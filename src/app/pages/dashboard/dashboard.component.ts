@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -17,12 +17,18 @@ export class DashboardComponent {
   private router = inject(Router);
   public themeService = inject(ThemeService);
 
-  // expose the theme signal so the template can call it as `currentTheme()`
+  /** Sidebar collapsed state: when true, sidebar is narrow and nav text is hidden. */
+  sidebarCollapsed = signal(false);
+
+  /** Active main content tab; synced with sidebar nav. */
+  activeTab = signal<'dashboard' | 'job-matching' | 'interview-simulator' | 'courses-projects' | 'support-feedback'>('dashboard');
+
+  readonly tabIds = ['dashboard', 'job-matching', 'interview-simulator', 'courses-projects', 'support-feedback'] as const;
+
   public currentTheme = this.themeService.theme$;
 
   authState$ = this.authService.authState$;
 
-  /** Sample job titles for "Use Sample Description" (single source of truth for template). */
   readonly sampleJobTitles = [
     'Developer',
     'Hadoop Developer',
@@ -35,6 +41,14 @@ export class DashboardComponent {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/sign-in']);
+  }
+
+  setActiveTab(tab: typeof this.tabIds[number]): void {
+    this.activeTab.set(tab);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed.update(v => !v);
   }
 
   toggleTheme(): void {

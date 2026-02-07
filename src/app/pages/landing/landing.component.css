@@ -1,0 +1,53 @@
+/* Landing page overrides */
+.landing-hero-grid {
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+}
+
+.dark .landing-hero-grid {
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+}
+
+.landing-glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.dark .landing-glass-panel {
+  background: rgba(10, 17, 32, 0.6);
+  border-color: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.landing-cyber-btn {
+  background: linear-gradient(90deg, #7c3aed, #06b6d4);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.landing-cyber-btn:hover {
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.35);
+}
+
+.landing-cyber-btn-outline {
+  background: transparent;
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, #7c3aed, #06b6d4) 1;
+}
+
+.landing-cyber-btn-outline:hover {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.faq-summary::-webkit-details-marker {
+  display: none;
+}

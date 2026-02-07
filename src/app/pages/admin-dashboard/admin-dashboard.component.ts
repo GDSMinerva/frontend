@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
@@ -17,10 +17,15 @@ export class AdminDashboardComponent {
   public themeService = inject(ThemeService);
   private router = inject(Router);
 
+  sidebarCollapsed = signal(false);
   authState$ = this.auth.authState$;
 
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/sign-in']);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed.update(v => !v);
   }
 }
