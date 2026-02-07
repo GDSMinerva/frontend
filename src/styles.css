@@ -1,0 +1,113 @@
+/* stylelint-disable at-rule-no-unknown */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* View Transition Animation for Theme Toggle */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation: slideOutUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-new(root) {
+  animation: slideInDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* CareerSeed logo: subtle glow in dark mode */
+.dark .logo-glow,
+.logo-glow.dark {
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4)) drop-shadow(0 0 24px rgba(34, 211, 238, 0.25));
+}
+
+.cyber-grid {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
+
+.glass-card {
+  background: linear-gradient(180deg, #0F1629 0%, #0B0F1A 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cyber-input {
+  background-color: #0B1022;
+  border: 1px dashed rgba(139, 92, 246, 0.4);
+  transition: all 0.3s ease;
+}
+
+.cyber-input:focus {
+  border-style: solid;
+  border-color: #22D3EE;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+  outline: none;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #8B5CF6 0%, #22D3EE 100%);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn-gradient:hover {
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+  filter: brightness(1.1);
+}
+
+html.dark body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0B0F1A;
+  color: #A1A1AA;
+}
+
+html.light body {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: #FFFFFF;
+}
+
+html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: #000000;
+}

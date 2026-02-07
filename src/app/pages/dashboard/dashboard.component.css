@@ -1,0 +1,57 @@
+/* Dashboard Component Styles */
+:host {
+  display: block;
+}
+
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+/* Shadow effects */
+.shadow-glass {
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.08);
+}
+
+.shadow-neon-soft {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+/* Backdrop blur */
+.backdrop-blur-xl {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Light mode dot grid background */
+.dot-grid {
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .dot-grid {
+  background-image: none;
+}
+
+/* Glow effect decoration */
+.glow-effect {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  z-index: -1;
+  filter: blur(40px);
+}

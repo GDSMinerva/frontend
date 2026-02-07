@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Admin Dashboard Component Styles */
+:host {
+  display: block;
+}
+
+@layer components {
+  .rounded-card {
+    @apply rounded-[16px];
+  }
+
+  .shadow-soft {
+    @apply shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)];
+  }
+
+  .shadow-glow {
+    @apply shadow-[0_0_20px_rgba(124,58,237,0.08)];
+  }
+
+  .font-display {
+    @apply font-['Space_Grotesk'];
+  }
+
+  .font-body {
+    @apply font-['Inter'];
+  }
+}
+
+/* Sidebar Toggle Responsiveness */
+#sidebar-toggle:checked ~ aside {
+  width: 80px;
+}
+
+#sidebar-toggle:checked ~ aside .nav-text,
+#sidebar-toggle:checked ~ aside .logo-text {
+  display: none;
+}
+
+#sidebar-toggle:checked ~ main {
+  margin-left: 80px;
+}
+
+/* Theme Colors - Light & Dark Mode */
+:host-context(.dark) {
+  color-scheme: dark;
+}
