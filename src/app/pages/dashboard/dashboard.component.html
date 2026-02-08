@@ -6,11 +6,11 @@
     [class.w-[80px]]="sidebarCollapsed()"
   >
     <div class="p-4 lg:p-6 overflow-hidden">
-      <div class="flex items-center gap-3 mb-10 px-2 min-h-[2.5rem]">
+      <div class="flex items-center gap-3 mb-10 px-2 min-h-[3rem]">
         <img
           src="/assets/logo-light.png"
           alt="CareerSeed"
-          class="app-logo logo-glow max-w-[120px] h-10 object-contain object-left transition-opacity duration-300"
+          class="app-logo logo-glow max-w-[160px] h-14 object-contain object-left transition-opacity duration-300"
           [class.max-w-[48px]!]="sidebarCollapsed()"
           [class.w-12]="sidebarCollapsed()"
           [class.h-8]="sidebarCollapsed()"
@@ -59,12 +59,12 @@
 
     <div class="relative z-10">
       <!-- Header -->
-      <header class="flex flex-col md:flex-row md:items-start justify-between gap-4 p-6 lg:p-8 border-b border-slate-200 dark:border-[#8B5CF6]/20">
+      <header class="flex flex-col md:flex-row md:items-start justify-between gap-3 p-4 lg:p-6 border-b border-slate-200 dark:border-[#8B5CF6]/20">
         <div>
-          <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <h1 class="text-lg lg:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
             Welcome, <span class="dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-white dark:to-slate-400">{{ (authState$ | async)?.user?.firstName || (authState$ | async)?.user?.email || 'User' }}!</span>
           </h1>
-          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Ready to optimize your career path?</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ready to optimize your career path?</p>
         </div>
         <div class="flex items-center gap-4">
           <om-theme-toggle
@@ -77,9 +77,9 @@
           </om-theme-toggle>
           <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-[#8B5CF6]/20 hidden sm:flex">
             <div class="text-right">
-              <p class="font-medium text-slate-900 dark:text-white leading-tight text-sm">User</p>
-              <button (click)="logout()" class="text-xs text-slate-400 dark:text-[#A1A1AA] hover:text-[#7C3AED] dark:hover:text-[#22D3EE] flex items-center justify-end gap-0.5 mt-1 transition-colors">
-                <span class="material-symbols-outlined text-sm">logout</span>
+              <p class="font-medium text-slate-900 dark:text-white leading-tight text-xs">User</p>
+              <button (click)="logout()" class="text-[10px] text-slate-400 dark:text-[#A1A1AA] hover:text-[#7C3AED] dark:hover:text-[#22D3EE] flex items-center justify-end gap-0.5 mt-0.5 transition-colors">
+                <span class="material-symbols-outlined text-xs">logout</span>
                 LOGOUT
               </button>
             </div>
@@ -90,70 +90,44 @@
         </div>
       </header>
 
-      <!-- Tabs: all visible at once -->
-      <div class="px-6 lg:px-8 pt-2 border-b border-slate-200 dark:border-[#8B5CF6]/20 bg-white/50 dark:bg-transparent">
-        <div class="flex flex-wrap gap-1 overflow-x-auto">
-          <button type="button" (click)="setActiveTab('dashboard')" class="flex items-center gap-2 px-4 py-3 rounded-t-lg text-sm font-medium whitespace-nowrap transition-all border-b-2 -mb-px" [class.border-[#7C3AED]]="activeTab() === 'dashboard'" [class.text-[#7C3AED]]="activeTab() === 'dashboard'" [class.dark:border-[#22D3EE]]="activeTab() === 'dashboard'" [class.dark:text-[#22D3EE]]="activeTab() === 'dashboard'" [class.border-transparent]="activeTab() !== 'dashboard'" [class.text-slate-500]="activeTab() !== 'dashboard'" [class.dark:text-slate-400]="activeTab() !== 'dashboard'" [class.hover:text-slate-700]="activeTab() !== 'dashboard'" [class.dark:hover:text-slate-300]="activeTab() !== 'dashboard'">
-            <span class="material-symbols-outlined text-lg" [class.filled]="activeTab() === 'dashboard'">grid_view</span>
-            Dashboard
-          </button>
-          <button type="button" (click)="setActiveTab('job-matching')" class="flex items-center gap-2 px-4 py-3 rounded-t-lg text-sm font-medium whitespace-nowrap transition-all border-b-2 -mb-px" [class.border-[#7C3AED]]="activeTab() === 'job-matching'" [class.text-[#7C3AED]]="activeTab() === 'job-matching'" [class.dark:border-[#22D3EE]]="activeTab() === 'job-matching'" [class.dark:text-[#22D3EE]]="activeTab() === 'job-matching'" [class.border-transparent]="activeTab() !== 'job-matching'" [class.text-slate-500]="activeTab() !== 'job-matching'" [class.dark:text-slate-400]="activeTab() !== 'job-matching'" [class.hover:text-slate-700]="activeTab() !== 'job-matching'" [class.dark:hover:text-slate-300]="activeTab() !== 'job-matching'">
-            <span class="material-symbols-outlined text-lg" [class.filled]="activeTab() === 'job-matching'">work</span>
-            Job Matching
-          </button>
-          <button type="button" (click)="setActiveTab('interview-simulator')" class="flex items-center gap-2 px-4 py-3 rounded-t-lg text-sm font-medium whitespace-nowrap transition-all border-b-2 -mb-px" [class.border-[#7C3AED]]="activeTab() === 'interview-simulator'" [class.text-[#7C3AED]]="activeTab() === 'interview-simulator'" [class.dark:border-[#22D3EE]]="activeTab() === 'interview-simulator'" [class.dark:text-[#22D3EE]]="activeTab() === 'interview-simulator'" [class.border-transparent]="activeTab() !== 'interview-simulator'" [class.text-slate-500]="activeTab() !== 'interview-simulator'" [class.dark:text-slate-400]="activeTab() !== 'interview-simulator'" [class.hover:text-slate-700]="activeTab() !== 'interview-simulator'" [class.dark:hover:text-slate-300]="activeTab() !== 'interview-simulator'">
-            <span class="material-symbols-outlined text-lg" [class.filled]="activeTab() === 'interview-simulator'">mic</span>
-            Interview Simulator
-          </button>
-          <button type="button" (click)="setActiveTab('courses-projects')" class="flex items-center gap-2 px-4 py-3 rounded-t-lg text-sm font-medium whitespace-nowrap transition-all border-b-2 -mb-px" [class.border-[#7C3AED]]="activeTab() === 'courses-projects'" [class.text-[#7C3AED]]="activeTab() === 'courses-projects'" [class.dark:border-[#22D3EE]]="activeTab() === 'courses-projects'" [class.dark:text-[#22D3EE]]="activeTab() === 'courses-projects'" [class.border-transparent]="activeTab() !== 'courses-projects'" [class.text-slate-500]="activeTab() !== 'courses-projects'" [class.dark:text-slate-400]="activeTab() !== 'courses-projects'" [class.hover:text-slate-700]="activeTab() !== 'courses-projects'" [class.dark:hover:text-slate-300]="activeTab() !== 'courses-projects'">
-            <span class="material-symbols-outlined text-lg" [class.filled]="activeTab() === 'courses-projects'">school</span>
-            Courses &amp; Projects
-          </button>
-          <button type="button" (click)="setActiveTab('support-feedback')" class="flex items-center gap-2 px-4 py-3 rounded-t-lg text-sm font-medium whitespace-nowrap transition-all border-b-2 -mb-px" [class.border-[#7C3AED]]="activeTab() === 'support-feedback'" [class.text-[#7C3AED]]="activeTab() === 'support-feedback'" [class.dark:border-[#22D3EE]]="activeTab() === 'support-feedback'" [class.dark:text-[#22D3EE]]="activeTab() === 'support-feedback'" [class.border-transparent]="activeTab() !== 'support-feedback'" [class.text-slate-500]="activeTab() !== 'support-feedback'" [class.dark:text-slate-400]="activeTab() !== 'support-feedback'" [class.hover:text-slate-700]="activeTab() !== 'support-feedback'" [class.dark:hover:text-slate-300]="activeTab() !== 'support-feedback'">
-            <span class="material-symbols-outlined text-lg" [class.filled]="activeTab() === 'support-feedback'">help</span>
-            Support &amp; Feedback
-          </button>
-        </div>
-      </div>
-
       <!-- Tab content -->
-      <div class="p-6 lg:p-8">
+      <div class="p-4 lg:p-6">
         @switch (activeTab()) {
           @case ('dashboard') {
-        <div class="bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B0F1A]/80 dark:backdrop-blur-xl border border-slate-200 dark:border-[#8B5CF6]/20 rounded-2xl shadow-xl dark:shadow-[0_0_30px_rgba(139,92,246,0.15)] p-8 max-w-5xl mx-auto">
-          <div class="flex items-center gap-3 mb-8">
-            <div class="w-10 h-10 rounded-lg bg-violet-50 dark:bg-[#8B5CF6]/10 text-[#7C3AED] dark:text-[#22D3EE] flex items-center justify-center">
-              <span class="material-symbols-outlined">document_scanner</span>
+        <div class="bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B0F1A]/80 dark:backdrop-blur-xl border border-slate-200 dark:border-[#8B5CF6]/20 rounded-2xl shadow-xl dark:shadow-[0_0_30px_rgba(139,92,246,0.15)] p-5 max-w-5xl mx-auto">
+          <div class="flex items-center gap-2 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-violet-50 dark:bg-[#8B5CF6]/10 text-[#7C3AED] dark:text-[#22D3EE] flex items-center justify-center">
+              <span class="material-symbols-outlined text-lg">document_scanner</span>
             </div>
-            <h2 class="text-xl lg:text-2xl font-bold font-display text-slate-900 dark:text-white">New scan</h2>
+            <h2 class="text-base lg:text-lg font-bold font-display text-slate-900 dark:text-white">New scan</h2>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Upload Resume Section -->
             <div class="lg:col-span-5 flex flex-col">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-sm font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                  <span class="w-6 h-6 rounded-full bg-[#7C3AED] dark:bg-[#8B5CF6]/20 text-white dark:text-[#22D3EE] text-xs flex items-center justify-center font-bold border dark:border-[#8B5CF6]/30">1</span>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xs font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-full bg-[#7C3AED] dark:bg-[#8B5CF6]/20 text-white dark:text-[#22D3EE] text-[9px] flex items-center justify-center font-bold border dark:border-[#8B5CF6]/30">1</span>
                   Upload Resume
                 </h3>
-                <button class="text-xs font-medium text-[#7C3AED] dark:text-[#22D3EE] hover:underline flex items-center gap-1 transition-colors">
-                  <span class="material-symbols-outlined text-sm">history</span>
+                <button class="text-[10px] font-medium text-[#7C3AED] dark:text-[#22D3EE] hover:underline flex items-center gap-1 transition-colors">
+                  <span class="material-symbols-outlined text-xs">history</span>
                   Saved Resumes
                 </button>
               </div>
 
-              <div class="flex-1 min-h-[340px] border-2 border-dashed border-slate-200 dark:border-[#8B5CF6]/60 rounded-2xl bg-slate-50/50 dark:bg-[#0B0F1A]/40 flex flex-col items-center justify-center p-8 text-center group hover:border-[#7C3AED] dark:hover:border-[#22D3EE] transition-all duration-300 dark:hover:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)] relative overflow-hidden">
+              <div class="flex-1 min-h-[340px] border-2 border-dashed border-slate-200 dark:border-[#8B5CF6]/60 rounded-2xl bg-slate-50/50 dark:bg-[#0B0F1A]/40 flex flex-col items-center justify-center p-6 text-center group hover:border-[#7C3AED] dark:hover:border-[#22D3EE] transition-all duration-300 dark:hover:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)] relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-tr from-[#7C3AED]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none dark:hidden"></div>
-                <div class="w-20 h-20 rounded-full bg-white dark:bg-[#0F1629]/60 shadow-sm border border-slate-100 dark:border-[#8B5CF6]/30 flex items-center justify-center mb-4 group-hover:scale-110 dark:group-hover:scale-125 transition-transform duration-300 relative">
-                  <span class="material-symbols-outlined text-4xl text-[#7C3AED] dark:text-[#8B5CF6] group-hover:text-[#06B6D4] dark:group-hover:text-[#22D3EE] transition-colors duration-300">cloud_upload</span>
+                <div class="w-16 h-16 rounded-full bg-white dark:bg-[#0F1629]/60 shadow-sm border border-slate-100 dark:border-[#8B5CF6]/30 flex items-center justify-center mb-3 group-hover:scale-110 dark:group-hover:scale-125 transition-transform duration-300 relative">
+                  <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#8B5CF6] group-hover:text-[#06B6D4] dark:group-hover:text-[#22D3EE] transition-colors duration-300">cloud_upload</span>
                 </div>
-                <p class="text-sm text-slate-900 dark:text-[#E0E7FF] font-medium mb-2">Drag &amp; Drop or Upload</p>
-                <p class="text-xs text-slate-400 dark:text-[#A1A1AA] mb-6 font-medium">Supports PDF, DOCX (Max 5MB)</p>
-                <button class="px-6 py-2.5 rounded-lg lg:rounded-full border border-slate-200 dark:border-[#8B5CF6]/30 bg-white dark:bg-[#0F1629]/60 font-medium text-slate-700 dark:text-[#E0E7FF] flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border-[#8B5CF6]/60 transition-all shadow-sm">
-                  <span class="material-symbols-outlined text-lg">add</span>
+                <p class="text-xs text-slate-900 dark:text-[#E0E7FF] font-medium mb-1.5">Drag &amp; Drop or Upload</p>
+                <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mb-4 font-medium">Supports PDF, DOCX (Max 5MB)</p>
+                <button class="px-4 py-2 rounded-lg lg:rounded-full border border-slate-200 dark:border-[#8B5CF6]/30 bg-white dark:bg-[#0F1629]/60 font-medium text-[10px] text-slate-700 dark:text-[#E0E7FF] flex items-center gap-1.5 hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border-[#8B5CF6]/60 transition-all shadow-sm">
+                  <span class="material-symbols-outlined text-sm">add</span>
                   Choose File
                 </button>
-                <p class="text-xs text-slate-400 dark:text-[#A1A1AA] mt-6 italic font-medium">Or copy and paste resume here</p>
+                <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mt-4 italic font-medium">Or copy and paste resume here</p>
               </div>
             </div>
 

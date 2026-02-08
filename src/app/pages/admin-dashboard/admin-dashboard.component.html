@@ -7,24 +7,24 @@
     <img
       src="/assets/logo-light.png"
       alt="CareerSeed"
-      class="app-logo logo-glow max-w-[120px] h-10 object-contain object-left transition-all duration-300"
+      class="app-logo logo-glow max-w-[160px] h-14 object-contain object-left transition-all duration-300"
       [class.max-w-[48px]!]="sidebarCollapsed()"
       [class.w-12]="sidebarCollapsed()"
       [class.h-8]="sidebarCollapsed()"
     />
   </div>
   <nav class="flex-1 px-4 space-y-1 mt-6">
-    <a class="flex items-center gap-3 px-3 py-3 text-white bg-gradient-to-r from-primary to-secondary rounded-xl font-medium shadow-md shadow-purple-100 dark:shadow-none" href="#">
-      <span class="material-symbols-outlined shrink-0 text-[20px]">dashboard</span>
-      <span class="whitespace-nowrap text-sm" [class.hidden]="sidebarCollapsed()">Dashboard</span>
+    <a class="flex items-center gap-3 px-3 py-2.5 text-white bg-gradient-to-r from-primary to-secondary rounded-xl font-medium text-sm shadow-md shadow-purple-100 dark:shadow-none" href="#">
+      <span class="material-symbols-outlined shrink-0 text-base">dashboard</span>
+      <span class="whitespace-nowrap text-xs" [class.hidden]="sidebarCollapsed()">Dashboard</span>
     </a>
-    <a class="flex items-center gap-3 px-3 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-primary rounded-xl transition-all" href="#">
-      <span class="material-symbols-outlined shrink-0 text-[20px]">group</span>
-      <span class="whitespace-nowrap text-sm" [class.hidden]="sidebarCollapsed()">User Management</span>
+    <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-primary rounded-xl transition-all text-sm" href="#">
+      <span class="material-symbols-outlined shrink-0 text-base">group</span>
+      <span class="whitespace-nowrap text-xs" [class.hidden]="sidebarCollapsed()">User Management</span>
     </a>
-    <a class="flex items-center gap-3 px-3 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-primary rounded-xl transition-all" href="#">
-      <span class="material-symbols-outlined shrink-0 text-[20px]">feedback</span>
-      <span class="whitespace-nowrap text-sm" [class.hidden]="sidebarCollapsed()">Feedback</span>
+    <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-primary rounded-xl transition-all text-sm" href="#">
+      <span class="material-symbols-outlined shrink-0 text-base">feedback</span>
+      <span class="whitespace-nowrap text-xs" [class.hidden]="sidebarCollapsed()">Feedback</span>
     </a>
   </nav>
   <div class="p-4 border-t border-[#EEF2FF] dark:border-slate-800 space-y-1">
@@ -40,11 +40,11 @@
 </aside>
 
 <main class="transition-all duration-300 min-h-screen" [ngClass]="{'lg:ml-64': !sidebarCollapsed(), 'lg:ml-[80px]': sidebarCollapsed()}">
-  <div class="max-w-[1600px] mx-auto p-6 lg:p-10">
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+  <div class="max-w-[1600px] mx-auto p-4 lg:p-8">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">System Administrator Dashboard</h1>
-        <p class="text-slate-500 dark:text-slate-400 text-sm">Overview of platform performance and AI engagement metrics.</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-0.5">System Administrator Dashboard</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-xs">Overview of platform performance and AI engagement metrics.</p>
       </div>
       <div class="flex items-center gap-4">
         <om-theme-toggle

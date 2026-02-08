@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { SignUpRequest } from '../../models/auth.model';
 import { NgxThemeToggleComponent, OmDarkIcon, OmLightIcon } from '@omnedia/ngx-theme-toggle';
+import { NgxGridpatternComponent } from '@omnedia/ngx-gridpattern';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxThemeToggleComponent, OmDarkIcon, OmLightIcon],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxThemeToggleComponent, OmDarkIcon, OmLightIcon, NgxGridpatternComponent],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css'
 })
