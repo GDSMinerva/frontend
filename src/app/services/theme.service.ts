@@ -1,4 +1,4 @@
-import { Injectable, effect, inject, signal } from '@angular/core';
+import { Injectable, effect, inject, signal, computed } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 export type Theme = 'light' | 'dark';
@@ -51,7 +51,7 @@ export class ThemeService {
    */
   private getInitialTheme(): Theme {
     const storedTheme = localStorage.getItem(this.THEME_KEY) as Theme | null;
-    
+
     if (storedTheme === 'light' || storedTheme === 'dark') {
       return storedTheme;
     }
@@ -77,7 +77,7 @@ export class ThemeService {
   toggleTheme(): void {
     const currentTheme = this.themeSignal();
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
+
     // Use View Transitions API for smooth animation
     if (document.startViewTransition) {
       document.startViewTransition(() => {
@@ -111,4 +111,9 @@ export class ThemeService {
       htmlElement.classList.remove('dark');
     }
   }
+
+  /**
+   * Check if dark mode is currently enabled
+   */
+  isDarkMode = computed(() => this.themeSignal() === 'dark');
 }

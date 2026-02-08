@@ -55,3 +55,95 @@
   z-index: -1;
   filter: blur(40px);
 }
+/* Typewriter animation styling */
+om-typewriter {
+  display: inline-block;
+}
+
+/* Dotpattern styling */
+om-dotpattern {
+  opacity: 0.5;
+}
+
+.dark om-dotpattern {
+  opacity: 0.3;
+}
+
+/* Responsive sidebar for mobile */
+@media (max-width: 768px) {
+  aside {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 40;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  main {
+    width: 100%;
+  }
+}
+
+/* Responsive header layout */
+@media (max-width: 640px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  p {
+    font-size: 0.75rem;
+  }
+}
+
+/* Dark mode color adjustments */
+:host-context(.dark) {
+  --tw-text-opacity: 1;
+  color: rgb(226 232 240 / var(--tw-text-opacity));
+}
+
+/* Light mode background */
+:host {
+  --tw-bg-opacity: 1;
+}
+
+/* Mobile sidebar animation */
+.animate-in {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Dark mode color variable and background */
+:host {
+  --dark-bg: #0f1528;
+}
+
+/* Ensure typewriter displays inline */
+om-typewriter {
+  display: inline;
+}
+
+/* Dotpattern Configuration */
+om-dotpattern {
+  opacity: 0.5;
+}
+
+.dark om-dotpattern {
+  opacity: 0.3;
+}

@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { LoginRequest } from '../../models/auth.model';
 import { NgxThemeToggleComponent, OmDarkIcon, OmLightIcon } from '@omnedia/ngx-theme-toggle';
+import { NgxGridpatternComponent } from '@omnedia/ngx-gridpattern';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxThemeToggleComponent, OmDarkIcon, OmLightIcon],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxThemeToggleComponent, OmDarkIcon, OmLightIcon, NgxGridpatternComponent],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css'
 })
@@ -93,7 +94,7 @@ export class SignInComponent {
 
   getErrorMessage(fieldName: string): string {
     const control = this.form.get(fieldName);
-    
+
     if (control?.hasError('required')) {
       return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
     }

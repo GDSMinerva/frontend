@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Admin Dashboard Statistics | cvScan AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Cyber Theme Palette
+                        "cyber-bg": "#0B0F1A",
+                        "cyber-card-from": "#151b2e", // Slightly lighter for gradient start
+                        "cyber-card-to": "#0B0F1A",
+                        "cyber-purple": "#8B5CF6",
+                        "cyber-cyan": "#22D3EE",
+                        "cyber-border": "rgba(255, 255, 255, 0.08)",
+                        "text-primary": "#FFFFFF",
+                        "text-secondary": "#94A3B8", // Slate 400
+                    },
+                    fontFamily: {
+                        display: ["Space Grotesk", "sans-serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px -5px rgba(139, 92, 246, 0.3)',
+                        'neon-strong': '0 0 25px -5px rgba(139, 92, 246, 0.5)',
+                    },
+                    backgroundImage: {
+                        'cyber-gradient': 'linear-gradient(135deg, #151b2e 0%, #0B0F1A 100%)',
+                        'bar-gradient': 'linear-gradient(to top, #8B5CF6, #22D3EE)',
+                        'bar-gradient-h': 'linear-gradient(to right, #8B5CF6, #22D3EE)',
+                        'radial-glow': 'radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { 
+                font-family: 'Inter', sans-serif;
+                background-color: theme('colors.cyber-bg');
+                color: theme('colors.text-primary');
+                background-image: theme('backgroundImage.radial-glow');
+                background-attachment: fixed;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Space Grotesk', sans-serif;
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0B0F1A;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #8B5CF6;
+        }.glass-card {
+            @apply bg-cyber-gradient border border-cyber-border backdrop-blur-md shadow-neon rounded-2xl;
+        }.sidebar-glass {
+            background: rgba(11, 15, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen custom-scrollbar selection:bg-cyber-purple selection:text-white overflow-x-hidden">
+<svg aria-hidden="true" class="w-0 h-0 absolute">
+<defs>
+<linearGradient id="cyber-gradient-def" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#8B5CF6"></stop>
+<stop offset="100%" stop-color="#22D3EE"></stop>
+</linearGradient>
+</defs>
+</svg>
+<input class="hidden" id="sidebar-toggle" type="checkbox"/>
+<aside class="w-64 sidebar-glass hidden lg:flex flex-col fixed h-full transition-all duration-300 z-30">
+<div class="p-6 flex items-center gap-3 overflow-hidden">
+<div class="w-10 h-10 bg-gradient-to-br from-cyber-purple to-cyber-cyan rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-cyber-purple/20">
+<span class="material-symbols-outlined text-white text-2xl">admin_panel_settings</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-white font-display logo-text">cvScan AI</span>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-6">
+<a class="flex items-center gap-3 px-4 py-3 text-cyber-purple bg-cyber-purple/10 border border-cyber-purple/20 rounded-xl font-semibold shadow-[0_0_15px_rgba(139,92,246,0.2)] group relative overflow-hidden" href="#">
+<div class="absolute inset-0 bg-cyber-purple/5 group-hover:bg-cyber-purple/10 transition-colors"></div>
+<span class="material-symbols-outlined shrink-0 drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]">dashboard</span>
+<span class="nav-text whitespace-nowrap relative z-10">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined shrink-0">group</span>
+<span class="nav-text whitespace-nowrap">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined shrink-0">work</span>
+<span class="nav-text whitespace-nowrap">Job Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined shrink-0">school</span>
+<span class="nav-text whitespace-nowrap">Training Catalog</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined shrink-0">feedback</span>
+<span class="nav-text whitespace-nowrap">Feedback</span>
+</a>
+</nav>
+<div class="p-4 border-t border-cyber-border/50">
+<label class="flex items-center gap-3 px-3 py-2 text-text-secondary hover:text-white cursor-pointer transition-colors" for="sidebar-toggle">
+<span class="material-symbols-outlined shrink-0">menu_open</span>
+<span class="nav-text text-sm font-medium">Collapse Sidebar</span>
+</label>
+</div>
+</aside>
+<main class="lg:ml-64 transition-all duration-300 min-h-screen relative z-10">
+<div class="max-w-[1600px] mx-auto p-4 lg:p-8">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-cyber-border">
+<div>
+<h1 class="text-3xl font-bold text-white mb-1 drop-shadow-md">System Administrator Dashboard</h1>
+<p class="text-text-secondary font-light">Overview of platform performance and engagement.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-4 pl-1 bg-white/5 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none text-white font-display">Admin</p>
+<a class="text-[10px] text-red-400 hover:text-red-300 font-bold flex items-center justify-end gap-0.5 mt-1 uppercase tracking-wider transition-colors" href="#">
+<span class="material-symbols-outlined text-[12px]">logout</span>
+                            Logout
+                        </a>
+</div>
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyber-purple to-cyber-cyan p-[1px] flex items-center justify-center shrink-0">
+<div class="w-full h-full bg-cyber-bg rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white">shield_person</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<section class="mb-8">
+<h2 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+<span class="w-1 h-6 bg-cyber-purple rounded-full shadow-[0_0_10px_#8B5CF6]"></span>
+                Platform Performance Statistics
+            </h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="glass-card p-6 group hover:border-cyber-purple/30 transition-all duration-300">
+<div class="flex items-center justify-between mb-4">
+<span class="text-text-secondary text-sm font-medium uppercase tracking-wider">Total Scans</span>
+<div class="w-8 h-8 rounded-lg bg-cyber-purple/10 flex items-center justify-center group-hover:bg-cyber-purple/20 transition-colors">
+<span class="material-symbols-outlined text-cyber-purple text-lg">barcode_scanner</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white font-display">24.5k</span>
+<span class="text-cyber-cyan text-xs font-bold bg-cyber-cyan/10 px-1.5 py-0.5 rounded border border-cyber-cyan/20">+12%</span>
+</div>
+</div>
+<div class="glass-card p-6 group hover:border-cyber-purple/30 transition-all duration-300">
+<div class="flex items-center justify-between mb-4">
+<span class="text-text-secondary text-sm font-medium uppercase tracking-wider">Successful Matches</span>
+<div class="w-8 h-8 rounded-lg bg-cyber-purple/10 flex items-center justify-center group-hover:bg-cyber-purple/20 transition-colors">
+<span class="material-symbols-outlined text-cyber-purple text-lg">verified</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white font-display">18.2k</span>
+<span class="text-cyber-cyan text-xs font-bold bg-cyber-cyan/10 px-1.5 py-0.5 rounded border border-cyber-cyan/20">+8%</span>
+</div>
+</div>
+<div class="glass-card p-6 group hover:border-cyber-purple/30 transition-all duration-300">
+<div class="flex items-center justify-between mb-4">
+<span class="text-text-secondary text-sm font-medium uppercase tracking-wider">System Uptime</span>
+<div class="w-8 h-8 rounded-lg bg-cyber-purple/10 flex items-center justify-center group-hover:bg-cyber-purple/20 transition-colors">
+<span class="material-symbols-outlined text-cyber-purple text-lg">dns</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white font-display">99.98%</span>
+<span class="text-cyber-purple text-xs font-bold bg-cyber-purple/10 px-1.5 py-0.5 rounded border border-cyber-purple/20">Stable</span>
+</div>
+</div>
+<div class="glass-card p-6 group hover:border-cyber-purple/30 transition-all duration-300">
+<div class="flex items-center justify-between mb-4">
+<span class="text-text-secondary text-sm font-medium uppercase tracking-wider">Avg Latency</span>
+<div class="w-8 h-8 rounded-lg bg-cyber-purple/10 flex items-center justify-center group-hover:bg-cyber-purple/20 transition-colors">
+<span class="material-symbols-outlined text-cyber-purple text-lg">speed</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white font-display">210ms</span>
+<span class="text-emerald-400 text-xs font-bold bg-emerald-400/10 px-1.5 py-0.5 rounded border border-emerald-400/20">-15ms</span>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+<div class="lg:col-span-8 glass-card p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-white">User Growth Over Time</h3>
+<select class="text-xs border-cyber-border bg-cyber-bg text-text-secondary rounded-lg focus:ring-cyber-purple focus:border-cyber-purple">
+<option>Last 6 Months</option>
+<option>Last Year</option>
+</select>
+</div>
+<div class="h-64 flex items-end justify-between gap-3 px-2">
+<div class="w-full bg-white/5 rounded-t-sm h-[30%] relative group">
+<div class="absolute bottom-0 w-full bg-bar-gradient h-[10%] rounded-t-sm transition-all duration-500 group-hover:opacity-100 shadow-[0_0_10px_#8B5CF6]"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-text-secondary">Jan</span>
+</div>
+<div class="w-full bg-white/5 rounded-t-sm h-[45%] relative group">
+<div class="absolute bottom-0 w-full bg-bar-gradient h-[25%] rounded-t-sm transition-all duration-500 shadow-[0_0_10px_#8B5CF6]"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-text-secondary">Feb</span>
+</div>
+<div class="w-full bg-white/5 rounded-t-sm h-[40%] relative group">
+<div class="absolute bottom-0 w-full bg-bar-gradient h-[40%] rounded-t-sm transition-all duration-500 shadow-[0_0_10px_#8B5CF6]"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-text-secondary">Mar</span>
+</div>
+<div class="w-full bg-white/5 rounded-t-sm h-[65%] relative group">
+<div class="absolute bottom-0 w-full bg-bar-gradient h-[50%] rounded-t-sm transition-all duration-500 shadow-[0_0_10px_#8B5CF6]"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-text-secondary">Apr</span>
+</div>
+<div class="w-full bg-white/5 rounded-t-sm h-[85%] relative group">
+<div class="absolute bottom-0 w-full bg-bar-gradient h-[70%] rounded-t-sm transition-all duration-500 shadow-[0_0_10px_#8B5CF6]"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-text-secondary">May</span>
+</div>
+<div class="w-full bg-white/5 rounded-t-sm h-[100%] relative group">
+<div class="absolute bottom-0 w-full bg-bar-gradient h-[90%] rounded-t-sm transition-all duration-500 shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-cyber-cyan font-bold">Jun</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 glass-card p-6">
+<h3 class="text-lg font-bold mb-6 text-white">Training Completion</h3>
+<div class="flex items-center justify-center h-48 relative">
+<svg class="w-40 h-40 transform -rotate-90">
+<circle class="text-white/5" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]" cx="80" cy="80" fill="transparent" r="70" stroke="url(#cyber-gradient-def)" stroke-dasharray="440" stroke-dashoffset="110" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-bold text-white font-display">75%</span>
+<span class="text-[10px] text-text-secondary uppercase font-bold tracking-wider mt-1">Overall</span>
+</div>
+</div>
+<div class="mt-6 space-y-3">
+<div class="flex items-center justify-between text-xs p-2 rounded-lg bg-white/5 border border-white/5">
+<span class="flex items-center gap-2 text-text-secondary"><span class="w-2 h-2 rounded-full bg-cyber-cyan shadow-[0_0_5px_#22D3EE]"></span> Completed</span>
+<span class="font-bold text-white font-display tracking-wide">1,240</span>
+</div>
+<div class="flex items-center justify-between text-xs p-2 rounded-lg bg-white/5 border border-white/5">
+<span class="flex items-center gap-2 text-text-secondary"><span class="w-2 h-2 rounded-full bg-white/20"></span> In Progress</span>
+<span class="font-bold text-white font-display tracking-wide">413</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6 glass-card p-6">
+<h3 class="text-lg font-bold mb-6 text-white">Most Used Features</h3>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-white">CV Analysis</span>
+<span class="text-cyber-cyan font-bold">88%</span>
+</div>
+<div class="w-full bg-white/5 rounded-full h-2 overflow-hidden border border-white/5">
+<div class="bg-bar-gradient-h h-2 rounded-full shadow-[0_0_10px_#8B5CF6]" style="width: 88%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-white">Job Matching</span>
+<span class="text-cyber-cyan font-bold">64%</span>
+</div>
+<div class="w-full bg-white/5 rounded-full h-2 overflow-hidden border border-white/5">
+<div class="bg-bar-gradient-h h-2 rounded-full shadow-[0_0_10px_#8B5CF6]" style="width: 64%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-white">Interview Simulator</span>
+<span class="text-cyber-cyan font-bold">52%</span>
+</div>
+<div class="w-full bg-white/5 rounded-full h-2 overflow-hidden border border-white/5">
+<div class="bg-bar-gradient-h h-2 rounded-full shadow-[0_0_10px_#8B5CF6]" style="width: 52%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-white">Courses &amp; Projects</span>
+<span class="text-cyber-cyan font-bold">41%</span>
+</div>
+<div class="w-full bg-white/5 rounded-full h-2 overflow-hidden border border-white/5">
+<div class="bg-bar-gradient-h h-2 rounded-full shadow-[0_0_10px_#8B5CF6]" style="width: 41%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-6 glass-card p-6">
+<h3 class="text-lg font-bold mb-6 text-white">Identified Skill Gaps</h3>
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 bg-cyber-purple/20 text-cyber-purple rounded-lg text-sm font-bold border border-cyber-purple/40 shadow-[0_0_10px_rgba(139,92,246,0.2)]">Cloud Architecture</span>
+<span class="px-4 py-2 bg-white/5 text-text-secondary rounded-lg text-xs font-medium border border-white/10 hover:border-white/30 transition-colors cursor-default">TypeScript</span>
+<span class="px-6 py-3 bg-gradient-to-r from-cyber-purple/20 to-cyber-cyan/20 text-white rounded-lg text-lg font-bold border border-white/20 shadow-[0_0_15px_rgba(34,211,238,0.1)]">React.js</span>
+<span class="px-4 py-2 bg-white/5 text-text-secondary rounded-lg text-sm font-medium border border-white/10 hover:border-white/30 transition-colors cursor-default">UI/UX Design</span>
+<span class="px-5 py-2.5 bg-cyber-purple/10 text-cyber-purple rounded-lg text-base font-bold border border-cyber-purple/30">Python</span>
+<span class="px-4 py-2 bg-white/5 text-text-secondary rounded-lg text-xs font-medium border border-white/10 hover:border-white/30 transition-colors cursor-default">Agile</span>
+<span class="px-6 py-3 bg-gradient-to-r from-cyber-cyan/20 to-cyber-purple/20 text-white rounded-lg text-xl font-bold border border-white/20 shadow-[0_0_15px_rgba(139,92,246,0.1)]">System Design</span>
+<span class="px-4 py-2 bg-white/5 text-text-secondary rounded-lg text-sm font-medium border border-white/10 hover:border-white/30 transition-colors cursor-default">Kubernetes</span>
+</div>
+</div>
+<div class="lg:col-span-12 glass-card p-8">
+<h3 class="text-lg font-bold mb-10 text-center text-white">Job Match Success Rates</h3>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-12">
+<div class="flex flex-col items-center">
+<div class="relative w-32 h-16 overflow-hidden">
+<div class="w-32 h-32 rounded-full border-[12px] border-white/5"></div>
+<div class="absolute top-0 w-32 h-32 rounded-full border-[12px] border-cyber-purple border-b-transparent border-r-transparent rotate-[45deg] drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]"></div>
+<span class="absolute bottom-0 left-1/2 -translate-x-1/2 text-2xl font-bold text-white font-display">82%</span>
+</div>
+<p class="mt-4 text-sm font-bold text-text-secondary uppercase tracking-widest">Tech Sector</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative w-32 h-16 overflow-hidden">
+<div class="w-32 h-32 rounded-full border-[12px] border-white/5"></div>
+<div class="absolute top-0 w-32 h-32 rounded-full border-[12px] border-cyber-purple/70 border-b-transparent border-r-transparent rotate-[20deg] drop-shadow-[0_0_8px_rgba(139,92,246,0.4)]"></div>
+<span class="absolute bottom-0 left-1/2 -translate-x-1/2 text-2xl font-bold text-white font-display">65%</span>
+</div>
+<p class="mt-4 text-sm font-bold text-text-secondary uppercase tracking-widest">Marketing</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative w-32 h-16 overflow-hidden">
+<div class="w-32 h-32 rounded-full border-[12px] border-white/5"></div>
+<div class="absolute top-0 w-32 h-32 rounded-full border-[12px] border-cyber-purple/40 border-b-transparent border-r-transparent rotate-[-10deg] drop-shadow-[0_0_8px_rgba(139,92,246,0.2)]"></div>
+<span class="absolute bottom-0 left-1/2 -translate-x-1/2 text-2xl font-bold text-white font-display">48%</span>
+</div>
+<p class="mt-4 text-sm font-bold text-text-secondary uppercase tracking-widest">Healthcare</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

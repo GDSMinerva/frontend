@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>New Scan | cvScan AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: "#0B0F1A",       // Main Background
+                            card: "#0F1629",       // Card Gradient Start
+                            input: "#0B1022",      // Inputs
+                            purple: "#8B5CF6",     // Primary Purple
+                            cyan: "#22D3EE",       // Secondary Cyan
+                        },
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'neon': '0 0 10px rgba(139, 92, 246, 0.5)',
+                        'neon-soft': '0 0 20px rgba(139, 92, 246, 0.2)',
+                        'glass': '0 0 40px rgba(139, 92, 246, 0.08)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { 
+                font-family: 'Inter', sans-serif; 
+                background-color: #0B0F1A;
+                color: #f9fafb;
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        #sidebar-toggle:checked ~ aside {
+            width: 80px;
+        }
+        #sidebar-toggle:checked ~ aside .nav-text,
+        #sidebar-toggle:checked ~ aside .logo-text {
+            display: none;
+        }
+        #sidebar-toggle:checked ~ main {
+            margin-left: 80px;
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(11, 16, 34, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.6);
+        }
+        .backdrop-blur-custom {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-cyber-dark text-white selection:bg-cyber-purple selection:text-white">
+<input class="hidden" id="sidebar-toggle" type="checkbox"/>
+<aside class="w-64 border-r border-white/10 bg-cyber-dark/60 backdrop-blur-custom hidden lg:flex flex-col fixed h-full transition-all duration-300 z-30">
+<div class="p-6 flex items-center gap-3 overflow-hidden">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-cyber-purple to-cyber-cyan flex items-center justify-center shrink-0 shadow-neon-soft">
+<span class="material-symbols-outlined text-white text-xl">smart_toy</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-white logo-text">cvScan<span class="text-cyber-cyan">.AI</span></span>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-3 text-cyber-purple bg-cyber-purple/10 border border-cyber-purple/20 rounded-lg font-medium shadow-[0_0_15px_rgba(139,92,246,0.15)]" href="#">
+<span class="material-symbols-outlined shrink-0" style="text-shadow: 0 0 10px rgba(139,92,246,0.6);">dashboard</span>
+<span class="nav-text whitespace-nowrap">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyber-cyan transition-colors">work</span>
+<span class="nav-text whitespace-nowrap">Job Matching</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyber-cyan transition-colors">record_voice_over</span>
+<span class="nav-text whitespace-nowrap">Interview Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyber-cyan transition-colors">school</span>
+<span class="nav-text whitespace-nowrap">Courses &amp; Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyber-cyan transition-colors">contact_support</span>
+<span class="nav-text whitespace-nowrap">Support &amp; Feedback</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10">
+<label class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-cyber-cyan cursor-pointer transition-colors" for="sidebar-toggle">
+<span class="material-symbols-outlined shrink-0">menu_open</span>
+<span class="nav-text text-sm font-medium">Collapse Sidebar</span>
+</label>
+</div>
+</aside>
+<main class="lg:ml-64 transition-all duration-300 min-h-screen bg-cyber-dark relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-cyber-purple/5 to-transparent pointer-events-none z-0"></div>
+<div class="relative z-10 max-w-[1200px] mx-auto p-4 lg:p-8">
+<header class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-10">
+<div>
+<h1 class="text-3xl font-bold text-white tracking-tight">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Alex!</span></h1>
+<p class="text-gray-400 text-sm mt-1">Ready to optimize your career path?</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-lg bg-cyber-input border border-white/10 flex items-center justify-center hover:bg-cyber-purple/20 hover:border-cyber-purple/50 shadow-neon transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-symbols-outlined text-cyber-purple group-hover:text-white transition-colors">light_mode</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-white/10">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-white leading-none">Alex Johnson</p>
+<a class="text-[10px] text-gray-500 hover:text-red-400 font-bold flex items-center justify-end gap-0.5 mt-1 uppercase transition-colors" href="#">
+<span class="material-symbols-outlined text-[12px]">logout</span>
+                                Logout
+                            </a>
+</div>
+<div class="relative">
+<div class="absolute inset-0 bg-cyber-purple rounded-full blur opacity-40"></div>
+<img alt="Profile" class="relative w-10 h-10 rounded-full border border-white/20 shrink-0 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0gKe153agdtaE2QX8dxVTTUZvCNwr9lfHYTo3qfEtVw-g5beM0dyqV9fTCCfKqp4zWLxSzPhnbKXQVZsuOBTkupMtvr5J7IqZ8qJ8bv8suaEY4rr4ZRwnvnlv4OfF7_lWFzdlurNcL00eg3dLK2Yp_9WiDvl1kusdeIywVtaNU-NtKJhnyPj72JQB2HrXvlRDo11OWO2WurLSMkEIVA9kcs5hnsrrbHoFTN2Ek4O-sHt6N5X_oDRWQADS_D3GNbn2m-CBAsqXE-Y"/>
+</div>
+</div>
+</div>
+</header>
+<div class="bg-gradient-to-b from-cyber-card to-cyber-dark border border-white/10 rounded-2xl shadow-glass backdrop-blur-sm overflow-hidden relative">
+<div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyber-purple/50 to-transparent"></div>
+<div class="p-8">
+<div class="flex items-center gap-3 mb-8">
+<div class="p-2 rounded bg-cyber-purple/10">
+<span class="material-symbols-outlined text-cyber-purple">document_scanner</span>
+</div>
+<h2 class="text-xl font-bold text-white">New scan</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-5 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-cyber-purple/20 text-cyber-purple text-xs flex items-center justify-center border border-cyber-purple/30">1</span>
+                                    Upload Resume
+                                </h3>
+<button class="text-xs font-medium text-cyber-cyan hover:text-white flex items-center gap-1 transition-colors hover:shadow-neon-soft rounded px-2 py-1">
+<span class="material-symbols-outlined text-sm">history</span>
+                                    Saved Resumes
+                                </button>
+</div>
+<div class="flex-1 min-h-[400px] border-2 border-dashed border-cyber-purple/40 rounded-xl bg-cyber-input flex flex-col items-center justify-center p-8 transition-all hover:border-cyber-cyan/60 hover:shadow-[inset_0_0_20px_rgba(34,211,238,0.05)] group relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tr from-cyber-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="w-20 h-20 rounded-full bg-cyber-dark border border-white/5 shadow-inner flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-cyber-cyan/30 transition-all duration-300">
+<span class="material-symbols-outlined text-cyber-purple group-hover:text-cyber-cyan text-4xl transition-colors duration-300">cloud_upload</span>
+</div>
+<p class="text-sm text-gray-300 mb-6 text-center leading-relaxed font-light">
+                                    Drag &amp; Drop or Upload Your Resume<br/>
+<span class="text-xs text-gray-500 font-mono mt-1 block">Supports PDF, DOCX (Max 5MB)</span>
+</p>
+<button class="px-6 py-3 bg-cyber-dark border border-white/10 text-white text-sm font-semibold rounded-lg hover:bg-white/5 hover:border-cyber-purple/50 transition-all flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined text-lg text-cyber-purple">add</span>
+                                    Choose File
+                                </button>
+<p class="mt-8 text-xs text-gray-500 italic">Or copy and paste resume here.</p>
+</div>
+</div>
+<div class="lg:col-span-7 flex flex-col">
+<h3 class="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-wider flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-cyber-cyan/10 text-cyber-cyan text-xs flex items-center justify-center border border-cyber-cyan/20">2</span>
+                                Job Details
+                            </h3>
+<div class="flex-1 min-h-[400px] border border-white/10 rounded-xl bg-cyber-input overflow-hidden flex flex-col md:flex-row shadow-inner">
+<div class="flex-1 flex flex-col p-6 border-r border-white/5">
+<label class="text-sm font-bold text-gray-200 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-cyber-purple text-base">description</span>
+                                        Paste Job Description
+                                    </label>
+<div class="flex-1 bg-cyber-dark/50 rounded-lg border border-white/5 hover:border-cyber-purple/30 transition-colors">
+<textarea class="w-full h-full p-4 text-sm bg-transparent border-none focus:ring-1 focus:ring-cyber-purple/50 rounded-lg resize-none text-gray-300 placeholder:text-gray-600 custom-scrollbar" placeholder="Copy and paste job description here..."></textarea>
+</div>
+</div>
+<div class="hidden md:flex flex-col items-center justify-center relative px-0 bg-cyber-dark/30">
+<div class="h-full w-[1px] bg-white/10"></div>
+<div class="absolute bg-cyber-card border border-white/10 px-2 py-1 text-[10px] font-bold text-gray-500 uppercase tracking-widest rounded-md">OR</div>
+</div>
+<div class="md:hidden flex items-center justify-center py-4 px-6 relative">
+<div class="w-full h-[1px] bg-white/10"></div>
+<div class="absolute bg-cyber-input px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">OR</div>
+</div>
+<div class="flex-1 flex flex-col p-6 overflow-hidden">
+<label class="text-sm font-bold text-gray-200 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-cyber-cyan text-base">sound_sampler</span>
+                                        Use Sample Description
+                                    </label>
+<div class="flex-1 overflow-y-auto custom-scrollbar space-y-1 pr-1">
+<button class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-white/5 hover:text-cyber-cyan hover:pl-5 transition-all duration-200 font-medium border border-transparent hover:border-white/5 group flex items-center justify-between">
+                                            Developer
+                                            <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-white/5 hover:text-cyber-cyan hover:pl-5 transition-all duration-200 font-medium border border-transparent hover:border-white/5 group flex items-center justify-between">
+                                            Hadoop Developer
+                                            <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-white/5 hover:text-cyber-cyan hover:pl-5 transition-all duration-200 font-medium border border-transparent hover:border-white/5 group flex items-center justify-between">
+                                            Magento Developer
+                                            <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-white/5 hover:text-cyber-cyan hover:pl-5 transition-all duration-200 font-medium border border-transparent hover:border-white/5 group flex items-center justify-between">
+                                            Security Analyst
+                                            <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-white/5 hover:text-cyber-cyan hover:pl-5 transition-all duration-200 font-medium border border-transparent hover:border-white/5 group flex items-center justify-between">
+                                            Data Scientist
+                                            <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+<button class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:bg-white/5 hover:text-cyber-cyan hover:pl-5 transition-all duration-200 font-medium border border-transparent hover:border-white/5 group flex items-center justify-between">
+                                            Product Manager
+                                            <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<button class="text-xs font-bold text-gray-400 hover:text-cyber-purple flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm">visibility</span>
+                                View sample Scan
+                            </button>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-20 py-4 bg-gradient-to-r from-cyber-purple to-cyber-cyan text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:brightness-110 transition-all flex items-center justify-center gap-2 text-base relative overflow-hidden group">
+<span class="relative z-10">Start AI Scan</span>
+<span class="material-symbols-outlined relative z-10 animate-pulse">rocket_launch</span>
+<div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
+</button>
+</div>
+</div>
+</div>
+</div>
+<p class="mt-8 text-center text-xs text-gray-500">By using cvScan, you agree to our Terms of Service and Privacy Policy.</p>
+</div>
+</main>
+
+</body></html>
