@@ -12,14 +12,55 @@
         <a routerLink="/" class="flex items-center gap-2 shrink-0">
           <img src="/assets/logo-light.png" alt="CareerSeed" class="app-logo logo-glow max-w-[120px] h-10 object-contain object-left" />
         </a>
+        
+        <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center gap-8">
           <a href="#features" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Features</a>
           <a href="#" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Pricing</a>
           <a href="#" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Resources</a>
         </div>
+        
         <div class="flex items-center gap-3">
-          <a routerLink="/sign-in" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white px-4 py-2 rounded-lg transition-colors">Log in</a>
-          <a routerLink="/sign-up" class="landing-cyber-btn text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-lg shadow-purple-500/20">Sign up</a>
+          <!-- Theme Toggle Button -->
+          <button 
+            (click)="toggleTheme()" 
+            class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">
+              {{ isDarkMode ? 'light_mode' : 'dark_mode' }}
+            </span>
+          </button>
+          
+          <!-- Desktop Auth Buttons -->
+          <div class="hidden sm:flex items-center gap-3">
+            <a routerLink="/sign-in" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white px-4 py-2 rounded-lg transition-colors">Log in</a>
+            <a routerLink="/sign-up" class="landing-cyber-btn text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-lg shadow-purple-500/20">Sign up</a>
+          </div>
+          
+          <!-- Mobile Menu Toggle -->
+          <button 
+            (click)="toggleMobileMenu()" 
+            class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            [attr.aria-label]="isMobileMenuOpen ? 'Close menu' : 'Open menu'"
+          >
+            <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">
+              {{ isMobileMenuOpen ? 'close' : 'menu' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Menu -->
+      <div *ngIf="isMobileMenuOpen" class="md:hidden border-t border-slate-200 dark:border-white/10 bg-white/95 dark:bg-[#0B0F1A]/95 backdrop-blur-lg animate-in">
+        <div class="px-4 py-4 space-y-3">
+          <a href="#features" (click)="closeMobileMenu()" class="block text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-cyan-400 transition-colors py-2">Features</a>
+          <a href="#" (click)="closeMobileMenu()" class="block text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-cyan-400 transition-colors py-2">Pricing</a>
+          <a href="#" (click)="closeMobileMenu()" class="block text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-cyan-400 transition-colors py-2">Resources</a>
+          <div class="border-t border-slate-200 dark:border-white/10 pt-3 mt-3 space-y-2">
+            <a routerLink="/sign-in" (click)="closeMobileMenu()" class="block text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-white px-4 py-2 rounded-lg transition-colors text-center">Log in</a>
+            <a routerLink="/sign-up" (click)="closeMobileMenu()" class="landing-cyber-btn block text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-lg shadow-purple-500/20 text-center">Sign up</a>
+          </div>
         </div>
       </div>
     </div>
@@ -33,11 +74,23 @@
         <span class="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse"></span>
         System Update: AI Technical Prep v2.0 Live
       </div>
-      <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white mb-6 leading-tight">
-        Upgrade Your Career
-        <br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-cyan-500 to-purple-600">Protocol: Optimized</span>
-      </h1>
+      
+      <!-- Typewriter Animation -->
+      <div class="mb-6 min-h-[140px] md:min-h-[180px] flex items-center justify-center">
+        <div class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight landing-hero-title">
+          <om-typewriter 
+            [words]="['Upgrade Your Career', 'Master Your Skills', 'Land Your Dream Job']"
+            [typeSpeed]="80"
+            [deleteSpeed]="60"
+            [pauseTime]="2000"
+            class="text-slate-900 dark:text-white block"
+          ></om-typewriter>
+          <div class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-cyan-500 to-purple-600 mt-2">
+            Protocol: Optimized
+          </div>
+        </div>
+      </div>
+
       <p class="max-w-2xl mx-auto text-lg text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
         CareerSeed uses advanced AI to analyze your CV against job descriptions, improve your ranking in recruiter systems, and unlock more interviews.
       </p>
@@ -45,37 +98,33 @@
         <span class="material-symbols-outlined">radar</span>
         Get started
       </a>
-    </div>
-  </header>
 
-  <!-- Upload / How it works -->
-  <section class="py-16 md:py-24 bg-slate-50/80 dark:bg-[#0F1629]/30 border-t border-slate-200 dark:border-white/10 relative">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="landing-glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden dark:rounded-2xl">
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10">
-          <div class="flex flex-col items-center">
-            <div class="w-12 h-12 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-lg">1</div>
-            <span class="mt-2 text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Upload</span>
+      <!-- Demo Section -->
+      <div class="mt-16 md:mt-24 relative">
+        <div class="mx-auto max-w-4xl">
+          <div class="rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500/10 to-cyan-500/10 backdrop-blur-sm border border-purple-300/30 dark:border-purple-500/30 p-1">
+            <div class="bg-slate-900 dark:bg-[#0F1629] rounded-xl p-8 md:p-12">
+              <div class="aspect-video bg-gradient-to-br from-purple-900/30 to-cyan-900/30 rounded-lg border border-purple-500/20 dark:border-cyan-500/20 flex items-center justify-center relative overflow-hidden">
+                <!-- Animated background elements -->
+                <div class="absolute inset-0 overflow-hidden">
+                  <div class="absolute top-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+                  <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+                </div>
+                
+                <div class="relative z-10 text-center">
+                  <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-5xl">play_arrow</span>
+                  </div>
+                  <p class="text-white font-semibold text-lg mb-2">Watch How CareerSeed Works</p>
+                  <p class="text-slate-400 text-sm">See your CV analysis in action — 3 minutes</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="flex-1 h-0.5 sm:h-0 sm:w-12 sm:w-0 bg-gradient-to-r sm:bg-gradient-to-b from-purple-500 to-slate-200 dark:to-slate-600"></div>
-          <div class="flex flex-col items-center">
-            <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold text-lg">2</div>
-            <span class="mt-2 text-xs font-medium text-slate-400 uppercase tracking-wider">Add Target</span>
-          </div>
-          <div class="flex-1 h-0.5 sm:h-0 sm:w-12 sm:w-0 bg-slate-200 dark:bg-slate-700"></div>
-          <div class="flex flex-col items-center">
-            <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold text-lg">3</div>
-            <span class="mt-2 text-xs font-medium text-slate-400 uppercase tracking-wider">View Analysis</span>
-          </div>
-        </div>
-        <div class="border-2 border-dashed border-purple-300 dark:border-purple-500/40 rounded-2xl p-12 text-center bg-white/50 dark:bg-[#0B0F1A]/50 hover:border-cyan-400 dark:hover:border-cyan-500/50 transition-colors">
-          <span class="material-symbols-outlined text-6xl text-slate-400 dark:text-slate-500 mb-4 block">description</span>
-          <p class="text-slate-700 dark:text-slate-300 font-medium mb-1">Drag &amp; drop or browse to upload your resume</p>
-          <p class="text-slate-400 dark:text-slate-500 text-sm font-mono">Supported: .PDF, .DOCX</p>
         </div>
       </div>
     </div>
-  </section>
+  </header>
 
   <!-- Features -->
   <section id="features" class="py-16 md:py-24 bg-white dark:bg-[#0B0F1A] border-t border-slate-200 dark:border-white/10">
@@ -87,39 +136,50 @@
         <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg">From CV scanning to interview prep — one AI-powered suite.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-8">
-        <div class="p-8 rounded-3xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-[#0F1629]/40 hover:-translate-y-1 transition-transform shadow-sm hover:shadow-xl hover:shadow-purple-100 dark:hover:shadow-purple-900/20">
-          <div class="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
-            <span class="material-symbols-outlined text-3xl">psychology</span>
+        <!-- Card 1 -->
+        <om-electric-border [particleColor]="'#a855f7'" [borderWidth]="2">
+          <div class="p-8 rounded-3xl bg-slate-50/50 dark:bg-[#0F1629]/40 hover:-translate-y-1 transition-transform">
+            <div class="w-14 h-14 rounded-2xl bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
+              <span class="material-symbols-outlined text-3xl">psychology</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">AI CV Analysis</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Keyword optimization, format checks, and impact metrics that ATS systems look for.</p>
+            <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-purple-500 text-sm">check_circle</span> Keyword optimization</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-purple-500 text-sm">check_circle</span> Format validation</li>
+            </ul>
           </div>
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">AI CV Analysis</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Keyword optimization, format checks, and impact metrics that ATS systems look for.</p>
-          <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-purple-500 text-sm">check_circle</span> Keyword optimization</li>
-            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-purple-500 text-sm">check_circle</span> Format validation</li>
-          </ul>
-        </div>
-        <div class="p-8 rounded-3xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-[#0F1629]/40 hover:-translate-y-1 transition-transform shadow-sm hover:shadow-xl hover:shadow-fuchsia-100 dark:hover:shadow-fuchsia-900/20">
-          <div class="w-14 h-14 rounded-2xl bg-fuchsia-100 dark:bg-fuchsia-900/30 border border-fuchsia-200 dark:border-fuchsia-500/20 flex items-center justify-center text-fuchsia-600 dark:text-fuchsia-400 mb-6">
-            <span class="material-symbols-outlined text-3xl">hub</span>
+        </om-electric-border>
+
+        <!-- Card 2 -->
+        <om-electric-border [particleColor]="'#d946ef'" [borderWidth]="2">
+          <div class="p-8 rounded-3xl bg-slate-50/50 dark:bg-[#0F1629]/40 hover:-translate-y-1 transition-transform">
+            <div class="w-14 h-14 rounded-2xl bg-fuchsia-100 dark:bg-fuchsia-900/30 border border-fuchsia-200 dark:border-fuchsia-500/20 flex items-center justify-center text-fuchsia-600 dark:text-fuchsia-400 mb-6">
+              <span class="material-symbols-outlined text-3xl">hub</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Semantic Job Match</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Go beyond keywords — we use AI to understand job descriptions and match you better.</p>
+            <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-fuchsia-500 text-sm">check_circle</span> Match score</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-fuchsia-500 text-sm">check_circle</span> Gap identification</li>
+            </ul>
           </div>
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Semantic Job Match</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Go beyond keywords — we use AI to understand job descriptions and match you better.</p>
-          <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-fuchsia-500 text-sm">check_circle</span> Match score</li>
-            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-fuchsia-500 text-sm">check_circle</span> Gap identification</li>
-          </ul>
-        </div>
-        <div class="p-8 rounded-3xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-[#0F1629]/40 hover:-translate-y-1 transition-transform shadow-sm hover:shadow-xl hover:shadow-cyan-100 dark:hover:shadow-cyan-900/20">
-          <div class="w-14 h-14 rounded-2xl bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-500/20 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-6">
-            <span class="material-symbols-outlined text-3xl">code</span>
+        </om-electric-border>
+
+        <!-- Card 3 -->
+        <om-electric-border [particleColor]="'#06b6d4'" [borderWidth]="2">
+          <div class="p-8 rounded-3xl bg-slate-50/50 dark:bg-[#0F1629]/40 hover:-translate-y-1 transition-transform">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-200 dark:border-cyan-500/20 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-6">
+              <span class="material-symbols-outlined text-3xl">code</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tech Prep</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">AI-generated practice questions and coding challenges for technical interviews.</p>
+            <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500 text-sm">check_circle</span> MCQs &amp; challenges</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500 text-sm">check_circle</span> Role-based prep</li>
+            </ul>
           </div>
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tech Prep</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">AI-generated practice questions and coding challenges for technical interviews.</p>
-          <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500 text-sm">check_circle</span> MCQs &amp; challenges</li>
-            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-cyan-500 text-sm">check_circle</span> Role-based prep</li>
-          </ul>
-        </div>
+        </om-electric-border>
       </div>
     </div>
   </section>
@@ -160,46 +220,82 @@
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="py-16 md:py-24 bg-white dark:bg-[#0B0F1A] border-t border-slate-200 dark:border-white/10">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">Ready to improve your hiring odds?</h2>
-      <p class="text-slate-600 dark:text-slate-400 text-xl mb-10">Join professionals who use CareerSeed to get past the algorithms.</p>
-      <a routerLink="/sign-up" class="landing-cyber-btn-outline inline-block px-10 py-4 rounded-xl font-bold text-lg text-slate-800 dark:text-white border-2 border-purple-500 dark:border-cyan-500 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all">
-        Start scanning
-      </a>
+  <!-- CTA with Meteors -->
+  <section class="relative py-16 md:py-24 bg-white dark:bg-[#0B0F1A] border-t border-slate-200 dark:border-white/10 overflow-hidden min-h-[500px]">
+    <!-- Meteors Background -->
+    <div class="absolute inset-0 pointer-events-none">
+      <om-meteors [count]="15" [duration]="2" class="w-full h-full"></om-meteors>
+    </div>
+    
+    <!-- Centered Content -->
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 pointer-events-auto">
+        <h2 class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">Ready to improve your hiring odds?</h2>
+        <p class="text-slate-600 dark:text-slate-400 text-xl mb-10">Join professionals who use CareerSeed to get past the algorithms.</p>
+        <a routerLink="/sign-up" class="landing-cyber-btn-outline inline-block px-10 py-4 rounded-xl font-bold text-lg text-slate-800 dark:text-white border-2 border-purple-500 dark:border-cyan-500 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all">
+          Start scanning
+        </a>
+      </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-slate-100 dark:bg-[#0F1629] pt-16 pb-8 border-t border-slate-200 dark:border-white/10">
+  <footer class="bg-white dark:bg-[#0A0E1A] pt-20 pb-8 border-t border-slate-200 dark:border-white/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-12">
-        <div class="col-span-2 md:col-span-1">
-          <a routerLink="/" class="flex items-center gap-2 mb-4">
-            <img src="/assets/logo-light.png" alt="CareerSeed" class="app-logo max-w-[100px] h-8 object-contain" />
-          </a>
-          <p class="text-slate-500 dark:text-slate-400 text-sm">Optimizing careers through AI and semantic analysis.</p>
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <!-- Company Info -->
         <div>
-          <h4 class="font-bold text-slate-900 dark:text-white mb-4 text-sm uppercase tracking-wider">Platform</h4>
-          <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
-            <li><a routerLink="/sign-in" class="hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">CV Scanner</a></li>
-            <li><a href="#" class="hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Job Matching</a></li>
-            <li><a href="#" class="hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Technical Prep</a></li>
+          <a routerLink="/" class="flex items-center gap-2 mb-6">
+            <img src="/assets/logo-light.png" alt="CareerSeed" class="app-logo max-w-[160px] h-12 object-contain" />
+          </a>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Optimizing careers through artificial intelligence and semantic analysis protocols.</p>
+          <div class="flex gap-3">
+            <a href="#" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+              <span class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-5xl">language</span>
+            </a>
+            <a href="#" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+              <span class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-5xl">mail</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Platform -->
+        <div>
+          <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-xs uppercase tracking-widest landing-hero-title">Platform</h4>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">CV Scanner</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Job Matching</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Technical Prep</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Cover Letters</a></li>
           </ul>
         </div>
+
+        <!-- Resources -->
         <div>
-          <h4 class="font-bold text-slate-900 dark:text-white mb-4 text-sm uppercase tracking-wider">Support</h4>
-          <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
-            <li><a href="#" class="hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Help Center</a></li>
-            <li><a href="#" class="hover:text-purple-600 dark:hover:text-cyan-400 transition-colors">Contact</a></li>
+          <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-xs uppercase tracking-widest landing-hero-title">Resources</h4>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Career Blog</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">CV Examples</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Job Search Tips</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Guides</a></li>
+          </ul>
+        </div>
+
+        <!-- Support -->
+        <div>
+          <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-xs uppercase tracking-widest landing-hero-title">Support</h4>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Help Center</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Contact Us</a></li>
+            <li><a href="#" class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">Community</a></li>
           </ul>
         </div>
       </div>
-      <div class="pt-8 border-t border-slate-200 dark:border-white/10 text-center text-sm text-slate-500 dark:text-slate-400">
+
+      <div class="pt-8 border-t border-slate-300 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-500">
         © {{ currentYear }} CareerSeed. All rights reserved.
       </div>
     </div>
   </footer>
 </div>
+

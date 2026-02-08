@@ -13,20 +13,6 @@
     linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
 }
 
-.landing-glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-}
-
-.dark .landing-glass-panel {
-  background: rgba(10, 17, 32, 0.6);
-  border-color: rgba(0, 240, 255, 0.1);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-}
-
 .landing-cyber-btn {
   background: linear-gradient(90deg, #7c3aed, #06b6d4);
   position: relative;
@@ -50,4 +36,73 @@
 
 .faq-summary::-webkit-details-marker {
   display: none;
+}
+
+/* Typewriter animation styling */
+om-typewriter {
+  display: block;
+}
+
+/* Electric border component styling */
+om-electric-border {
+  display: block;
+  border-radius: 1.5rem;
+}
+
+/* Meteors animation styling */
+om-meteors {
+  position: relative;
+  display: block;
+}
+
+/* Delay animation for demo section pulse */
+@keyframes delayed-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.delay-700 {
+  animation-delay: 700ms;
+}
+
+/* Typewriter text styling */
+::ng-deep .om-typewriter-cursor {
+  animation: blink 0.7s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Orbitron font styling for hero title */
+.landing-hero-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+/* Mobile menu animation */
+.animate-in {
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

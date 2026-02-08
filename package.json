@@ -29,8 +29,11 @@
     "@angular/forms": "^21.1.0",
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
+    "@omnedia/ngx-electric-border": "^4.0.1",
     "@omnedia/ngx-gridpattern": "^4.0.0",
+    "@omnedia/ngx-meteors": "^4.0.1",
     "@omnedia/ngx-theme-toggle": "^4.0.1",
+    "@omnedia/ngx-typewriter": "^4.0.1",
     "postcss-import": "^16.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
