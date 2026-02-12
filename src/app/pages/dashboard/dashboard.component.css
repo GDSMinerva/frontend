@@ -55,10 +55,7 @@
   z-index: -1;
   filter: blur(40px);
 }
-/* Typewriter animation styling */
-om-typewriter {
-  display: inline-block;
-}
+
 
 /* Dotpattern styling */
 om-dotpattern {
@@ -131,12 +128,7 @@ om-dotpattern {
 
 /* Dark mode color variable and background */
 :host {
-  --dark-bg: #0f1528;
-}
-
-/* Ensure typewriter displays inline */
-om-typewriter {
-  display: inline;
+  --dark-bg: #0B1120;
 }
 
 /* Dotpattern Configuration */
