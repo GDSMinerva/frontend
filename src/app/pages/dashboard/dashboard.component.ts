@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { NgxThemeToggleComponent, OmDarkIcon, OmLightIcon } from '@omnedia/ngx-theme-toggle';
-import { NgxTypewriterComponent } from '@omnedia/ngx-typewriter';
 import { NgxDotpatternComponent } from '@omnedia/ngx-dotpattern';
 
 @Component({
