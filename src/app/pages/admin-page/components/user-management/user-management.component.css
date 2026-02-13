@@ -1,0 +1,164 @@
+/* User Management Component Styles */
+
+/* Material Icons Configuration */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+:host-context(.dark) .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* Table Row Hover Effects */
+tbody tr {
+  transition: all 0.2s ease;
+}
+
+:host-context(.dark) tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Input Styles */
+input[type="text"],
+select {
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border-style: solid;
+}
+
+:host-context(.dark) input[type="text"],
+:host-context(.dark) select {
+  background-color: #0B1022;
+  border-color: rgba(139, 92, 246, 0.4);
+  color: #e2e8f0;
+}
+
+:host-context(.dark) input[type="text"]:focus,
+:host-context(.dark) select:focus {
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2);
+}
+
+/* Button Transitions */
+button {
+  transition: all 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Avatar Gradient Backgrounds */
+.bg-gradient-to-tr {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+:host-context(.dark) .bg-gradient-to-tr {
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
+}
+
+/* CV Score Badge Styles */
+.px-2\.5 {
+  transition: all 0.2s ease;
+}
+
+/* Pagination Button Styles */
+.w-8.h-8 {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.w-8.h-8:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* Delete Button Hover Effect */
+.text-error {
+  color: #EF4444;
+}
+
+:host-context(.dark) .text-error {
+  color: #EF4444;
+}
+
+/* Filter Section Backdrop */
+.backdrop-blur-sm {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Dark Mode Card Styles */
+:host-context(.dark) .bg-white\/80 {
+  background: linear-gradient(145deg, #0F1629 0%, #0B0F1A 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 0 50px rgba(124, 58, 237, 0.15),
+    0 15px 45px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+:host-context(.dark) .bg-white {
+  background: linear-gradient(145deg, #0F1629 0%, #0B0F1A 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Smooth Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Neon Shadow for Active Elements */
+:host-context(.dark) .shadow-indigo-200 {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+:host-context(.dark) .shadow-purple-900\/30 {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+/* Table Responsive Behavior */
+@media (max-width: 1024px) {
+  table {
+    font-size: 0.875rem;
+  }
+  
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Empty State Icon */
+.material-symbols-outlined.text-4xl {
+  font-size: 3rem;
+  display: block;
+  margin: 0 auto;
+}

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin User Management - BridgeToJob</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6366f1",
+                        "primary-dark": "#4f46e5",
+                        "background-light": "#ffffff",
+                        "background-dark": "#0f172a",
+                        "border-dashed": "#C4B5FD",
+                        "error": "#EF4444",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Space Grotesk", "sans-serif"],
+                    },
+                    borderRadius: {
+                        'xl': '0.75rem',
+                        '2xl': '1rem',
+                        'custom': '12px',
+                    },
+                    backgroundImage: {
+                        'ambient-glow': 'linear-gradient(135deg, #f3f0ff 0%, #ffffff 50%, #ecfeff 100%)',
+                        'brand-gradient': 'linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .sidebar-item-active {
+            @apply bg-indigo-50 text-indigo-600 border-r-4 border-indigo-500;
+        }.ai-input {
+            @apply w-full text-sm bg-white border border-dashed border-[var(--border-dashed)] text-slate-700 rounded-custom focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition-shadow outline-none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            @apply bg-slate-50;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            @apply bg-indigo-200 rounded-full;
+        }
+    </style>
+</head>
+<body class="bg-ambient-glow text-slate-900 min-h-screen flex">
+<aside class="w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 flex-shrink-0 flex flex-col hidden lg:flex h-screen sticky top-0 z-20">
+<div class="p-6 border-b border-slate-100/60 flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-brand-gradient flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+<span class="material-icons-round text-xl">smart_toy</span>
+</div>
+<span class="text-xl font-display font-bold tracking-tight text-slate-900">BridgeToJob</span>
+</div>
+<nav class="flex-1 py-6 space-y-1">
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-indigo-50/50 hover:text-indigo-600 transition-colors group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 sidebar-item-active" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-medium text-sm">User Management</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-indigo-50/50 hover:text-indigo-600 transition-colors group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform">rate_review</span>
+<span class="font-medium text-sm">Feedback</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-100/60">
+<div class="p-6 border-b border-slate-100/60">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center overflow-hidden">
+<span class="material-icons-round text-indigo-400">person</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 font-display">Admin User</p>
+<p class="text-xs text-slate-500">Super Admin</p>
+</div>
+</div>
+</div>
+<button class="w-full flex items-center px-6 py-4 text-slate-400 hover:text-indigo-600 transition-colors group">
+<span class="material-symbols-outlined mr-3 group-hover:translate-x-[-2px] transition-transform">keyboard_double_arrow_left</span>
+<span class="text-sm font-medium">Collapse Sidebar</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 bg-transparent">
+<header class="h-20 bg-white/60 backdrop-blur-sm border-b border-slate-200/60 flex items-center justify-between px-8 sticky top-0 z-10">
+<div>
+<h1 class="text-2xl font-bold text-slate-800 font-display">Admin User Management</h1>
+<p class="text-xs text-slate-500 mt-1">Manage users, filters, and access controls</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-400 hover:bg-white hover:text-indigo-500 rounded-full transition-all shadow-sm hover:shadow-md border border-transparent hover:border-slate-100">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200/60">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-slate-900 leading-tight font-display">Admin User</p>
+<p class="text-[10px] text-slate-500 font-medium tracking-wider">SUPER ADMIN</p>
+</div>
+<div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-100 to-white border border-indigo-100 flex items-center justify-center shadow-sm">
+<span class="material-icons-round text-indigo-400 text-lg">person</span>
+</div>
+</div>
+</div>
+</header>
+<div class="p-8">
+<div class="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-white shadow-sm shadow-indigo-100 mb-6">
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-5 items-end">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-wide ml-1">Search</label>
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-indigo-500 absolute left-3 top-1/2 -translate-y-1/2 text-lg transition-colors">search</span>
+<input class="ai-input pl-10 pr-4 py-2.5" placeholder="Name or email..." type="text"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-wide ml-1">Registration Date</label>
+<select class="ai-input py-2.5">
+<option value="">All Time</option>
+<option value="24h">Last 24h</option>
+<option value="week">Last Week</option>
+<option value="custom">Custom Range</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-wide ml-1">Last Login</label>
+<select class="ai-input py-2.5">
+<option value="">Any Time</option>
+<option value="today">Active Today</option>
+<option value="30d">Inactive &gt; 30 days</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-400 uppercase tracking-wide ml-1">CV Score Range</label>
+<select class="ai-input py-2.5">
+<option value="">All Scores</option>
+<option value="low">0-30%</option>
+<option value="mid">31-70%</option>
+<option value="high">71-100%</option>
+</select>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between border-t border-dashed border-slate-200 pt-5">
+<button class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-indigo-50">
+<span class="material-symbols-outlined text-lg">filter_alt_off</span>
+                        Clear Filters
+                    </button>
+<div class="flex items-center gap-3">
+<select class="ai-input w-auto py-2 px-4 !bg-transparent !border-slate-200">
+<option>Bulk Actions</option>
+<option>Export Selected</option>
+<option>Delete Selected</option>
+</select>
+<button class="bg-brand-gradient text-white px-5 py-2.5 rounded-custom text-sm font-bold shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-base">person_add</span>
+                            Add New User
+                        </button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/80 border-b border-slate-100">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-12 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider font-display">User ID</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider font-display">Full Name</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider font-display">Email</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center font-display">CV Score</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider font-display">Last Login</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right font-display">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-9421</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-100 to-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs shadow-sm">AS</div>
+<span class="text-sm font-semibold text-slate-800">Alex Shepherd</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">alex.s@example.com</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">85%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">2 mins ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-8842</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-50 to-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs shadow-sm">MK</div>
+<span class="text-sm font-semibold text-slate-800">Maria Kross</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">maria.k@cvscan.io</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-600 border border-purple-100">62%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Yesterday</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-7215</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-100 to-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs shadow-sm">JD</div>
+<span class="text-sm font-semibold text-slate-800">John Doe</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">john.doe@gmail.com</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">91%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">12 Oct 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-4412</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-teal-50 to-teal-100 text-teal-600 flex items-center justify-center font-bold text-xs shadow-sm">LW</div>
+<span class="text-sm font-semibold text-slate-800">Lucy Wang</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">lwang@tech.co</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">28%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">3 hours ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-3391</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-orange-50 to-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs shadow-sm">RM</div>
+<span class="text-sm font-semibold text-slate-800">Robert Miller</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">r.miller@example.com</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-600 border border-purple-100">55%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">5 hours ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-2284</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-50 to-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs shadow-sm">SC</div>
+<span class="text-sm font-semibold text-slate-800">Sarah Chen</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">sarah.c@design.io</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">76%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">1 day ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-1152</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-50 to-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs shadow-sm">MT</div>
+<span class="text-sm font-semibold text-slate-800">Michael Tan</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">mtan@service.net</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">15%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">2 days ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-0098</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-50 to-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs shadow-sm">EW</div>
+<span class="text-sm font-semibold text-slate-800">Emma Watson</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">emma.w@global.com</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">88%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">3 days ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-5561</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-50 to-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs shadow-sm">DP</div>
+<span class="text-sm font-semibold text-slate-800">David Park</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">d.park@creative.co</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-600 border border-purple-100">45%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">5 days ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-indigo-50/30 transition-colors group">
+<td class="px-6 py-4 text-center">
+<input class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" type="checkbox"/>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 font-mono">#ID-8810</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-50 to-cyan-100 text-cyan-600 flex items-center justify-center font-bold text-xs shadow-sm">KF</div>
+<span class="text-sm font-semibold text-slate-800">Kevin Foster</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">k.foster@domain.com</td>
+<td class="px-6 py-4 text-center">
+<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">92%</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">1 week ago</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 hover:bg-red-50 rounded-lg text-error transition-colors opacity-60 group-hover:opacity-100" title="Delete">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-white border-t border-slate-100 flex items-center justify-between">
+<p class="text-sm text-slate-500">Showing <span class="font-bold text-slate-700">1</span> to <span class="font-bold text-slate-700">10</span> of <span class="font-bold text-slate-700">2,410</span> users</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-400 disabled:opacity-50 transition-colors" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-indigo-600 text-white text-sm font-bold shadow-md shadow-indigo-200">1</button>
+<button class="w-8 h-8 rounded-lg hover:bg-indigo-50 text-slate-600 text-sm font-medium transition-colors">2</button>
+<button class="w-8 h-8 rounded-lg hover:bg-indigo-50 text-slate-600 text-sm font-medium transition-colors">3</button>
+<span class="text-slate-400 text-sm px-1">...</span>
+<button class="w-8 h-8 rounded-lg hover:bg-indigo-50 text-slate-600 text-sm font-medium transition-colors">241</button>
+<button class="w-8 h-8 flex items-center justify-center border border-slate-200 rounded-lg hover:bg-white hover:border-indigo-200 text-slate-500 transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
