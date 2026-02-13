@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Training Catalog Management | cvScan Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        main: "#0B0F1A",
+                        card: "rgba(15, 23, 42, 0.6)",
+                        "neon-purple": "#a855f7",
+                        "neon-cyan": "#06b6d4",
+                        "text-primary": "#f8fafc",
+                        "text-secondary": "#94a3b8",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'cyber-gradient': 'linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%)',
+                        'btn-gradient': 'linear-gradient(90deg, #9333ea 0%, #06b6d4 100%)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { 
+                font-family: 'Inter', sans-serif;
+                background-color: theme('colors.main');
+                color: theme('colors.text-primary');
+                background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0B0F1A 60%);
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            @apply bg-card backdrop-blur-md border border-white/10 shadow-lg;
+        }
+        .cyber-input {
+            @apply bg-black/20 border border-white/10 text-text-primary focus:border-neon-purple focus:ring-1 focus:ring-neon-purple placeholder-slate-500 transition-all;
+        }
+        #sidebar-toggle:checked ~ aside {
+            width: 80px;
+        }
+        #sidebar-toggle:checked ~ aside .nav-text,
+        #sidebar-toggle:checked ~ aside .logo-text {
+            display: none;
+        }
+        #sidebar-toggle:checked ~ main {
+            margin-left: 80px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen custom-scrollbar">
+<input class="hidden" id="sidebar-toggle" type="checkbox"/>
+<aside class="w-64 border-r border-white/10 bg-main/80 backdrop-blur-xl hidden lg:flex flex-col fixed h-full transition-all duration-300 z-30">
+<div class="p-6 flex items-center gap-2 overflow-hidden">
+<div class="w-8 h-8 bg-btn-gradient rounded flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(147,51,234,0.5)]">
+<span class="material-symbols-outlined text-white text-xl font-bold">admin_panel_settings</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-white logo-text">cvScan <span class="text-neon-cyan font-light">Admin</span></span>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-neon-purple transition-colors">dashboard</span>
+<span class="nav-text whitespace-nowrap">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-neon-purple transition-colors">group</span>
+<span class="nav-text whitespace-nowrap">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-neon-purple transition-colors">work</span>
+<span class="nav-text whitespace-nowrap">Job Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-text-secondary hover:text-white hover:bg-white/5 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-neon-purple transition-colors">feedback</span>
+<span class="nav-text whitespace-nowrap">Feedback</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 bg-cyber-gradient border border-neon-purple/30 rounded-lg text-white font-medium shadow-[0_0_15px_rgba(168,85,247,0.1)] relative overflow-hidden" href="#">
+<div class="absolute left-0 top-0 h-full w-1 bg-neon-purple"></div>
+<span class="material-symbols-outlined shrink-0 text-neon-cyan">school</span>
+<span class="nav-text whitespace-nowrap">Training Catalog</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10">
+<label class="flex items-center gap-3 px-3 py-2 text-text-secondary hover:text-neon-cyan cursor-pointer transition-colors" for="sidebar-toggle">
+<span class="material-symbols-outlined shrink-0">menu_open</span>
+<span class="nav-text text-sm font-medium">Collapse Sidebar</span>
+</label>
+</div>
+</aside>
+<main class="lg:ml-64 transition-all duration-300 min-h-screen relative">
+<div class="fixed top-0 left-0 w-full h-96 bg-neon-purple/5 blur-[100px] pointer-events-none -z-10"></div>
+<div class="fixed bottom-0 right-0 w-96 h-96 bg-neon-cyan/5 blur-[100px] pointer-events-none -z-10"></div>
+<div class="max-w-[1600px] mx-auto p-4 lg:p-8">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-white/10 pb-6">
+<div>
+<h1 class="text-2xl font-bold text-white tracking-tight">Training Catalog Management</h1>
+<p class="text-text-secondary mt-1">Manage AI-curated education resources and partner integrations.</p>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-btn-gradient hover:opacity-90 text-white font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.4)]">
+<span class="material-symbols-outlined text-xl">add</span>
+                        Add New Resource
+                    </button>
+<div class="flex items-center gap-3 pl-6 border-l border-white/10">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none text-white">Admin</p>
+<a class="text-[10px] text-red-400 hover:text-red-300 font-bold flex items-center justify-end gap-0.5 mt-1 uppercase transition-colors" href="#">
+<span class="material-symbols-outlined text-[12px]">logout</span>
+                                Logout
+                            </a>
+</div>
+<div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 ring-2 ring-transparent hover:ring-neon-purple/50 transition-all">
+<span class="material-symbols-outlined text-text-secondary">shield_person</span>
+</div>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="glass-panel rounded-2xl p-6 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-neon-purple/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-neon-purple/20 transition-all"></div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<span class="material-symbols-outlined text-neon-purple bg-neon-purple/10 p-2 rounded-lg border border-neon-purple/20">library_books</span>
+<span class="text-neon-cyan text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                            +12% this month
+                        </span>
+</div>
+<h3 class="text-text-secondary text-sm font-medium uppercase tracking-wider relative z-10">Total Courses</h3>
+<p class="text-3xl font-bold text-white mt-1 relative z-10">1,284</p>
+</div>
+<div class="glass-panel rounded-2xl p-6 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-neon-cyan/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-neon-cyan/20 transition-all"></div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<span class="material-symbols-outlined text-neon-cyan bg-neon-cyan/10 p-2 rounded-lg border border-neon-cyan/20">hub</span>
+<span class="text-text-secondary text-xs font-bold bg-white/5 px-2 py-1 rounded">8 active</span>
+</div>
+<h3 class="text-text-secondary text-sm font-medium uppercase tracking-wider relative z-10">Partner Platforms</h3>
+<p class="text-3xl font-bold text-white mt-1 relative z-10 truncate" title="Coursera, Udemy, edX">Coursera, Udemy, edX</p>
+</div>
+<div class="glass-panel rounded-2xl p-6 relative group overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-neon-purple/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-neon-purple/20 transition-all"></div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<span class="material-symbols-outlined text-white bg-gradient-to-br from-purple-500 to-cyan-500 p-2 rounded-lg shadow-lg">trending_up</span>
+<span class="text-neon-cyan text-xs font-bold">+5.4%</span>
+</div>
+<h3 class="text-text-secondary text-sm font-medium uppercase tracking-wider relative z-10">Enrollment Rate</h3>
+<p class="text-3xl font-bold text-white mt-1 relative z-10">68.2%</p>
+</div>
+</div>
+<div class="glass-panel rounded-2xl overflow-hidden">
+<div class="p-6 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/[0.02]">
+<div class="flex flex-1 items-center gap-4">
+<div class="relative flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-xl">search</span>
+<input class="w-full cyber-input rounded-lg pl-10 pr-4 py-2 text-sm" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<select class="cyber-input rounded-lg text-sm py-2">
+<option>All Categories</option>
+<option>Data Science</option>
+<option>Software Engineering</option>
+<option>UI/UX Design</option>
+<option>Business</option>
+</select>
+<select class="cyber-input rounded-lg text-sm py-2">
+<option>All Sources</option>
+<option>Coursera</option>
+<option>Udemy</option>
+<option>LinkedIn Learning</option>
+</select>
+</div>
+</div>
+<button class="flex items-center gap-2 text-sm text-text-secondary hover:text-neon-cyan transition-colors">
+<span class="material-symbols-outlined text-xl">sort</span>
+                        Sort by Latest
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-black/20 border-b border-white/10">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-neon-purple/80">ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-neon-purple/80">Resource Title</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-neon-purple/80">Category</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-neon-purple/80">Source</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-neon-purple/80">Difficulty</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-neon-purple/80 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#TR-8821</td>
+<td class="px-6 py-4">
+<span class="text-sm font-semibold text-white group-hover:text-neon-cyan transition-colors">Python for Everybody</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">Data Science</span>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary">Coursera</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<span class="w-1.5 h-4 bg-neon-purple rounded-full shadow-[0_0_5px_#a855f7]"></span>
+<span class="w-1.5 h-4 bg-white/10 rounded-full"></span>
+<span class="w-1.5 h-4 bg-white/10 rounded-full"></span>
+</div>
+<span class="text-sm text-text-primary ml-1">Beginner</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 hover:bg-neon-cyan/10 text-text-secondary hover:text-neon-cyan rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-2 hover:bg-red-500/10 text-text-secondary hover:text-red-500 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#TR-8822</td>
+<td class="px-6 py-4">
+<span class="text-sm font-semibold text-white group-hover:text-neon-cyan transition-colors">Advanced React Patterns</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]">Software Eng.</span>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary">Udemy</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<span class="w-1.5 h-4 bg-neon-purple/60 rounded-full"></span>
+<span class="w-1.5 h-4 bg-neon-purple/80 rounded-full"></span>
+<span class="w-1.5 h-4 bg-neon-purple rounded-full shadow-[0_0_5px_#a855f7]"></span>
+</div>
+<span class="text-sm text-text-primary ml-1">Advanced</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 hover:bg-neon-cyan/10 text-text-secondary hover:text-neon-cyan rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-2 hover:bg-red-500/10 text-text-secondary hover:text-red-500 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#TR-8823</td>
+<td class="px-6 py-4">
+<span class="text-sm font-semibold text-white group-hover:text-neon-cyan transition-colors">UX Research Fundamentals</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 shadow-[0_0_10px_rgba(217,70,239,0.1)]">UI/UX Design</span>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary">LinkedIn Learning</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<span class="w-1.5 h-4 bg-neon-purple/70 rounded-full"></span>
+<span class="w-1.5 h-4 bg-neon-purple rounded-full shadow-[0_0_5px_#a855f7]"></span>
+<span class="w-1.5 h-4 bg-white/10 rounded-full"></span>
+</div>
+<span class="text-sm text-text-primary ml-1">Intermediate</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 hover:bg-neon-cyan/10 text-text-secondary hover:text-neon-cyan rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-2 hover:bg-red-500/10 text-text-secondary hover:text-red-500 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-sm text-text-secondary font-mono">#TR-8824</td>
+<td class="px-6 py-4">
+<span class="text-sm font-semibold text-white group-hover:text-neon-cyan transition-colors">Machine Learning with Go</span>
+</td>
+<td class="px-6 py-4">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20 shadow-[0_0_10px_rgba(6,182,212,0.1)]">Data Science</span>
+</td>
+<td class="px-6 py-4 text-sm text-text-secondary">Coursera</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<span class="w-1.5 h-4 bg-neon-purple/60 rounded-full"></span>
+<span class="w-1.5 h-4 bg-neon-purple/80 rounded-full"></span>
+<span class="w-1.5 h-4 bg-neon-purple rounded-full shadow-[0_0_5px_#a855f7]"></span>
+</div>
+<span class="text-sm text-text-primary ml-1">Advanced</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 hover:bg-neon-cyan/10 text-text-secondary hover:text-neon-cyan rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="p-2 hover:bg-red-500/10 text-text-secondary hover:text-red-500 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 border-t border-white/10 flex items-center justify-between bg-white/[0.02]">
+<span class="text-sm text-text-secondary">Showing 1 to 10 of 1,284 resources</span>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-white/10 rounded-lg hover:bg-white/5 text-text-secondary disabled:opacity-50 transition-colors" disabled="">
+<span class="material-symbols-outlined text-xl">chevron_left</span>
+</button>
+<button class="w-10 h-10 bg-btn-gradient text-white font-bold rounded-lg shadow-[0_0_10px_rgba(147,51,234,0.3)]">1</button>
+<button class="w-10 h-10 hover:bg-white/5 text-text-secondary hover:text-white rounded-lg transition-colors">2</button>
+<button class="w-10 h-10 hover:bg-white/5 text-text-secondary hover:text-white rounded-lg transition-colors">3</button>
+<button class="p-2 border border-white/10 rounded-lg hover:bg-white/5 text-text-secondary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

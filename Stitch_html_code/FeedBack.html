@@ -1,0 +1,302 @@
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BridgeToJob - Admin Feedback</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#7C3AED",secondary: "#3B82F6","brand-bg": "#F3E8FF","brand-text": "#7C3AED","admin-bg": "#F3F6FF",},
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(124, 58, 237, 0.3)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }.glass-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .dark .glass-card {
+            background: #0f172a;
+            border-color: #1e293b;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex h-screen overflow-hidden">
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col shrink-0 z-20 shadow-sm">
+<div class="p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-violet-500/20">
+<span class="material-icons-round text-xl">insights</span>
+</div>
+<span class="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">BridgeToJob</span>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-3">Main Menu</p>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all group" href="#">
+<span class="material-symbols-outlined text-xl font-light text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all group" href="#">
+<span class="material-symbols-outlined text-xl font-light text-slate-400 group-hover:text-primary transition-colors">group</span>
+<span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-white transition-colors">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-brand-bg dark:bg-violet-900/20 text-brand-text dark:text-violet-400 rounded-xl transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined text-xl font-medium">forum</span>
+<span class="text-sm font-bold">Feedback</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+<div class="flex items-center gap-3 px-3 py-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="w-9 h-9 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 shadow-sm border border-slate-100 dark:border-slate-600">
+<span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-xs font-bold text-slate-900 dark:text-white truncate">Admin</p>
+<p class="text-[10px] text-slate-500 truncate uppercase font-bold tracking-wider">System Access</p>
+</div>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col overflow-hidden">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between px-6 z-10 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.03)]">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder:text-slate-400 transition-all shadow-sm" placeholder="Search feedback, users, or tickets..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors relative border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
+<button class="flex items-center gap-2 pl-2 pr-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<div class="w-7 h-7 rounded-full bg-brand-bg dark:bg-slate-700 overflow-hidden flex items-center justify-center text-brand-text dark:text-slate-300">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<span class="text-xs font-bold text-slate-700 dark:text-slate-300">Admin</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">expand_more</span>
+</button>
+</div>
+</header>
+<main class="flex-1 flex overflow-hidden">
+<div class="w-[420px] border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex flex-col shrink-0">
+<div class="p-5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-10 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<h1 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Feedback Inbox</h1>
+<div class="flex gap-2">
+<button class="p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-lg">refresh</span>
+</button>
+<button class="bg-brand-bg text-brand-text p-1.5 rounded-lg hover:bg-violet-100 transition-colors">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+<button class="px-3.5 py-1.5 rounded-full bg-brand-bg text-brand-text border border-violet-100 dark:border-violet-900/30 text-[11px] font-bold whitespace-nowrap shadow-sm">All Items</button>
+<button class="px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm">Bug Reports</button>
+<button class="px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm">Feature Requests</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3">
+<div class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-violet-200 dark:border-violet-500/30 shadow-soft cursor-pointer relative ring-1 ring-violet-500/20 group hover:shadow-md transition-all">
+<div class="absolute top-0 left-0 bottom-0 w-1 bg-gradient-to-b from-violet-500 to-blue-500 rounded-l-xl"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50 uppercase tracking-wide">High Priority</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">2m ago</span>
+</div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1.5 pl-2 group-hover:text-primary transition-colors">PDF Parsing error in technical CV</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-3 pl-2 leading-relaxed">I tried uploading my resume as a PDF but it says it's not readable. This is very frustrating as I have a deadline...</p>
+<div class="flex items-center justify-between pl-2 pt-2 border-t border-slate-50 dark:border-slate-700/50">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-600 border border-indigo-200">IP</div>
+<span class="text-[11px] text-slate-600 font-medium">Ina Perry</span>
+</div>
+<div class="flex items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined text-[14px]">bug_report</span>
+<span class="text-[10px] font-bold uppercase">Bug</span>
+</div>
+</div>
+</div>
+<div class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer hover:border-violet-200 hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-100 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-900/50 uppercase tracking-wide">Medium</span>
+<span class="text-[10px] text-slate-400 font-medium">14m ago</span>
+</div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1.5 group-hover:text-primary transition-colors">Suggestion: Dark mode support</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-3 leading-relaxed">It would be awesome if the platform supported dark mode. I usually do my applications late at night.</p>
+<div class="flex items-center justify-between pt-2 border-t border-slate-50 dark:border-slate-700/50">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center text-[10px] font-bold text-teal-600 border border-teal-200">WR</div>
+<span class="text-[11px] text-slate-600 font-medium">Wesley Ray</span>
+</div>
+<div class="flex items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined text-[14px]">lightbulb</span>
+<span class="text-[10px] font-bold uppercase">Feature</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-1 bg-slate-50 dark:bg-slate-950 flex flex-col overflow-hidden relative">
+<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-100/40 via-transparent to-transparent pointer-events-none dark:from-violet-900/10"></div>
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar relative z-0">
+<div class="max-w-4xl mx-auto space-y-6">
+<div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-soft flex items-center justify-between backdrop-blur-sm bg-white/80">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/30 dark:to-violet-900/30 flex items-center justify-center text-xl font-bold text-indigo-600 dark:text-indigo-400 shadow-inner">IP</div>
+<div>
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Ina Perry</h2>
+<div class="flex items-center gap-2 mt-1">
+<p class="text-xs text-slate-500 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">ina.perry@example.com</p>
+<span class="text-[10px] text-slate-400 font-mono">ID: #92841</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<div class="px-3 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full border border-red-100 dark:border-red-900/30 flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-sm">bug_report</span>
+<span class="text-[11px] font-bold uppercase tracking-wide">Bug Report</span>
+</div>
+<div class="px-3 py-1.5 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-sm">history</span>
+<span class="text-[11px] font-bold">2 prev tickets</span>
+</div>
+</div>
+</div>
+<div class="space-y-8 py-4">
+<div class="flex flex-col items-start max-w-[90%]">
+<div class="bg-white dark:bg-slate-900 rounded-2xl rounded-tl-none p-6 shadow-soft border border-slate-200 dark:border-slate-800 relative">
+<div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-50 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-300"></span>
+<span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Candidate Message</span>
+</div>
+<span class="text-[11px] text-slate-400 font-medium bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">Today, 10:45 AM</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">PDF Parsing error in technical CV</h3>
+<div class="prose prose-slate prose-sm dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
+<p class="leading-relaxed">Hi Team,</p>
+<p class="leading-relaxed">I tried uploading my resume (attached) which is a standard PDF exported from Adobe InDesign. The platform keeps giving me an error saying <span class="font-mono bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded text-red-600 dark:text-red-400 text-xs font-semibold border border-red-100 dark:border-red-900/30">"Unable to parse document structure"</span>.</p>
+<p class="leading-relaxed">I have a job application deadline today so any help would be appreciated.</p>
+<p class="mt-4 font-medium text-slate-800 dark:text-slate-200">Best,<br/>Ina</p>
+</div>
+<div class="mt-5 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-between group hover:border-violet-200 transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center text-red-500 shadow-sm border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-2xl">picture_as_pdf</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors">ina_perry_resume_2024.pdf</p>
+<p class="text-[10px] text-slate-500 font-medium">1.2 MB • PDF</p>
+</div>
+</div>
+<button class="text-primary bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-[10px] font-bold hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all shadow-sm">Download</button>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-center py-2">
+<div class="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800"></div>
+<span class="px-4 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-slate-700">Ticket Assigned to Admin</span>
+<div class="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800"></div>
+</div>
+<div class="flex flex-col items-end w-full">
+<div class="bg-admin-bg dark:bg-slate-900/50 rounded-2xl rounded-tr-none p-6 border border-violet-100 dark:border-slate-800 w-full max-w-[90%] shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-violet-400 to-blue-400"></div>
+<div class="flex items-center gap-3 mb-4 opacity-70">
+<div class="w-6 h-6 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-xs text-primary">edit_note</span>
+</div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Drafting Response...</span>
+</div>
+<div class="text-sm text-slate-500 italic">
+                                        Use the editor below to compose your reply.
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white/90 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 p-6 backdrop-blur-md z-10">
+<div class="max-w-4xl mx-auto">
+<div class="flex items-center gap-4 mb-3">
+<div class="flex-1 relative">
+<select class="w-full pl-4 pr-10 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-primary appearance-none cursor-pointer hover:bg-white hover:shadow-sm transition-all">
+<option>Load Template: Technical Issue Acknowledgment</option>
+<option>Request for More Information</option>
+<option>Fixed - Update Released</option>
+</select>
+<span class="material-icons-round absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400 pointer-events-none">expand_more</span>
+</div>
+<div class="flex gap-1 p-1 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all shadow-sm"><span class="material-symbols-outlined text-lg">format_bold</span></button>
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all shadow-sm"><span class="material-symbols-outlined text-lg">format_italic</span></button>
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all shadow-sm"><span class="material-symbols-outlined text-lg">link</span></button>
+<div class="w-[1px] bg-slate-200 dark:bg-slate-700 my-1 mx-1"></div>
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all shadow-sm"><span class="material-symbols-outlined text-lg">attach_file</span></button>
+</div>
+</div>
+<div class="relative group">
+<textarea class="w-full h-36 p-5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder:text-slate-400 resize-none shadow-inner transition-all focus:bg-white dark:focus:bg-slate-900" placeholder="Type your response to Ina Perry..."></textarea>
+<div class="absolute bottom-4 right-4 flex items-center gap-3">
+<span class="text-[10px] text-slate-400 font-medium opacity-0 group-focus-within:opacity-100 transition-opacity">Press Cmd+Enter to send</span>
+<button class="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-lg shadow-violet-500/25 active:scale-95 hover:-translate-y-0.5">
+<span>Send Reply</span>
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
