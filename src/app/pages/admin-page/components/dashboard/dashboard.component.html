@@ -3,11 +3,10 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Stat Cards -->
         @for (stat of statCards; track stat.id) {
-        <div
-            class="bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft transition-all hover:shadow-glow group">
+        <div class="card-glass p-6 group transition-all duration-300">
             <div class="flex items-center justify-between mb-4">
                 <div
-                    class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-primary">
+                    class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-[24px]">{{ stat.icon }}</span>
                 </div>
                 @if (stat.changeType === 'positive') {
@@ -42,18 +41,17 @@
 <!-- Charts Section -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
     <!-- User Growth Chart -->
-    <div
-        class="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+    <div class="lg:col-span-8 card-glass p-6">
         <div class="flex items-center justify-between mb-8">
             <h3 class="text-lg font-bold text-slate-800 dark:text-white">User Growth Over Time</h3>
             <div class="relative">
                 <select
-                    class="appearance-none pl-3 pr-8 py-1.5 text-xs font-medium border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    class="appearance-none pl-3 pr-8 py-1.5 text-xs font-medium border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
                     <option>Last 6 Months</option>
                     <option>Last Year</option>
                 </select>
                 <span
-                    class="material-symbols-outlined absolute right-2 top-1.5 text-[16px] text-slate-400 pointer-events-none">expand_more</span>
+                    class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-slate-400 pointer-events-none">expand_more</span>
             </div>
         </div>
         <div class="h-64 flex items-end justify-between gap-4 px-2">
@@ -63,7 +61,8 @@
                     <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary/20 to-secondary/20 rounded-t-lg transition-all group-hover:opacity-80"
                         [style.height.%]="data.percentage"></div>
                     <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary to-secondary rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"
-                        [class.shadow-[0_0_15px_rgba(124,58,237,0.3)]]="last" [style.height.%]="data.percentage"></div>
+                        [class.shadow-neon]="last" [style.height.%]="data.percentage">
+                    </div>
                 </div>
                 <span class="text-xs text-center font-medium" [class.text-primary]="last" [class.font-bold]="last"
                     [class.text-slate-400]="!last">{{ data.month }}</span>
@@ -73,8 +72,7 @@
     </div>
 
     <!-- Training Completion Chart -->
-    <div
-        class="lg:col-span-4 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+    <div class="lg:col-span-4 card-glass p-6">
         <h3 class="text-lg font-bold mb-6 text-slate-800 dark:text-white">Training Completion</h3>
         <div class="flex items-center justify-center h-48 relative">
             <svg class="w-40 h-40 transform -rotate-90">
@@ -109,8 +107,7 @@
     </div>
 
     <!-- Most Used Features -->
-    <div
-        class="lg:col-span-6 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+    <div class="lg:col-span-6 card-glass p-6">
         <h3 class="text-lg font-bold mb-8 text-slate-800 dark:text-white">Most Used Features</h3>
         <div class="space-y-6">
             @for (feature of features; track feature.name) {
@@ -129,13 +126,12 @@
     </div>
 
     <!-- Skill Gaps -->
-    <div
-        class="lg:col-span-6 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft flex flex-col">
+    <div class="lg:col-span-6 card-glass p-6 flex flex-col">
         <h3 class="text-lg font-bold mb-6 text-slate-800 dark:text-white">Identified Skill Gaps</h3>
         <div class="flex flex-wrap content-start gap-3 flex-1">
             @for (skill of skillGaps; track skill.name) {
             <span
-                class="px-4 py-2 bg-violet-50 dark:bg-primary/20 text-primary rounded-full text-sm font-medium border border-transparent hover:border-primary/30 transition-colors cursor-default">
+                class="px-4 py-2 bg-violet-50 dark:bg-primary/20 text-primary rounded-full text-sm font-medium border border-[#EEF2FF] dark:border-primary/30 hover:shadow-neon transition-all cursor-default">
                 {{ skill.name }}
             </span>
             }
@@ -143,8 +139,7 @@
     </div>
 
     <!-- Job Match Success Rates -->
-    <div
-        class="lg:col-span-12 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+    <div class="lg:col-span-12 card-glass p-6">
         <h3 class="text-lg font-bold mb-10 text-center text-slate-800 dark:text-white">Job Match Success Rates</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
             @for (rate of jobMatchRates; track rate.sector) {

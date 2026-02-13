@@ -1,15 +1,12 @@
 <header
-    class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-[#EEF2FF] dark:border-white/10">
-    <div class="flex items-center justify-between gap-4 w-full sm:w-auto">
-        <h1 class="text-lg lg:text-5xl font-bold tracking-tight">
-            <span
-                class="text-purple-600 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-purple-400 dark:via-cyan-400 dark:to-purple-400">System
-                Administrator</span>
+    class="header-premium flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-[#EEF2FF] dark:border-white/5 transition-all duration-300">
+    <div class="flex flex-col gap-1">
+        <h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-slate-800 dark:text-white">
+            System Administrator Dashboard
         </h1>
-    </div>
-    <div class="hidden sm:block">
-        <p class="text-slate-500 dark:text-slate-400 text-xs mb-2">Overview of platform performance and AI engagement
-            metrics.</p>
+        <p class="text-sm font-medium text-slate-500 dark:text-blue-400/80">
+            Overview of platform performance and engagement.
+        </p>
     </div>
     <div class="flex items-center gap-4">
         <om-theme-toggle [animationStyle]="'circle'" [duration]="400"

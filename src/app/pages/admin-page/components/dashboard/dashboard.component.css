@@ -1,5 +1,4 @@
 /* Dashboard Component Styles */
-/* Note: Global styles and @layer directives are in src/styles.css */
 
 /* Material Icons Configuration */
 .material-symbols-outlined {
@@ -24,30 +23,56 @@
   background: #334155;
 }
 
+/* Premium Card Styles inspired by Stitch Design */
+.card-glass {
+  background: #ffffff;
+  border: 1px solid #EEF2FF;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+:host-context(.dark) .card-glass {
+  background: linear-gradient(135deg, #0b1220, #070d18);
+  border-radius: 20px;
+  padding: 24px;
+  border: none;
+  box-shadow: 
+    0 0 50px rgba(124, 58, 237, 0.15), /* outer_glow (tuned) */
+    0 15px 45px rgba(0, 0, 0, 0.5),      /* main_shadow (tuned) */
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04); /* soft_edge */
+}
+
+.card-glass:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+}
+
+:host-context(.dark) .card-glass:hover {
+  box-shadow: 
+    0 0 70px rgba(124, 58, 237, 0.25), 
+    0 25px 60px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Neon Shadow Utilities */
+.shadow-neon {
+  box-shadow: 0 0 15px -2px rgba(124, 58, 237, 0.4);
+}
+
+:host-context(.dark) .shadow-neon {
+  box-shadow: 0 0 20px -5px rgba(139, 92, 246, 0.5), 0 0 10px -2px rgba(34, 211, 238, 0.3);
+}
+
 /* Text Gradient Utility */
 .text-gradient {
   background: linear-gradient(to right, #7C3AED, #06B6D4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-/* Card Styles */
-.rounded-card {
-  border-radius: 16px;
-}
-
-.shadow-soft {
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-}
-
-.shadow-glow {
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.08);
-}
-
-/* Hover Effects */
-.group:hover .group-hover\:scale-105 {
-  transform: scale(1.05);
 }
 
 /* Animations */
@@ -63,15 +88,12 @@
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Progress Bar Animations */
-.progress-bar {
-  transition: width 0.6s ease-out;
-}
-
-/* Chart Bar Hover Effects */
-.chart-bar:hover {
-  filter: brightness(1.1);
+/* Progress bar transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }

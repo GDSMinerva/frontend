@@ -1,3 +1,28 @@
+/* Premium Sidebar Styles */
+:host-context(.dark) aside {
+  background: linear-gradient(135deg, #0b1220, #070d18) !important;
+  box-shadow: 
+    10px 0 50px rgba(0, 0, 0, 0.4),
+    4px 0 30px rgba(124, 58, 237, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Sidebar navigation buttons refinements */
+:host-context(.dark) nav button:not(.bg-gradient-to-r) {
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+:host-context(.dark) nav button:not(.bg-gradient-to-r):hover {
+  background: rgba(124, 58, 237, 0.08) !important;
+  border-color: rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Material symbols styling */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+}
+
 /* Mobile sidebar animation */
 .animate-in {
   animation: slideInLeft 0.3s ease-out forwards;
@@ -12,9 +37,4 @@
     opacity: 1;
     transform: translateX(0);
   }
-}
-
-/* Material symbols styling */
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
 }
