@@ -26,7 +26,7 @@ describe('DashboardHostComponent', () => {
         { provide: Router, useValue: routerSpy }
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DashboardHostComponent);
     component = fixture.componentInstance;
@@ -38,26 +38,26 @@ describe('DashboardHostComponent', () => {
 
   it('should navigate to admin dashboard for admin role', () => {
     authServiceSpy.getAuthState.mockReturnValue({ user: { role: 'admin' } });
-    
+
     component.ngOnInit();
-    
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard/admin']);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/admin-page']);
   });
 
   it('should navigate to user dashboard for user role', () => {
     authServiceSpy.getAuthState.mockReturnValue({ user: { role: 'user' } });
-    
+
     component.ngOnInit();
-    
+
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard/user']);
   });
 
   it('should default to user dashboard if no role found', () => {
     authServiceSpy.getAuthState.mockReturnValue({ user: null });
     authServiceSpy.decodeToken.mockReturnValue(null);
-    
+
     component.ngOnInit();
-    
+
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard/user']);
   });
 });

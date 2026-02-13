@@ -18,7 +18,7 @@ export class DashboardHostComponent implements OnInit {
     const userRole = state.user?.['role'] || this.auth.decodeToken()?.['role'] || 'user';
 
     if (userRole === 'admin') {
-      this.router.navigate(['/dashboard/admin']);
+      this.router.navigate(['/admin-page']);
     } else {
       this.router.navigate(['/dashboard/user']);
     }

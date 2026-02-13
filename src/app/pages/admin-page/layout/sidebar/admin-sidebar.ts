@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -28,6 +28,17 @@ export class AdminSidebar {
   setActiveTab(tab: typeof this.tabIds[number]): void {
     this.activeTab.set(tab);
     this.closeMobileSidebar();
+
+    // Navigate to the appropriate route
+    const routeMap: Record<typeof this.tabIds[number], string> = {
+      'dashboard': '/admin-page/dashboard',
+      'User Management': '/admin-page/user-management',
+      'Job Management': '/admin-page/job-management',
+      'Training Catalog': '/admin-page/training-catalog',
+      'Feedback': '/admin-page/feedback'
+    };
+
+    this.router.navigate([routeMap[tab]]);
   }
 
   toggleSidebar(): void {

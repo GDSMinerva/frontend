@@ -28,7 +28,13 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard/admin',
+    redirectTo: 'admin-page',
+    pathMatch: 'full'
+  },
+  {
+    path: 'admin-page',
     canActivate: [authGuard],
-    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+    loadComponent: () => import('./pages/admin-page/admin-page.component').then(m => m.AdminPageComponent),
+    loadChildren: () => import('./pages/admin-page/admin-page.routes').then(m => m.adminPageRoutes)
   }
 ];

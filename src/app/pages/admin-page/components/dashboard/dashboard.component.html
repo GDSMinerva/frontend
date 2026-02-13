@@ -1,0 +1,167 @@
+<section class="mb-8">
+    <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-6 font-display">Platform Performance Statistics</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Stat Cards -->
+        @for (stat of statCards; track stat.id) {
+        <div
+            class="bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft transition-all hover:shadow-glow group">
+            <div class="flex items-center justify-between mb-4">
+                <div
+                    class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[24px]">{{ stat.icon }}</span>
+                </div>
+                @if (stat.changeType === 'positive') {
+                <span
+                    class="px-2 py-1 text-xs font-bold rounded-lg flex items-center gap-0.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
+                    <span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                    {{ stat.change }}
+                </span>
+                } @else if (stat.changeType === 'negative') {
+                <span
+                    class="px-2 py-1 text-xs font-bold rounded-lg flex items-center gap-0.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">
+                    <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                    {{ stat.change }}
+                </span>
+                } @else {
+                <span
+                    class="px-2 py-1 text-xs font-bold rounded-lg flex items-center gap-0.5 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
+                    {{ stat.change }}
+                </span>
+                }
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">{{
+                    stat.label }}</p>
+                <h4 class="text-2xl font-bold text-slate-900 dark:text-white font-body">{{ stat.value }}</h4>
+            </div>
+        </div>
+        }
+    </div>
+</section>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
+    <!-- User Growth Chart -->
+    <div
+        class="lg:col-span-8 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-lg font-bold text-slate-800 dark:text-white">User Growth Over Time</h3>
+            <div class="relative">
+                <select
+                    class="appearance-none pl-3 pr-8 py-1.5 text-xs font-medium border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <option>Last 6 Months</option>
+                    <option>Last Year</option>
+                </select>
+                <span
+                    class="material-symbols-outlined absolute right-2 top-1.5 text-[16px] text-slate-400 pointer-events-none">expand_more</span>
+            </div>
+        </div>
+        <div class="h-64 flex items-end justify-between gap-4 px-2">
+            @for (data of userGrowthData; track data.month; let last = $last) {
+            <div class="w-full flex flex-col justify-end gap-2 h-full group relative cursor-pointer">
+                <div class="w-full bg-slate-50 dark:bg-slate-800/50 rounded-t-lg h-full relative overflow-hidden">
+                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary/20 to-secondary/20 rounded-t-lg transition-all group-hover:opacity-80"
+                        [style.height.%]="data.percentage"></div>
+                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary to-secondary rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"
+                        [class.shadow-[0_0_15px_rgba(124,58,237,0.3)]]="last" [style.height.%]="data.percentage"></div>
+                </div>
+                <span class="text-xs text-center font-medium" [class.text-primary]="last" [class.font-bold]="last"
+                    [class.text-slate-400]="!last">{{ data.month }}</span>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Training Completion Chart -->
+    <div
+        class="lg:col-span-4 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+        <h3 class="text-lg font-bold mb-6 text-slate-800 dark:text-white">Training Completion</h3>
+        <div class="flex items-center justify-center h-48 relative">
+            <svg class="w-40 h-40 transform -rotate-90">
+                <circle class="text-slate-100 dark:text-slate-800" cx="80" cy="80" fill="transparent" r="70"
+                    stroke="currentColor" stroke-width="12"></circle>
+                <circle class="text-primary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor"
+                    stroke-dasharray="440" [attr.stroke-dashoffset]="getStrokeDashoffset()" stroke-linecap="round"
+                    stroke-width="12"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-4xl font-bold text-slate-800 dark:text-white">{{ trainingStats.overallPercentage
+                    }}%</span>
+                <span class="text-[11px] text-slate-400 uppercase font-bold tracking-wider mt-1">Overall</span>
+            </div>
+        </div>
+        <div class="mt-6 space-y-3">
+            <div class="flex items-center justify-between text-xs p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                <span class="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
+                    <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-primary to-secondary"></span>
+                    Completed
+                </span>
+                <span class="font-bold text-slate-800 dark:text-white">{{ trainingStats.completed | number }}</span>
+            </div>
+            <div class="flex items-center justify-between text-xs p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                <span class="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-slate-700"></span>
+                    In Progress
+                </span>
+                <span class="font-bold text-slate-800 dark:text-white">{{ trainingStats.inProgress | number }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Most Used Features -->
+    <div
+        class="lg:col-span-6 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+        <h3 class="text-lg font-bold mb-8 text-slate-800 dark:text-white">Most Used Features</h3>
+        <div class="space-y-6">
+            @for (feature of features; track feature.name) {
+            <div class="space-y-2">
+                <div class="flex justify-between text-sm items-end">
+                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ feature.name }}</span>
+                    <span class="text-primary font-bold">{{ feature.percentage }}%</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                    <div class="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-500"
+                        [style.width.%]="feature.percentage"></div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Skill Gaps -->
+    <div
+        class="lg:col-span-6 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft flex flex-col">
+        <h3 class="text-lg font-bold mb-6 text-slate-800 dark:text-white">Identified Skill Gaps</h3>
+        <div class="flex flex-wrap content-start gap-3 flex-1">
+            @for (skill of skillGaps; track skill.name) {
+            <span
+                class="px-4 py-2 bg-violet-50 dark:bg-primary/20 text-primary rounded-full text-sm font-medium border border-transparent hover:border-primary/30 transition-colors cursor-default">
+                {{ skill.name }}
+            </span>
+            }
+        </div>
+    </div>
+
+    <!-- Job Match Success Rates -->
+    <div
+        class="lg:col-span-12 bg-white dark:bg-slate-900 border border-[#EEF2FF] dark:border-slate-800 rounded-card p-6 shadow-soft">
+        <h3 class="text-lg font-bold mb-10 text-center text-slate-800 dark:text-white">Job Match Success Rates</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            @for (rate of jobMatchRates; track rate.sector) {
+            <div class="flex flex-col items-center">
+                <div class="relative w-32 h-16 overflow-hidden">
+                    <div class="w-32 h-32 rounded-full border-[12px] border-slate-100 dark:border-slate-800"></div>
+                    <div class="absolute top-0 w-32 h-32 rounded-full border-[12px] border-primary border-b-transparent border-r-transparent transition-transform duration-500"
+                        [style.transform]="'rotate(' + rate.rotation + 'deg)'"></div>
+                    <span
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 text-2xl font-bold text-slate-800 dark:text-white font-body">
+                        {{ rate.percentage }}%
+                    </span>
+                </div>
+                <p class="mt-3 text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{{
+                    rate.sector }}</p>
+            </div>
+            }
+        </div>
+    </div>
+</div>

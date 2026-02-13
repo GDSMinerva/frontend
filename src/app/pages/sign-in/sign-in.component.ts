@@ -57,7 +57,7 @@ export class SignInComponent {
       localStorage.setItem('access_token', 'admin_token_67890');
       localStorage.setItem('user', JSON.stringify({ email, firstName: 'Admin', role: 'admin' }));
       this.loading.set(false);
-      this.router.navigate(['/dashboard/admin']);
+      this.router.navigate(['/admin-page']);
       return;
     }
 

@@ -36,7 +36,7 @@ describe('SignInComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SignInComponent);
     component = fixture.componentInstance;
@@ -58,7 +58,7 @@ describe('SignInComponent', () => {
     component.form.setValue({ email: 'admin@gmail.com', password: 'azertyui' });
     component.onSubmit();
     expect(authServiceSpy.login).not.toHaveBeenCalled();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard/admin']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/admin-page']);
   });
 
   it('should call AuthService login for other users', () => {
