@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdminDashboardComponent } from './admin-dashboard.component';
+import { AdminSidebar } from '../../shared/components/admin-sidebar/admin-sidebar';
+import { By } from '@angular/platform-browser';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { Router } from '@angular/router';
@@ -35,7 +37,7 @@ describe('AdminDashboardComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdminDashboardComponent);
     component = fixture.componentInstance;
@@ -47,9 +49,12 @@ describe('AdminDashboardComponent', () => {
   });
 
   it('should toggle sidebar', () => {
-    const initialState = component.sidebarCollapsed();
-    component.toggleSidebar();
-    expect(component.sidebarCollapsed()).toBe(!initialState);
+    const sidebarDebugElement = fixture.debugElement.query(By.directive(AdminSidebar));
+    const sidebarComponent = sidebarDebugElement.componentInstance;
+
+    const initialState = sidebarComponent.sidebarCollapsed();
+    sidebarComponent.toggleSidebar();
+    expect(sidebarComponent.sidebarCollapsed()).toBe(!initialState);
   });
 
   it('should logout and navigate', () => {

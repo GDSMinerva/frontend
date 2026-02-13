@@ -1,13 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 /* Admin Dashboard Component Styles */
 :host {
   display: block;
 }
 
-@layer components {
   .rounded-card {
     @apply rounded-2xl;
   }
@@ -27,7 +24,6 @@
   .font-body {
     @apply font-['Inter'];
   }
-}
 
 /* Dotpattern styling */
 om-dotpattern {
