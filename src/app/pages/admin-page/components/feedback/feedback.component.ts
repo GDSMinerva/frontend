@@ -3,10 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 // Data Interfaces
+interface Reply {
+  id: string;
+  text: string;
+  sender: 'user' | 'admin';
+  timestamp: string;
+}
+
 interface FeedbackItem {
   id: string;
   title: string;
   message: string;
+  replies: Reply[];
   userName: string;
   userEmail: string;
   userInitials: string;
@@ -37,6 +45,14 @@ export class FeedbackComponent {
       id: '#92841',
       title: 'PDF Parsing error in technical CV',
       message: 'I tried uploading my resume as a PDF but it says it\'s not readable. This is very frustrating as I have a deadline...',
+      replies: [
+        {
+          id: 'r1',
+          text: 'I tried uploading my resume as a PDF but it says it\'s not readable. This is very frustrating as I have a deadline...',
+          sender: 'user',
+          timestamp: '2m ago'
+        }
+      ],
       userName: 'Ina Perry',
       userEmail: 'ina.perry@example.com',
       userInitials: 'IE',
@@ -50,6 +66,14 @@ export class FeedbackComponent {
       id: '#92840',
       title: 'Suggestion: Dark mode support',
       message: 'It would be awesome if the platform supported dark mode. I usually do my applications late at night.',
+      replies: [
+        {
+          id: 'r2',
+          text: 'It would be awesome if the platform supported dark mode. I usually do my applications late at night.',
+          sender: 'user',
+          timestamp: '14m ago'
+        }
+      ],
       userName: 'Wesley Ray',
       userEmail: 'wesley.r@example.com',
       userInitials: 'WR',
@@ -62,6 +86,26 @@ export class FeedbackComponent {
       id: '#92839',
       title: 'CV score seems inaccurate',
       message: 'My CV score is showing 45 but I have 10 years of experience. Can you check if the algorithm is working correctly?',
+      replies: [
+        {
+          id: 'r3',
+          text: 'My CV score is showing 45 but I have 10 years of experience. Can you check if the algorithm is working correctly?',
+          sender: 'user',
+          timestamp: '1h ago'
+        },
+        {
+          id: 'r4',
+          text: 'Hi Sarah, thanks for reaching out. Could you clarify which specific section seems to be scored low?',
+          sender: 'admin',
+          timestamp: '55m ago'
+        },
+        {
+          id: 'r5',
+          text: 'Mainly the "Work Experience" section. It doesn\'t seem to be picking up my senior roles.',
+          sender: 'user',
+          timestamp: '45m ago'
+        }
+      ],
       userName: 'Sarah Chen',
       userEmail: 'sarah.c@example.com',
       userInitials: 'SC',
@@ -74,6 +118,14 @@ export class FeedbackComponent {
       id: '#92838',
       title: 'Feature Request: LinkedIn Integration',
       message: 'Would love to see LinkedIn profile import to auto-fill CV data.',
+      replies: [
+        {
+          id: 'r6',
+          text: 'Would love to see LinkedIn profile import to auto-fill CV data.',
+          sender: 'user',
+          timestamp: '3h ago'
+        }
+      ],
       userName: 'Marcus Johnson',
       userEmail: 'marcus.j@example.com',
       userInitials: 'MJ',
@@ -86,6 +138,26 @@ export class FeedbackComponent {
       id: '#92837',
       title: 'Cannot download my CV analysis',
       message: 'The download button for the analysis report is not working. I get a 404 error.',
+      replies: [
+        {
+          id: 'r7',
+          text: 'The download button for the analysis report is not working. I get a 404 error.',
+          sender: 'user',
+          timestamp: '5h ago'
+        },
+        {
+          id: 'r8',
+          text: 'We have identified a temporary issue with our storage service. The fix has been deployed.',
+          sender: 'admin',
+          timestamp: '4h ago'
+        },
+        {
+          id: 'r9',
+          text: 'Great, it works now! Thanks for the quick fix.',
+          sender: 'user',
+          timestamp: '3h 30m ago'
+        }
+      ],
       userName: 'Emily Watson',
       userEmail: 'emily.w@example.com',
       userInitials: 'EW',
@@ -100,6 +172,9 @@ export class FeedbackComponent {
   filteredFeedback: FeedbackItem[] = [];
   selectedFeedback: FeedbackItem | null = null;
 
+  // Mobile View State
+  showDetailOnMobile: boolean = false;
+
   // Filter Options
   filters: FilterOptions = {
     type: 'all'
@@ -110,9 +185,12 @@ export class FeedbackComponent {
 
   constructor() {
     this.applyFilters();
-    // Select first item by default
+    // Select first item by default BUT only on desktop (check window width or just don't select on init if mobile?)
+    // For simplicity, we select it, but our mobile view logic will hide it initially if showDetailOnMobile is false
     if (this.filteredFeedback.length > 0) {
       this.selectFeedback(this.filteredFeedback[0]);
+      // Reset mobile view to show list initially
+      this.showDetailOnMobile = false;
     }
   }
 
@@ -201,6 +279,14 @@ export class FeedbackComponent {
    */
   selectFeedback(feedback: FeedbackItem): void {
     this.selectedFeedback = feedback;
+    this.showDetailOnMobile = true; // Switch to detail view on mobile selection
+  }
+
+  /**
+   * Go back to inbox list (Mobile only)
+   */
+  backToInbox(): void {
+    this.showDetailOnMobile = false;
   }
 
   /**
@@ -273,8 +359,15 @@ export class FeedbackComponent {
    */
   onSendReply(): void {
     if (this.selectedFeedback && this.replyText.trim()) {
+      // Add admin reply to the list
+      this.selectedFeedback.replies.push({
+        id: `r${Date.now()}`,
+        text: this.replyText,
+        sender: 'admin',
+        timestamp: 'Just now'
+      });
+
       console.log('Sending reply to:', this.selectedFeedback.id);
-      console.log('Reply text:', this.replyText);
 
       this.markAsReplied(this.selectedFeedback.id);
       this.replyText = '';

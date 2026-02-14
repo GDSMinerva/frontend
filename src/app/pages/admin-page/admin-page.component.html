@@ -6,7 +6,7 @@
     <om-dotpattern class="absolute inset-0 pointer-events-none dark:opacity-30"></om-dotpattern>
 
     <div class="max-w-[1600px] mx-auto p-4 lg:p-8 relative z-10">
-        <app-admin-header></app-admin-header>
+        <app-admin-header (toggleSidebar)="sidebar.toggleMobileSidebar()"></app-admin-header>
 
         <!-- Router outlet for child components -->
         <router-outlet></router-outlet>
