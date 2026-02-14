@@ -2,8 +2,9 @@
     <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-6 font-display">Platform Performance Statistics</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Stat Cards -->
-        @for (stat of statCards; track stat.id) {
-        <div class="card-glass p-6 group transition-all duration-300">
+        @for (stat of statCards; track stat.id; let i = $index) {
+        <div class="card-glass p-6 group transition-all duration-300 animate-fade-in-up animate-ready"
+            [style.animation-delay]="i * 100 + 'ms'">
             <div class="flex items-center justify-between mb-4">
                 <div
                     class="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -31,7 +32,10 @@
             <div>
                 <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">{{
                     stat.label }}</p>
-                <h4 class="text-2xl font-bold text-slate-900 dark:text-white font-body">{{ stat.value }}</h4>
+                <h4 class="text-2xl font-bold text-slate-900 dark:text-white font-body flex items-baseline">
+                    <om-number-ticker [countTo]="getNumericValue(stat.value)" [countDuration]="2000"></om-number-ticker>
+                    <span>{{ extractSuffix(stat.value) }}</span>
+                </h4>
             </div>
         </div>
         }
@@ -41,7 +45,7 @@
 <!-- Charts Section -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
     <!-- User Growth Chart -->
-    <div class="lg:col-span-8 card-glass p-6">
+    <div class="lg:col-span-8 card-glass p-6 animate-fade-in-up animate-ready delay-200">
         <div class="flex items-center justify-between mb-8">
             <h3 class="text-lg font-bold text-slate-800 dark:text-white">User Growth Over Time</h3>
             <div class="relative">
@@ -58,9 +62,9 @@
             @for (data of userGrowthData; track data.month; let last = $last) {
             <div class="w-full flex flex-col justify-end gap-2 h-full group relative cursor-pointer">
                 <div class="w-full bg-slate-50 dark:bg-slate-800/50 rounded-t-lg h-full relative overflow-hidden">
-                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary/20 to-secondary/20 rounded-t-lg transition-all group-hover:opacity-80"
+                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary/20 to-secondary/20 rounded-t-lg transition-all duration-[2000ms] ease-out group-hover:opacity-80"
                         [style.height.%]="data.percentage"></div>
-                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary to-secondary rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"
+                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-primary to-secondary rounded-t-lg opacity-80 group-hover:opacity-100 transition-all duration-[2000ms] ease-out"
                         [class.shadow-neon]="last" [style.height.%]="data.percentage">
                     </div>
                 </div>
@@ -72,15 +76,15 @@
     </div>
 
     <!-- Training Completion Chart -->
-    <div class="lg:col-span-4 card-glass p-6">
+    <div class="lg:col-span-4 card-glass p-6 animate-fade-in-up animate-ready delay-300">
         <h3 class="text-lg font-bold mb-6 text-slate-800 dark:text-white">Training Completion</h3>
         <div class="flex items-center justify-center h-48 relative">
             <svg class="w-40 h-40 transform -rotate-90">
                 <circle class="text-slate-100 dark:text-slate-800" cx="80" cy="80" fill="transparent" r="70"
                     stroke="currentColor" stroke-width="12"></circle>
-                <circle class="text-primary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor"
-                    stroke-dasharray="440" [attr.stroke-dashoffset]="getStrokeDashoffset()" stroke-linecap="round"
-                    stroke-width="12"></circle>
+                <circle class="text-primary transition-all duration-[2000ms] ease-out" cx="80" cy="80"
+                    fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440"
+                    [attr.stroke-dashoffset]="getStrokeDashoffset()" stroke-linecap="round" stroke-width="12"></circle>
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
                 <span class="text-4xl font-bold text-slate-800 dark:text-white">{{ trainingStats.overallPercentage
@@ -107,7 +111,7 @@
     </div>
 
     <!-- Most Used Features -->
-    <div class="lg:col-span-6 card-glass p-6">
+    <div class="lg:col-span-6 card-glass p-6 animate-fade-in-up animate-ready delay-400">
         <h3 class="text-lg font-bold mb-8 text-slate-800 dark:text-white">Most Used Features</h3>
         <div class="space-y-6">
             @for (feature of features; track feature.name) {
@@ -117,7 +121,7 @@
                     <span class="text-primary font-bold">{{ feature.percentage }}%</span>
                 </div>
                 <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                    <div class="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-500"
+                    <div class="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-[2000ms] ease-out"
                         [style.width.%]="feature.percentage"></div>
                 </div>
             </div>
@@ -126,7 +130,7 @@
     </div>
 
     <!-- Skill Gaps -->
-    <div class="lg:col-span-6 card-glass p-6 flex flex-col">
+    <div class="lg:col-span-6 card-glass p-6 flex flex-col animate-fade-in-up animate-ready delay-500">
         <h3 class="text-lg font-bold mb-6 text-slate-800 dark:text-white">Identified Skill Gaps</h3>
         <div class="flex flex-wrap content-start gap-3 flex-1">
             @for (skill of skillGaps; track skill.name) {
@@ -139,14 +143,14 @@
     </div>
 
     <!-- Job Match Success Rates -->
-    <div class="lg:col-span-12 card-glass p-6">
+    <div class="lg:col-span-12 card-glass p-6 animate-fade-in-up animate-ready delay-600">
         <h3 class="text-lg font-bold mb-10 text-center text-slate-800 dark:text-white">Job Match Success Rates</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
             @for (rate of jobMatchRates; track rate.sector) {
             <div class="flex flex-col items-center">
                 <div class="relative w-32 h-16 overflow-hidden">
                     <div class="w-32 h-32 rounded-full border-[12px] border-slate-100 dark:border-slate-800"></div>
-                    <div class="absolute top-0 w-32 h-32 rounded-full border-[12px] border-primary border-b-transparent border-r-transparent transition-transform duration-500"
+                    <div class="absolute top-0 w-32 h-32 rounded-full border-[12px] border-primary border-b-transparent border-r-transparent transition-transform duration-[2000ms] ease-out"
                         [style.transform]="'rotate(' + rate.rotation + 'deg)'"></div>
                     <span
                         class="absolute bottom-0 left-1/2 -translate-x-1/2 text-2xl font-bold text-slate-800 dark:text-white font-body">

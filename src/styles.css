@@ -111,3 +111,15 @@ html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.
   font-family: 'Space Grotesk', sans-serif;
   color: #000000;
 }
+
+/* Animation Delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+
+/* Ensure elements are hidden before animation starts */
+.animate-ready { opacity: 0; animation-fill-mode: forwards; }

@@ -1,8 +1,8 @@
 <!-- Stats Cards Section -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    @for (stat of statCards; track stat.id) {
-    <div
-        class="bg-white/80 dark:bg-gradient-to-br dark:from-[#0F1726]/60 dark:to-transparent backdrop-blur-md p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-lg hover:shadow-xl dark:hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] transition-all duration-300 relative overflow-hidden group">
+    @for (stat of statCards; track stat.id; let i = $index) {
+    <div class="bg-white/80 dark:bg-gradient-to-br dark:from-[#0F1726]/60 dark:to-transparent backdrop-blur-md p-6 rounded-2xl border border-slate-100 dark:border-white/10 shadow-lg hover:shadow-xl dark:hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] transition-all duration-300 relative overflow-hidden group animate-fade-in-up animate-ready"
+        [style.animation-delay]="i * 100 + 'ms'">
         <!-- Glow effect on hover -->
         <div
             class="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-purple-500/20 transition-all">
@@ -37,15 +37,22 @@
 
         <h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider relative z-10">{{
             stat.label }}</h3>
-        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-1 relative z-10 truncate" [title]="stat.value">{{
-            stat.value }}</p>
+        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-1 relative z-10 truncate" [title]="stat.value">
+            <ng-container *ngIf="isNumeric(stat.value); else plainText">
+                <span class="flex items-baseline">
+                    <om-number-ticker [countTo]="getNumericValue(stat.value)" [countDuration]="2000"></om-number-ticker>
+                    <span class="ml-0.5">{{ getSuffix(stat.value) }}</span>
+                </span>
+            </ng-container>
+            <ng-template #plainText>{{ stat.value }}</ng-template>
+        </p>
     </div>
     }
 </div>
 
 <!-- Training Resources Table Section -->
 <div
-    class="bg-white dark:bg-gradient-to-br dark:from-[#0F1726]/60 dark:to-transparent rounded-2xl border border-slate-100 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-none overflow-hidden">
+    class="bg-white dark:bg-gradient-to-br dark:from-[#0F1726]/60 dark:to-transparent rounded-2xl border border-slate-100 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-none overflow-hidden animate-fade-in-up animate-ready delay-300">
     <!-- Filters Section -->
     <div
         class="p-6 border-b border-slate-100 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-white/50 dark:from-white/[0.02] to-transparent">

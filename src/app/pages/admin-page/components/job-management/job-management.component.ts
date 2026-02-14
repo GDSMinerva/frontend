@@ -1,4 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgxNumberTickerComponent } from '@omnedia/ngx-number-ticker';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -41,7 +43,7 @@ interface StatCard {
 @Component({
   selector: 'app-job-management',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxNumberTickerComponent],
   templateUrl: './job-management.component.html',
   styleUrls: ['./job-management.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -341,5 +343,12 @@ export class JobManagementComponent {
     };
 
     this.addJob(newJob);
+  }
+
+  // Ticker helpers
+  getNumericValue(value: string): number {
+    const cleaned = value.toString().replace(/,/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
   }
 }

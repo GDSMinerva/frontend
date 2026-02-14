@@ -1,4 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgxNumberTickerComponent } from '@omnedia/ngx-number-ticker';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -38,7 +40,7 @@ interface StatCard {
 @Component({
   selector: 'app-training-catalog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxNumberTickerComponent],
   templateUrl: './training-catalog.component.html',
   styleUrls: ['./training-catalog.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -319,5 +321,34 @@ export class TrainingCatalogComponent {
     };
 
     this.addResource(newResource);
+  }
+
+  // Ticker helpers
+  isNumeric(value: string): boolean {
+    if (!value) return false;
+    const cleaned = value.toString().replace(/,/g, '').replace('%', '');
+    return !isNaN(parseFloat(cleaned)) && isFinite(parseFloat(cleaned));
+  }
+
+  getNumericValue(value: string): number {
+    const cleaned = value.toString().replace(/,/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+  }
+
+  getSuffix(value: string): string {
+    const cleaned = value.toString().replace(/,/g, '');
+    const num = parseFloat(cleaned);
+    if (isNaN(num)) return '';
+    // Simple suffix extraction: remove the number part
+    const strNum = num.toString();
+    // Need to handle if number part was formatted differently in string vs float
+    // e.g. "24.5" vs 24.5.
+    // But we just want the rest.
+    // Easiest: extract non-numeric chars from end?
+    // "68.2%" -> "%"
+    // "24.5k" -> "k"
+    const match = value.match(/[a-zA-Z%]+$/);
+    return match ? match[0] : '';
   }
 }
