@@ -1,0 +1,35 @@
+<div class="min-h-screen bg-white dark:bg-[#0B0F1A] text-slate-800 dark:text-white transition-colors duration-300">
+  <app-user-sidebar 
+    [isCollapsed]="isSidebarCollapsed()" 
+    [isMobileOpen]="isMobileSidebarOpen()"
+    (toggleCollapse)="toggleSidebar()"
+    (closeMobile)="closeMobileSidebar()"
+  ></app-user-sidebar>
+
+  <main class="transition-all duration-300 min-h-screen relative overflow-y-auto bg-gradient-to-b from-slate-50 dark:from-transparent dark:to-transparent dark:bg-[#0B1120]" 
+    [ngClass]="{'lg:ml-[280px]': !isSidebarCollapsed(), 'lg:ml-[80px]': isSidebarCollapsed()}">
+    
+    <!-- Dotpattern Background -->
+    <om-dotpattern class="absolute inset-0 pointer-events-none dark:z-0"></om-dotpattern>
+    
+    <!-- Decorative gradient overlay (dark mode only) -->
+    <div class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-slate-700/5 dark:from-[#8B5CF6]/5 to-transparent pointer-events-none dark:z-0"></div>
+
+    <div class="relative z-10">
+      <app-header 
+        [isMobileSidebarOpen]="isMobileSidebarOpen()"
+        (toggleMobileSidebar)="toggleMobileSidebar()"
+      ></app-header>
+
+      <!-- Main Content -->
+      <div class="p-4 lg:p-6">
+        <router-outlet></router-outlet>
+
+        <!-- Footer -->
+        <p class="mt-8 text-center text-xs text-slate-400 dark:text-[#A1A1AA] max-w-5xl mx-auto">
+          By using CareerSeed, you agree to our <a href="#" class="underline hover:text-[#7C3AED] dark:hover:text-[#22D3EE] transition-colors">Terms of Service</a> and <a href="#" class="underline hover:text-[#7C3AED] dark:hover:text-[#22D3EE] transition-colors">Privacy Policy</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>

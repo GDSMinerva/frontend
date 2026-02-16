@@ -1,0 +1,312 @@
+<div class="max-w-[1600px] mx-auto p-4 lg:p-8 relative z-10 transition-colors bg-[#FAFAFA] dark:bg-[#0B0F1A] rounded-2xl">
+  
+  <!-- Header -->
+  <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-200 dark:border-white/5 transition-colors">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-1 tracking-tight font-display">Profile Settings &amp; Data Export</h1>
+      <p class="text-slate-500 dark:text-gray-400 text-sm">Manage your personal information, CV versions, and data privacy exports.</p>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+    
+    <!-- LEFT COLUMN: Profile & Skills -->
+    <div class="xl:col-span-7 space-y-6">
+      
+      <!-- Personal Information Card -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden group bg-white border border-slate-200 shadow-sm">
+        
+        <!-- Card Header -->
+        <div class="flex items-center justify-between mb-6 relative z-10">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-lg bg-violet-50 text-[#7C3AED] dark:bg-purple-500/10 dark:text-purple-400">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide font-display">Personal Information</h2>
+          </div>
+          <button (click)="toggleEditMode()" class="text-xs font-bold text-[#06B6D4] dark:text-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-300 hover:underline uppercase tracking-widest transition-colors">
+            {{ isEditingProfile() ? 'Cancel' : 'Edit Profile' }}
+          </button>
+        </div>
+
+        <!-- Avatar Section -->
+        <div class="mb-8 p-6 bg-violet-50 dark:bg-[#0B1022]/80 rounded-xl border border-violet-200 dark:border-purple-500/30 flex flex-col sm:flex-row items-center gap-6 relative transition-colors">
+            <input type="file" id="avatar-upload" class="hidden" accept="image/png, image/jpeg" (change)="onAvatarSelected($event)">
+            <div class="relative group/avatar cursor-pointer" (click)="triggerAvatarUpload()">
+            <div class="hidden dark:block absolute -inset-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full opacity-20 group-hover/avatar:opacity-50 transition duration-300 blur"></div>
+            <img [src]="userProfile()?.avatarUrl" alt="Profile" class="relative w-24 h-24 rounded-full border-2 border-white dark:border-[#0B1022] object-cover shadow-sm">
+            <div class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-all duration-300">
+              <span class="material-symbols-outlined text-white">photo_camera</span>
+            </div>
+          </div>
+          <div class="flex-1 text-center sm:text-left">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 font-display tracking-wide">Profile Photo</h3>
+            <p class="text-xs text-slate-500 dark:text-gray-400 mb-4 max-w-sm">Upload a high-quality professional headshot. PNG or JPG, max 5MB.</p>
+            <div class="flex flex-wrap justify-center sm:justify-start gap-3">
+              <button (click)="triggerAvatarUpload()" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-5 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all duration-300 border border-transparent dark:border-white/10">
+                <span class="material-symbols-outlined text-sm">upload</span> Update Avatar
+              </button>
+              <button (click)="removeAvatar()" class="bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 px-5 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Form / View -->
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+            
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Full Name</label>
+              <!-- View Mode -->
+              <div *ngIf="!isEditingProfile()" class="text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50  rounded-lg border border-transparent">
+                {{ userProfile()?.firstName }} {{ userProfile()?.lastName }}
+              </div>
+              <!-- Edit Mode -->
+              <div *ngIf="isEditingProfile()" class="flex gap-2">
+                <input formControlName="firstName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="First Name">
+                <input formControlName="lastName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="Last Name">
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Email Address</label>
+              <div *ngIf="!isEditingProfile()" class="text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
+                {{ userProfile()?.email }}
+              </div>
+              <input *ngIf="isEditingProfile()" formControlName="email" class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" type="email">
+            </div>
+
+            <div class="space-y-2 md:col-span-2">
+              <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Location</label>
+              <div *ngIf="!isEditingProfile()" class="text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
+                {{ userProfile()?.location || 'Not set' }}
+              </div>
+              <input *ngIf="isEditingProfile()" formControlName="location" class="w-full rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text">
+            </div>
+
+            <div class="space-y-2 md:col-span-2">
+              <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Career Goals (Bio)</label>
+              <div *ngIf="!isEditingProfile()" class="text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent min-h-[80px]">
+                {{ userProfile()?.bio || 'No bio provided' }}
+              </div>
+              <textarea *ngIf="isEditingProfile()" formControlName="bio" class="w-full rounded-lg text-sm px-4 py-3 min-h-[100px] bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" placeholder="Briefly describe your professional objectives..."></textarea>
+            </div>
+          </div>
+          
+          <div *ngIf="isEditingProfile()" class="mt-6 flex justify-end">
+            <button type="submit" [disabled]="isLoading()" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:shadow-lg transition-all disabled:opacity-70 flex items-center gap-2">
+              <span *ngIf="isLoading()" class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+              {{ isLoading() ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Skills Section -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden bg-white border border-slate-200 shadow-sm transition-colors">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-lg bg-cyan-50 text-[#06B6D4] dark:bg-cyan-500/10 dark:text-cyan-400">
+              <span class="material-symbols-outlined">verified_user</span>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide font-display">Skills</h2>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <!-- Hard Skills -->
+          <div>
+            <p class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest mb-3">Technical Skills</p>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let skill of hardSkills()" class="px-3 py-1.5 bg-slate-50 dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-gray-300 flex items-center gap-2 hover:border-[#7C3AED]/50 dark:hover:border-purple-500/50 transition-colors group">
+                {{ skill.name }} 
+                <span *ngIf="skill.level" class="text-[10px] opacity-60 ml-1">{{skill.level}}%</span>
+                <button (click)="deleteSkill(skill.id)" class="material-symbols-outlined text-sm text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">close</button>
+              </span>
+              <span *ngIf="hardSkills().length === 0" class="text-xs text-slate-400 italic">No technical skills added yet.</span>
+            </div>
+          </div>
+          
+          <!-- Soft Skills -->
+          <div>
+            <p class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest mb-3">Soft Skills</p>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let skill of softSkills()" class="px-3 py-1.5 bg-slate-50 dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-gray-300 flex items-center gap-2 hover:border-[#7C3AED]/50 dark:hover:border-purple-500/50 transition-colors group">
+                {{ skill.name }}
+                <button (click)="deleteSkill(skill.id)" class="material-symbols-outlined text-sm text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">close</button>
+              </span>
+              <span *ngIf="softSkills().length === 0" class="text-xs text-slate-400 italic">No soft skills added yet.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Experience Timeline -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden bg-white border border-slate-200 shadow-sm transition-colors">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-lg bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400">
+              <span class="material-symbols-outlined">work_history</span>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide font-display">Experience</h2>
+          </div>
+        </div>
+        
+        <div class="relative pl-4 space-y-8 before:absolute before:inset-0 before:ml-4 before:h-full before:w-0.5 before:bg-slate-200 dark:before:bg-white/10">
+          <div *ngFor="let exp of experiences()" class="relative pl-8">
+            <span class="absolute left-0 top-1.5 -ml-[5px] h-3 w-3 rounded-full border-2 border-white dark:border-[#0B0F1A]" 
+              [ngClass]="exp.isCurrent ? 'bg-[#7C3AED] dark:bg-purple-500' : 'bg-slate-300 dark:bg-slate-700'"></span>
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between mb-1">
+              <h4 class="text-base font-bold text-slate-900 dark:text-white">{{ exp.position }}</h4>
+              <span class="text-xs font-mono text-slate-500 dark:text-gray-500">{{ exp.startDate }} - {{ exp.endDate || 'Present' }}</span>
+            </div>
+            <p class="text-sm font-medium text-[#7C3AED] dark:text-purple-400 mb-2">{{ exp.company }}</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400">{{ exp.description }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: CV Management & Privacy -->
+    <div class="xl:col-span-5 space-y-6">
+      
+      <!-- CV Management Card -->
+      <div class="glass-card rounded-2xl overflow-hidden flex flex-col bg-white border border-slate-200 shadow-sm transition-colors">
+        <div class="p-6 border-b border-slate-100 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
+              <span class="material-symbols-outlined">history</span>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide font-display">CV Management</h2>
+          </div>
+          <input type="file" id="cv-upload" class="hidden" accept=".pdf,.docx,.doc" (change)="onFileSelected($event)">
+          <button (click)="triggerFileUpload()" [disabled]="isLoading()" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 border border-transparent dark:border-white/10 disabled:opacity-70">
+            <span class="material-symbols-outlined text-lg">{{ isLoading() ? 'hourglass_empty' : 'upload' }}</span>
+            {{ isLoading() ? 'Uploading...' : 'Upload New' }}
+          </button>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200">
+                <th class="px-6 py-4 text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Version Name</th>
+                <th class="px-6 py-4 text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Date</th>
+                <th class="px-6 py-4 text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Score</th>
+                <th class="px-6 py-4 text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+              <tr *ngFor="let cv of cvList()" class="hover:bg-slate-50 transition-colors group">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined" [ngClass]="cv.isActive ? 'text-[#06B6D4] dark:text-emerald-400' : 'text-slate-400 dark:text-gray-500'">picture_as_pdf</span>
+                    <div>
+                      <p class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-[#06B6D4] dark:group-hover:text-cyan-400 transition-colors">{{ cv.versionName || cv.fileName }}</p>
+                      <p class="text-[10px] text-slate-500 dark:text-gray-500">{{ cv.isActive ? 'Current Version' : 'Archived Version' }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-xs text-slate-500 dark:text-gray-400 font-mono">{{ cv.uploadDate }}</td>
+                <td class="px-6 py-4">
+                  <span *ngIf="cv.score" class="px-2 py-1 rounded shadow-[0_0_10px_rgba(16,185,129,0.1)] text-[10px] font-bold border"
+                    [ngClass]="cv.score > 70 
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400' 
+                      : 'bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-400'">
+                    {{ cv.score }}%
+                  </span>
+                  <span *ngIf="!cv.score" class="text-[10px] text-slate-400">N/A</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <button (click)="setPrimaryCV(cv.id)" [disabled]="cv.isActive" title="Set as Primary" class="w-8 h-8 rounded hover:bg-slate-100 dark:hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-[#7C3AED] dark:hover:text-white transition-colors disabled:opacity-50">
+                      <span class="material-symbols-outlined text-lg">{{ cv.isActive ? 'star' : 'star_outline' }}</span>
+                    </button>
+                    <button title="Download" (click)="downloadCV(cv)" class="w-8 h-8 rounded hover:bg-slate-100 dark:hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-[#06B6D4] dark:hover:text-white transition-colors">
+                      <span class="material-symbols-outlined text-lg">download</span>
+                    </button>
+                    <button (click)="deleteCV(cv.id)" title="Delete" class="w-8 h-8 rounded hover:bg-red-50 dark:hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-red-500 dark:hover:text-white transition-colors">
+                      <span class="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="cvList().length === 0">
+                <td colspan="4" class="px-6 py-8 text-center text-sm text-slate-500 dark:text-slate-500">
+                  No CVs uploaded yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Data & Privacy Card -->
+      <div class="glass-card rounded-2xl p-6 shadow-sm bg-white border border-slate-200 transition-colors">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="p-2 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+            <span class="material-symbols-outlined">security</span>
+          </div>
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white tracking-wide font-display">Data &amp; Privacy</h2>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-[#0B1022]/60 border border-slate-200 dark:border-white/5 rounded-xl hover:border-[#7C3AED]/30 dark:hover:border-purple-500/30 transition-colors group">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-violet-100 dark:bg-purple-500/10 rounded-lg flex items-center justify-center text-[#7C3AED] dark:text-purple-400 group-hover:text-[#6d28d9] dark:group-hover:text-purple-300 transition-colors">
+                <span class="material-symbols-outlined">analytics</span>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Analysis Reports</p>
+                <p class="text-[10px] text-slate-500 dark:text-gray-400">Consolidated PDF of all CV scans</p>
+              </div>
+            </div>
+            <button (click)="exportData('pdf')" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all hover:shadow-md dark:hover:shadow-[0_0_10px_rgba(139,92,246,0.4)] border border-transparent dark:border-white/10">
+              <span class="material-symbols-outlined text-sm">download</span> PDF
+            </button>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-[#0B1022]/60 border border-slate-200 dark:border-white/5 rounded-xl hover:border-[#7C3AED]/30 dark:hover:border-purple-500/30 transition-colors group">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-cyan-50 dark:bg-cyan-500/10 rounded-lg flex items-center justify-center text-[#06B6D4] dark:text-cyan-400 group-hover:text-[#0891b2] dark:group-hover:text-cyan-300 transition-colors">
+                <span class="material-symbols-outlined">folder_zip</span>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Optimized CVs</p>
+                <p class="text-[10px] text-slate-500 dark:text-gray-400">ZIP file of all latest versions</p>
+              </div>
+            </div>
+            <button (click)="exportData('zip')" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all hover:shadow-md dark:hover:shadow-[0_0_10px_rgba(139,92,246,0.4)] border border-transparent dark:border-white/10">
+              <span class="material-symbols-outlined text-sm">download</span> ZIP
+            </button>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-[#0B1022]/60 border border-slate-200 dark:border-white/5 rounded-xl hover:border-[#7C3AED]/30 dark:hover:border-purple-500/30 transition-colors group">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-500 dark:group-hover:text-emerald-300 transition-colors">
+                <span class="material-symbols-outlined">database</span>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Personal Data</p>
+                <p class="text-[10px] text-slate-500 dark:text-gray-400">JSON or CSV of profile info</p>
+              </div>
+            </div>
+            <button (click)="exportData('json')" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all hover:shadow-md dark:hover:shadow-[0_0_10px_rgba(139,92,246,0.4)] border border-transparent dark:border-white/10">
+              <span class="material-symbols-outlined text-sm">download</span> JSON
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-6 pt-6 border-t border-slate-200 dark:border-white/10">
+          <button (click)="deleteAccount()" class="w-full py-3 rounded-xl border border-red-200 dark:border-red-500/20 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 text-xs font-bold tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+            DELETE ACCOUNT &amp; ALL DATA
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

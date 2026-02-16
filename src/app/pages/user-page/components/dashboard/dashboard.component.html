@@ -1,0 +1,345 @@
+<!-- Main Container -->
+<div class="relative min-h-[600px]">
+
+  <!-- Loading Overlay -->
+  <div *ngIf="isScanning()" class="absolute inset-0 bg-white/90 dark:bg-[#0B1120]/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 rounded-2xl">
+    <div class="text-center">
+      <div class="w-16 h-16 mx-auto mb-4 relative">
+        <div class="w-16 h-16 border-4 border-slate-200 dark:border-slate-700 rounded-full"></div>
+        <div class="absolute top-0 left-0 w-16 h-16 border-4 border-[#7C3AED] dark:border-[#8B5CF6] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Analyzing Your CV</h3>
+      <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Please wait while we process your resume...</p>
+      <div class="w-64 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] transition-all duration-300"
+             [style.width.%]="scanProgress()"></div>
+      </div>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">{{ scanProgress() }}% complete</p>
+    </div>
+  </div>
+
+  <!-- STATE 1: Upload & Scan Form -->
+  <div *ngIf="currentState() === 'upload'" class="bg-white dark:bg-gradient-to-b dark:from-[#0b1120]/95 dark:to-[#0b1120]  dark:backdrop-blur-xl border border-slate-200 dark:border-[#8B5CF6]/20 rounded-2xl shadow-xl dark:shadow-[0_0_30px_rgba(139,92,246,0.15)] p-5 max-w-5xl mx-auto">
+    <div class="flex items-center gap-2 mb-6">
+      <div class="w-8 h-8 rounded-lg bg-violet-50 dark:bg-[#8B5CF6]/10 text-[#7C3AED] dark:text-[#22D3EE] flex items-center justify-center">
+        <span class="material-symbols-outlined text-lg">document_scanner</span>
+      </div>
+      <h2 class="text-base lg:text-lg font-bold font-display text-slate-900 dark:text-white">New scan</h2>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" 
+           id="cv-file-input" 
+           class="hidden" 
+           accept=".pdf,.docx,.doc"
+           (change)="onFileSelected($event)">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Upload Resume Section -->
+      <div class="lg:col-span-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-[#7C3AED] dark:bg-[#8B5CF6]/20 text-white dark:text-[#22D3EE] text-[9px] flex items-center justify-center font-bold border dark:border-[#8B5CF6]/30">1</span>
+            Upload Resume
+          </h3>
+          <button class="text-[10px] font-medium text-[#7C3AED] dark:text-[#22D3EE] hover:underline flex items-center gap-1 transition-colors">
+            <span class="material-symbols-outlined text-xs">history</span>
+            Saved Resumes
+          </button>
+        </div>
+
+        <div class="flex-1 min-h-[340px] border-2 border-dashed border-slate-200 dark:border-[#8B5CF6]/60 rounded-2xl bg-slate-50/50 dark:bg-[#0B0F1A]/40 flex flex-col items-center justify-center p-6 text-center group hover:border-[#7C3AED] dark:hover:border-[#22D3EE] transition-all duration-300 dark:hover:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)] relative overflow-hidden">
+          
+          <div *ngIf="!uploadedCV()">
+            <div class="absolute inset-0 bg-gradient-to-tr from-[#7C3AED]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none dark:hidden"></div>
+            <div class="w-16 h-16 rounded-full bg-white dark:bg-[#0F1629]/60 shadow-sm border border-slate-100 dark:border-[#8B5CF6]/30 flex items-center justify-center mb-3 group-hover:scale-110 dark:group-hover:scale-125 transition-transform duration-300 relative mx-auto">
+              <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#8B5CF6] group-hover:text-[#06B6D4] dark:group-hover:text-[#22D3EE] transition-colors duration-300">cloud_upload</span>
+            </div>
+            <p class="text-xs text-slate-900 dark:text-[#E0E7FF] font-medium mb-1.5">Drag &amp; Drop or Upload</p>
+            <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mb-4 font-medium">Supports PDF, DOCX (Max 5MB)</p>
+            <button (click)="triggerFileUpload()" class="px-4 py-2 rounded-lg lg:rounded-full border border-slate-200 dark:border-[#8B5CF6]/30 bg-white dark:bg-[#0F1629]/60 font-medium text-[10px] text-slate-700 dark:text-[#E0E7FF] flex items-center gap-1.5 hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border-[#8B5CF6]/60 transition-all shadow-sm mx-auto">
+              <span class="material-symbols-outlined text-sm">add</span>
+              Choose File
+            </button>
+            <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mt-4 italic font-medium">Or copy and paste resume here</p>
+          </div>
+
+          <!-- Show uploaded file if exists -->
+          <div *ngIf="uploadedCV()" class="w-full">
+            <div class="w-16 h-16 rounded-full bg-violet-50 dark:bg-[#8B5CF6]/10 flex items-center justify-center mb-3 mx-auto">
+              <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#22D3EE]">description</span>
+            </div>
+            <p class="text-sm font-bold text-slate-900 dark:text-white mb-1 truncate px-4">{{ uploadedCV()?.fileName }}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">{{ uploadedCV()?.fileSize }}</p>
+            <div class="flex gap-2 justify-center">
+              <button (click)="triggerFileUpload()" class="text-xs text-[#7C3AED] dark:text-[#22D3EE] font-bold hover:underline">Change</button>
+              <span class="text-slate-300 dark:text-slate-600">|</span>
+              <button (click)="removeUploadedCV()" class="text-xs text-red-500 font-bold hover:underline">Remove</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Job Details Section -->
+      <div class="lg:col-span-7 flex flex-col">
+        <h3 class="text-sm font-semibold text-slate-400 dark:text-[#E0E7FF] mb-4 uppercase tracking-wider flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-[#06B6D4] dark:bg-[#22D3EE]/20 text-white dark:text-[#22D3EE] text-xs flex items-center justify-center font-bold border dark:border-[#22D3EE]/30">2</span>
+          Job Details
+        </h3>
+
+        <div class="flex-1 min-h-[340px] border border-slate-200 dark:border-[#8B5CF6]/20 rounded-2xl bg-slate-50/50 dark:bg-[#0B0F1A]/40 overflow-hidden flex flex-col md:flex-row shadow-sm dark:shadow-lg dark:shadow-[#8B5CF6]/10">
+          <!-- Job Description Textarea -->
+          <div class="flex-1 flex flex-col p-6 border-b md:border-b-0 md:border-r border-slate-200 dark:border-[#8B5CF6]/20">
+            <label class="text-sm font-bold text-slate-400 dark:text-[#E0E7FF] mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-base">description</span>
+              Paste Job Description
+            </label>
+            <div class="flex-1 bg-white dark:bg-[#0F1629]/60 rounded-lg border border-slate-200 dark:border-[#8B5CF6]/20 hover:border-[#7C3AED] dark:hover:border-[#8B5CF6]/50 transition-colors">
+              <textarea [(ngModel)]="jobDescription().text"
+                        (ngModelChange)="updateJobDescription($event)"
+                        class="w-full h-full p-4 text-sm bg-transparent border-none focus:ring-1 focus:ring-[#7C3AED] dark:focus:ring-[#22D3EE] rounded-lg resize-none text-slate-600 dark:text-[#E0E7FF] placeholder:text-slate-400 dark:placeholder:text-[#A1A1AA] outline-none transition-all" 
+                        placeholder="Copy and paste job description here..."></textarea>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="hidden md:flex flex-col items-center justify-center relative px-0 bg-gradient-to-b from-transparent via-slate-200 dark:via-[#8B5CF6]/10 to-transparent">
+            <div class="h-full w-[1px]"></div>
+            <div class="absolute bg-white dark:bg-[#0F1629]/80 border border-slate-200 dark:border-[#8B5CF6]/30 px-2 py-1 text-[10px] font-bold text-slate-400 dark:text-[#A1A1AA] uppercase tracking-widest rounded-md">OR</div>
+          </div>
+          <div class="md:hidden flex items-center justify-center py-3 px-6 relative bg-gradient-to-r from-transparent via-slate-200 dark:via-[#8B5CF6]/10 to-transparent">
+            <div class="absolute bg-white dark:bg-[#0F1629]/80 border border-slate-200 dark:border-[#8B5CF6]/30 px-3 text-[10px] font-bold text-slate-400 dark:text-[#A1A1AA] uppercase tracking-widest rounded-md">OR</div>
+          </div>
+
+          <!-- Sample Job Descriptions -->
+          <div class="flex-1 flex flex-col p-6 overflow-hidden">
+            <label class="text-sm font-bold text-slate-400 dark:text-[#E0E7FF] mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-base">play_circle</span>
+              Use Sample Description
+            </label>
+            <div class="flex-1 overflow-y-auto space-y-1 pr-2 custom-scrollbar">
+              <button 
+                *ngFor="let job of sampleJobTitles; let i = index" 
+                (click)="toggleSampleJob(job.title)"
+                class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:pl-5 group flex items-center gap-3"
+                [ngClass]="isSampleJobSelected(job.title) 
+                  ? 'bg-[#7C3AED]/10 dark:bg-white/10 text-[#7C3AED] dark:text-[#22D3EE] border border-[#7C3AED]/30 dark:border-white/20' 
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-[#7C3AED] dark:hover:text-[#22D3EE] border border-transparent hover:border-slate-200 dark:hover:border-white/5'"
+              >
+                <div class="flex items-center justify-center w-4 h-4 rounded border-2 shrink-0 transition-all" 
+                  [ngClass]="isSampleJobSelected(job.title) 
+                    ? 'border-[#7C3AED] dark:border-[#22D3EE] bg-[#7C3AED] dark:bg-[#22D3EE]' 
+                    : 'border-slate-400 dark:border-slate-500'">
+                  <span *ngIf="isSampleJobSelected(job.title)" class="material-symbols-outlined text-white text-xs">check</span>
+                </div>
+                <span class="flex-1">{{ job.title }}</span>
+                <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage()" class="mt-4 p-3 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg flex items-center gap-2">
+      <span class="material-symbols-outlined text-red-500 text-sm">error</span>
+      <p class="text-xs text-red-600 dark:text-red-400">{{ errorMessage() }}</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-10 pt-8 border-t border-slate-200 dark:border-[#8B5CF6]/20 flex justify-end">
+      <button (click)="startScan()" 
+              [disabled]="!canStartScan() || isScanning()"
+              class="w-full sm:w-auto px-8 lg:px-12 py-3 lg:py-4 bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold rounded-lg lg:rounded-xl shadow-lg dark:shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-xl dark:hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:scale-[1.02] dark:hover:brightness-110 transition-all flex items-center justify-center gap-2 text-base relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+        <span class="relative z-10">{{ isScanning() ? 'Scanning...' : 'Start AI Scan' }}</span>
+        <span *ngIf="!isScanning()" class="material-symbols-outlined relative z-10 group-hover:animate-pulse">rocket_launch</span>
+        <div *ngIf="isScanning()" class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <div class="absolute inset-0 bg-white/20 dark:bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- STATE 2: Analysis Results -->
+  <div *ngIf="currentState() === 'results'" class="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-8 max-w-[1600px] mx-auto">
+    <!-- LEFT COLUMN -->
+    <div class="lg:col-span-8 2xl:col-span-9 space-y-6">
+      
+      <!-- Report Header -->
+      <div class="bg-white/80 dark:bg-[#0F1629]/60 backdrop-blur-xl rounded-2xl overflow-hidden shadow-sm dark:shadow-[0_0_20px_rgba(139,92,246,0.1)] flex flex-col relative border border-slate-200 dark:border-[#8B5CF6]/20">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#7C3AED]/5 to-[#22D3EE]/5 opacity-50 -z-10"></div>
+        <div class="flex border-b border-slate-200 dark:border-white/5">
+          <button class="flex-1 py-4 text-sm font-bold border-b-2 border-[#7C3AED] text-[#7C3AED] dark:text-[#22D3EE] font-display tracking-wide bg-slate-50 dark:bg-transparent">RESUME REPORT</button>
+        </div>
+        
+        <!-- Tip Header -->
+        <div class="p-6 bg-gradient-to-r from-[#7C3AED]/10 to-transparent border-b border-[#7C3AED]/20 flex items-start gap-3">
+          <div class="p-1.5 bg-amber-500/10 rounded-lg shrink-0">
+            <span class="material-symbols-outlined text-amber-500 dark:text-amber-400">tips_and_updates</span>
+          </div>
+          <div class="text-xs text-slate-700 dark:text-amber-100/90 font-medium leading-relaxed">
+            <span class="font-bold text-amber-600 dark:text-amber-400">ATS-Specific Tip:</span> Adding the specific job title to your resume header can increase match rate by up to 12%.
+          </div>
+        </div>
+
+        <div class="flex-1 p-6 space-y-10 overflow-y-auto max-h-[800px] custom-scrollbar">
+          
+          <!-- Searchability Section -->
+          <div>
+            <div class="flex items-center gap-3 mb-5">
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white font-display">Searchability</h2>
+              <span class="px-2 py-0.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white text-[10px] font-bold rounded uppercase tracking-wider">Important</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-[#9ca3af] mb-6 pl-1">How your resume is parsed by automated tracking systems (ATS).</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Strengths -->
+              <div *ngFor="let strength of analysisResults()?.strengths" class="flex gap-4 group">
+                <div class="w-8 h-8 rounded-full bg-[#22D3EE]/10 flex items-center justify-center shrink-0 border border-[#22D3EE]/20 group-hover:border-[#22D3EE]/50 transition-colors">
+                  <span class="material-symbols-outlined text-[#06B6D4] dark:text-[#22D3EE] text-sm">check</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-slate-900 dark:text-white font-display">Strength Identified</p>
+                  <p class="text-xs text-slate-500 dark:text-[#9ca3af] mt-1">{{ strength }}</p>
+                </div>
+              </div>
+
+              <!-- Weaknesses -->
+              <div *ngFor="let weakness of analysisResults()?.weaknesses" class="flex gap-4 group">
+                <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                  <span class="material-symbols-outlined text-red-500 text-sm">priority_high</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-slate-900 dark:text-white font-display">Attention Needed</p>
+                  <p class="text-xs text-slate-500 dark:text-[#9ca3af] mt-1">{{ weakness }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="border-slate-200 dark:border-white/5"/>
+
+          <!-- Missing Skills Section -->
+          <div>
+            <div class="flex items-center gap-3 mb-5">
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white font-display">Missing Skills</h2>
+              <span class="px-2 py-0.5 bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/20 text-[10px] font-bold rounded uppercase tracking-wider">Critical</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-[#9ca3af] mb-6 pl-1">Technical competencies and key terms missing from your profile.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div *ngFor="let skill of analysisResults()?.missingSkills" class="flex gap-4 group">
+                <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 group-hover:border-red-500/50 transition-colors">
+                  <span class="material-symbols-outlined text-red-500 text-sm">close</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-slate-900 dark:text-white font-display">{{ skill }}</p>
+                  <p class="text-xs text-slate-500 dark:text-[#9ca3af] mt-1">Keywords not detected.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <hr class="border-slate-200 dark:border-white/5"/>
+
+          <!-- AI Recommendations -->
+          <div>
+             <div class="flex items-center gap-3 mb-5">
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white font-display">AI Recommendations</h2>
+              <span class="px-2 py-0.5 bg-[#7C3AED]/10 text-[#7C3AED] dark:text-[#A78BFA] border border-[#7C3AED]/20 text-[10px] font-bold rounded uppercase tracking-wider">Insights</span>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+              <div *ngFor="let rec of analysisResults()?.recommendations" class="flex gap-4 p-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 hover:border-[#22D3EE]/30 transition-all">
+                <span class="material-symbols-outlined text-[#06B6D4] dark:text-[#22D3EE]">lightbulb</span>
+                <div>
+                  <p class="text-sm font-bold text-slate-900 dark:text-white font-display">Suggestion</p>
+                  <p class="text-xs text-slate-500 dark:text-[#9ca3af] mt-1">{{ rec }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="lg:col-span-4 2xl:col-span-3 space-y-6">
+      
+      <!-- Score Card -->
+      <div class="bg-white/80 dark:bg-[#0F1629]/60 backdrop-blur-xl rounded-2xl p-6 shadow-lg dark:shadow-[0_0_20px_rgba(139,92,246,0.15)] relative overflow-hidden group border border-slate-200 dark:border-[#8B5CF6]/20">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#7C3AED]/20 blur-3xl rounded-full pointer-events-none group-hover:bg-[#7C3AED]/30 transition-all"></div>
+        <h3 class="text-sm font-bold text-slate-500 dark:text-[#9ca3af] uppercase tracking-wider mb-8 text-center font-display">Match Rate</h3>
+        
+        <div class="relative w-48 h-48 mx-auto flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90 filter drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+            <circle class="text-slate-100 dark:text-white/5" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-width="12"></circle>
+            <defs>
+              <linearGradient id="gradient-stroke" x1="0%" x2="100%" y1="0%" y2="0%">
+                <stop offset="0%" stop-color="#8B5CF6"></stop>
+                <stop offset="100%" stop-color="#22D3EE"></stop>
+              </linearGradient>
+            </defs>
+            <circle cx="96" cy="96" fill="transparent" r="80" stroke="url(#gradient-stroke)" [attr.stroke-dasharray]="502" [attr.stroke-dashoffset]="502 - (502 * (analysisResults()?.matchScore || 0) / 100)" stroke-linecap="round" stroke-width="12" class="transition-all duration-1000 ease-out"></circle>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span class="text-5xl font-extrabold text-slate-900 dark:text-white font-display tracking-tight">{{ analysisResults()?.matchScore }}%</span>
+            <span class="text-[10px] text-[#7C3AED] dark:text-[#A78BFA] font-bold uppercase tracking-widest mt-1">ATS Score</span>
+          </div>
+        </div>
+
+        <div class="mt-8 space-y-4">
+          <button (click)="startNewScan()" class="w-full py-3.5 bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all flex items-center justify-center gap-2 group">
+            <span class="material-symbols-outlined text-lg group-hover:rotate-180 transition-transform duration-500">sync</span>
+            <span class="uppercase tracking-wide text-xs">Start New Scan</span>
+          </button>
+        </div>
+
+        <div class="mt-10 space-y-5">
+          <div>
+            <div class="flex justify-between text-xs font-bold mb-2">
+              <span class="text-slate-500 dark:text-[#9ca3af]">Missing Skills</span>
+              <span class="text-red-400">{{ analysisResults()?.missingSkills?.length || 0 }} issues</span>
+            </div>
+            <div class="h-1.5 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] shadow-[0_0_10px_rgba(34,211,238,0.5)]" [style.width.%]="100 - ((analysisResults()?.missingSkills?.length || 0) * 10)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optimization Insights -->
+      <div class="bg-white/80 dark:bg-[#0F1629]/60 backdrop-blur-xl rounded-2xl p-6 shadow-sm relative overflow-hidden border border-slate-200 dark:border-[#8B5CF6]/20">
+        <div class="absolute inset-0 opacity-10 bg-[length:10px_10px]" style="background-image: repeating-linear-gradient(45deg, #8B5CF6 0px, #8B5CF6 1px, transparent 1px, transparent 10px);"></div>
+        
+        <div class="flex items-center gap-2 mb-6 relative z-10">
+          <span class="material-symbols-outlined text-[#06B6D4] dark:text-[#22D3EE] text-xl">auto_fix_high</span>
+          <h3 class="text-sm font-bold text-slate-500 dark:text-[#9ca3af] uppercase tracking-wider font-display">AI Optimization Insights</h3>
+        </div>
+        
+        <div class="space-y-6 relative z-10">
+          <div>
+            <p class="text-[10px] font-bold text-slate-500 dark:text-[#9ca3af] uppercase tracking-widest mb-3">Top Matching Roles</p>
+            <div class="space-y-2">
+              <div *ngFor="let role of analysisResults()?.topMatchingRoles" class="flex justify-between items-center text-xs font-semibold p-2 bg-slate-50 dark:bg-white/5 rounded-lg">
+                <span class="text-slate-700 dark:text-white">{{ role.title }}</span>
+                <span class="text-[#06B6D4] dark:text-[#22D3EE]">{{ role.matchScore }}%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <p class="text-[10px] font-bold text-slate-500 dark:text-[#9ca3af] uppercase tracking-widest mb-2">Estimated Salary</p>
+            <div class="p-3 bg-slate-50 dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/10 text-center">
+              <span class="text-sm font-bold text-slate-900 dark:text-white font-display">
+                ${{ analysisResults()?.salaryEstimate?.min | number }} - ${{ analysisResults()?.salaryEstimate?.max | number }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

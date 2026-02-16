@@ -1,0 +1,14 @@
+/* Dotpattern styling */
+om-dotpattern {
+  opacity: 0.5;
+}
+
+.dark om-dotpattern {
+  opacity: 0.3;
+}
+
+/* Dark mode color adjustments */
+:host-context(.dark) {
+  --tw-text-opacity: 1;
+  color: rgb(226 232 240 / var(--tw-text-opacity));
+}

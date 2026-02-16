@@ -1,0 +1,550 @@
+
+<!-- Loading State -->
+<!-- Loading State Removed -->
+
+<!-- STATE 1: No CV Scan - Locked View -->
+<div *ngIf="!isLoading() && currentState() === 'locked'" class="p-4 lg:p-8">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- Main locked card -->
+    <div class="lg:col-span-8">
+      <div class="flex items-center justify-center min-h-[50vh]">
+        <div class="max-w-lg w-full bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B1120]/80 
+                    rounded-2xl border border-slate-200 dark:border-[#8B5CF6]/20 
+                    shadow-xl dark:shadow-[0_0_30px_rgba(139,92,246,0.15)] 
+                    p-8 text-center locked-card">
+          
+          <!-- Lock Icon -->
+          <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-slate-100 dark:bg-[#8B5CF6]/10 
+                      flex items-center justify-center">
+            <span class="material-symbols-outlined text-5xl text-slate-400 dark:text-[#8B5CF6]">
+              lock
+            </span>
+          </div>
+          
+          <!-- Title -->
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 font-display">
+            Interview Simulation Unavailable
+          </h2>
+          
+          <!-- Description -->
+          <p class="text-sm text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+            To generate job-specific technical questions, please first complete 
+            a CV scan and select a target job description.
+          </p>
+          
+          <!-- CTA Button -->
+          <button (click)="navigateToDashboard()"
+                  class="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] 
+                         dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold rounded-lg 
+                         shadow-lg dark:shadow-[0_0_20px_rgba(34,211,238,0.3)] 
+                         hover:shadow-xl dark:hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] 
+                         hover:scale-[1.02] transition-all flex items-center justify-center gap-2 
+                         text-base mx-auto">
+            Go to Dashboard
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sidebar widgets (visible even when locked) -->
+    <div class="lg:col-span-4 space-y-6">
+      
+      <!-- Current Score Card -->
+      <div class="bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B1120]/80 
+                  rounded-2xl border border-slate-200 dark:border-[#8B5CF6]/20 p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-[#06B6D4]">bar_chart</span>
+          <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            Current Score
+          </h3>
+        </div>
+        <div class="text-5xl font-bold text-slate-300 dark:text-slate-600 mb-2">
+          0 <span class="text-2xl">—</span>
+        </div>
+        <p class="text-xs text-slate-400 dark:text-slate-500">
+          Complete a scan to start scoring
+        </p>
+      </div>
+      
+      <!-- Simulation Progress Card -->
+      <div class="bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B1120]/80 
+                  rounded-2xl border border-slate-200 dark:border-[#8B5CF6]/20 p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-[#06B6D4]">check_circle</span>
+          <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            Simulation Progress
+          </h3>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-slate-600 dark:text-slate-300">Ready to Start</span>
+              <span class="text-sm font-bold text-slate-400">0%</span>
+            </div>
+            <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4]" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-500 dark:text-slate-400">Questions Completed</span>
+              <span class="font-bold text-slate-700 dark:text-slate-300">0</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-500 dark:text-slate-400">Avg. Time/Question</span>
+              <span class="font-bold text-slate-700 dark:text-slate-300">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Expert Tip Card -->
+      <div class="bg-blue-50 dark:bg-blue-500/10 rounded-2xl border border-blue-200 dark:border-blue-500/30 p-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">lightbulb</span>
+          <h3 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+            Expert Tip
+          </h3>
+        </div>
+        <p class="text-sm text-blue-900 dark:text-blue-300 leading-relaxed">
+          First, select a target role in your dashboard to unlock customized 
+          practice questions tailored to your experience.
+        </p>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- STATE 2: Mode Selection (NEW) -->
+<div *ngIf="!isLoading() && currentState() === 'mode_selection'" class="min-h-screen p-8 flex flex-col justify-center items-center relative overflow-hidden">
+    <!-- Optional: Background glow effect like in active mode -->
+    <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-[#7C3AED]/5 to-transparent pointer-events-none"></div>
+
+    <div class="max-w-6xl w-full mx-auto relative z-10">
+      
+      <!-- Header -->
+      <div class="text-center mb-12 animate-fadeIn">
+        <h1 class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4 font-display">
+          Choose Your Interview Mode
+        </h1>
+        <p class="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Select the practice mode that best fits your preparation style and goals.
+        </p>
+      </div>
+      
+      <!-- Mode Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        
+        <!-- Practice Mode Card -->
+        <button (click)="selectMode('practice')"
+                class="bg-white dark:bg-[#020617] 
+                       rounded-2xl border-2 border-slate-200 dark:border-blue-900/30 
+                       hover:border-blue-400 dark:hover:border-blue-400 
+                       hover:bg-blue-50/50 dark:hover:bg-[#0F172A] 
+                       shadow-xl dark:shadow-none
+                       hover:shadow-2xl dark:hover:shadow-[0_0_50px_rgba(59,130,246,0.2)]
+                       p-8 text-left transition-all duration-300 hover:scale-[1.02] group">
+          
+          <!-- Icon and Title -->
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-xl bg-blue-50 dark:bg-blue-500/10 
+                        flex items-center justify-center border border-blue-100 dark:border-blue-500/20
+                        group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
+              <span class="material-symbols-outlined text-4xl text-blue-600 dark:text-blue-400">
+                school
+              </span>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-slate-900 dark:text-white font-display">
+                Practice Mode
+              </h2>
+              <p class="text-sm text-blue-600 dark:text-blue-400 font-medium tracking-wide">
+                SELF-PACED LEARNING
+              </p>
+            </div>
+          </div>
+          
+          <!-- Description -->
+          <p class="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed border-b border-slate-100 dark:border-white/5 pb-6">
+            Self-paced interview practice with no time pressure. Perfect for learning and building confidence.
+          </p>
+          
+          <!-- Features List -->
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-blue-500 text-xl shrink-0">check_circle</span>
+              <span>No time limit per question</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-blue-500 text-xl shrink-0">check_circle</span>
+              <span>Review and edit answers anytime</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-blue-500 text-xl shrink-0">check_circle</span>
+              <span>Detailed AI feedback after each response</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-blue-500 text-xl shrink-0">check_circle</span>
+              <span>Skip and return to questions</span>
+            </li>
+          </ul>
+          
+          <!-- Select Button -->
+          <div class="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700/50">
+            <span class="text-sm font-medium text-slate-500 dark:text-slate-500">
+              Best for beginners
+            </span>
+            <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold group-hover:gap-3 transition-all">
+              Start Practice
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </div>
+          </div>
+        </button>
+        
+        <!-- Assistant Mode Card -->
+        <button (click)="selectMode('assistant')"
+                class="bg-white dark:bg-[#020617] 
+                       rounded-2xl border-2 border-slate-200 dark:border-purple-900/30 
+                       hover:border-purple-400 dark:hover:border-purple-400 
+                       hover:bg-purple-50/50 dark:hover:bg-[#0F172A] 
+                       shadow-xl dark:shadow-none
+                       hover:shadow-2xl dark:hover:shadow-[0_0_50px_rgba(139,92,246,0.2)]
+                       p-8 text-left transition-all duration-300 hover:scale-[1.02] group">
+          
+          <!-- Icon and Title -->
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-xl bg-purple-50 dark:bg-purple-500/10 
+                        flex items-center justify-center border border-purple-100 dark:border-purple-500/20
+                        group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20 transition-colors">
+              <span class="material-symbols-outlined text-4xl text-purple-600 dark:text-purple-400">
+                timer
+              </span>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-slate-900 dark:text-white font-display">
+                Assistant Mode
+              </h2>
+              <p class="text-sm text-purple-600 dark:text-purple-400 font-medium tracking-wide">
+                REALISTIC SIMULATION
+              </p>
+            </div>
+          </div>
+          
+          <!-- Description -->
+          <p class="text-base text-slate-600 dark:text-slate-400 mb-8 leading-relaxed border-b border-slate-100 dark:border-white/5 pb-6">
+            Realistic interview simulation with timer and pressure. Mimics real interview conditions.
+          </p>
+          
+          <!-- Features List -->
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-purple-500 text-xl shrink-0">check_circle</span>
+              <span>Timed questions (recommended duration)</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-purple-500 text-xl shrink-0">check_circle</span>
+              <span>Real-time performance tracking</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-purple-500 text-xl shrink-0">check_circle</span>
+              <span>Pressure simulation</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+              <span class="material-symbols-outlined text-purple-500 text-xl shrink-0">check_circle</span>
+              <span>Time management scoring</span>
+            </li>
+          </ul>
+          
+          <!-- Select Button -->
+          <div class="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700/50">
+            <span class="text-sm font-medium text-slate-500 dark:text-slate-500">
+              Best for preparation
+            </span>
+            <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold group-hover:gap-3 transition-all">
+              Start Simulation
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </div>
+          </div>
+        </button>
+        
+      </div>
+      
+      <!-- Back to Dashboard Link -->
+      <div class="text-center">
+        <button (click)="navigateToDashboard()" 
+                class="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-[#7C3AED] dark:hover:text-[#8B5CF6] transition-colors flex items-center justify-center gap-2 mx-auto">
+          <span class="material-symbols-outlined text-lg">arrow_back</span>
+          Back to Dashboard
+        </button>
+      </div>
+      
+    </div>
+</div>
+
+<!-- STATE 3: Active Simulator -->
+<div *ngIf="!isLoading() && currentState() === 'active_simulator'" class="flex flex-col lg:flex-row h-[calc(100vh-80px)] overflow-hidden">
+  
+    <!-- Main Content Area -->
+    <!-- Main Content Area - Compact Padding -->
+    <main class="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        
+        <!-- Mode Badge & Back Button -->
+        <div class="max-w-3xl mx-auto mb-6 flex items-center justify-between animate-fadeIn">
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors border"
+                    [ngClass]="selectedMode() === 'practice' 
+                      ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20' 
+                      : 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/20'">
+                <span class="material-symbols-outlined text-sm">
+                    {{ selectedMode() === 'practice' ? 'school' : 'timer' }}
+                </span>
+                {{ selectedMode() === 'practice' ? 'Practice Mode' : 'Assistant Mode' }}
+              </span>
+            </div>
+            <button (click)="backToModeSelection()" 
+                    class="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-[#7C3AED] dark:hover:text-[#8B5CF6] transition-colors flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">swap_horiz</span> Change Mode
+            </button>
+        </div>
+
+        <!-- Timer Display (Assistant Mode Only) -->
+        <div *ngIf="isTimerEnabled()" 
+            class="max-w-3xl mx-auto mb-6 p-4 rounded-xl border transition-all animate-fadeIn"
+            [ngClass]="getTimeColor() === 'text-rose-500' 
+                ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30 shadow-[0_0_15px_rgba(244,63,94,0.1)]' 
+                : 'glass-panel border-slate-200 dark:border-white/10'">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-2xl" [className]="getTimeColor()">timer</span>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Time Remaining</span>
+                        <span class="text-sm text-slate-700 dark:text-slate-300" *ngIf="getTimeColor() !== 'text-rose-500'">Good pace, keep going.</span>
+                        <span class="text-sm text-rose-600 dark:text-rose-400 font-bold" *ngIf="getTimeColor() === 'text-rose-500'">Hurry up! Almost out of time.</span>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold font-mono" [className]="getTimeColor()">
+                    {{ formatTime(timeRemaining()) }}
+                </div>
+            </div>
+            <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div class="h-full transition-all duration-1000 ease-linear"
+                    [className]="getTimeColor() === 'text-rose-500' ? 'bg-rose-500' : (getTimeColor() === 'text-amber-500' ? 'bg-amber-500' : 'bg-emerald-500')"
+                    [style.width.%]="(timeRemaining() / questionTimeLimit()) * 100"></div>
+            </div>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-6" *ngIf="currentQuestion() as question">
+            
+            <!-- Question Card - Compact Padding -->
+            <div class="glass-panel cyber-card-bg rounded-3xl p-4 lg:p-6 relative overflow-hidden group question-card">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#7C3AED]/10 dark:bg-[#8B5CF6]/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+                
+                <div class="flex items-center justify-between mb-4 relative z-10">
+                    <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#7C3AED]/10 dark:bg-[#8B5CF6]/10 border border-[#7C3AED]/20 dark:border-[#8B5CF6]/20 text-[#7C3AED] dark:text-[#8B5CF6] text-xs font-bold uppercase tracking-wider shadow-sm">
+                        {{ question.category }}
+                    </span>
+                    
+                    <!-- Elapsed Timer for Practice Mode -->
+                    <div *ngIf="!isTimerEnabled()" class="flex items-center gap-2 text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/10">
+                        <span class="material-symbols-outlined text-base text-blue-500">schedule</span>
+                        <span class="text-xs font-bold tabular-nums">{{ formatTime(questionTimer()) }}</span>
+                    </div>
+                </div>
+
+                <h2 class="text-base md:text-lg font-bold text-slate-900 dark:text-white leading-snug mb-4 relative z-10">
+                    {{ question.question }}
+                </h2>
+
+                <!-- Code Snippet if available - Compact -->
+                <div *ngIf="question.codeSnippet" class="bg-[#0B1022] rounded-xl p-3 font-mono text-xs text-slate-300 mb-4 overflow-x-auto border border-white/5 relative shadow-inner max-h-48">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#7C3AED] to-transparent"></div>
+                    <div class="flex gap-1.5 mb-2 opacity-70">
+                        <div class="w-2 h-2 rounded-full bg-[#ff5f56]"></div>
+                        <div class="w-2 h-2 rounded-full bg-[#ffbd2e]"></div>
+                        <div class="w-2 h-2 rounded-full bg-[#27c93f]"></div>
+                    </div>
+                    <pre class="block leading-relaxed relative z-10"><code>{{ question.codeSnippet.code }}</code></pre>
+                </div>
+
+                <!-- Multiple Choice Options -->
+                <div *ngIf="question.options" class="grid grid-cols-1 gap-3 relative z-10">
+                    <button *ngFor="let option of question.options; let i = index" 
+                            (click)="!showFeedback() && selectOption(i)"
+                            [disabled]="showFeedback()"
+                            [ngClass]="{
+                                'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-500/10': showFeedback() && i === question.correctOptionIndex,
+                                'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-500/10': showFeedback() && selectedOption() === i && i !== question.correctOptionIndex,
+                                'opacity-50 border-slate-200 dark:border-slate-700': showFeedback() && i !== question.correctOptionIndex && selectedOption() !== i,
+                                'border-[#7C3AED] bg-[#7C3AED]/5': !showFeedback() && selectedOption() === i,
+                                'border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-[#7C3AED]/50 dark:hover:border-[#8B5CF6]/50 hover:bg-[#7C3AED]/5 dark:hover:bg-[#8B5CF6]/5': !showFeedback() && selectedOption() !== i
+                            }"
+                            class="group flex flex-col p-3 rounded-xl border transition-all text-left relative overflow-hidden">
+                        
+                        <div class="flex items-start gap-3 w-full">
+                            <!-- Icon for Feedback State -->
+                            <div *ngIf="showFeedback() && i === question.correctOptionIndex" class="shrink-0 mt-0.5">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-xl">check_circle</span>
+                            </div>
+                            <div *ngIf="showFeedback() && selectedOption() === i && i !== question.correctOptionIndex" class="shrink-0 mt-0.5">
+                                <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-xl">cancel</span>
+                            </div>
+
+                            <!-- Option Letter & Text -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3">
+                                    <div [ngClass]="{
+                                        'bg-green-600 text-white border-green-600': showFeedback() && i === question.correctOptionIndex,
+                                        'bg-red-600 text-white border-red-600': showFeedback() && selectedOption() === i && i !== question.correctOptionIndex,
+                                        'bg-[#7C3AED] text-white border-[#7C3AED]': !showFeedback() && selectedOption() === i,
+                                        'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/10 group-hover:bg-[#7C3AED] dark:group-hover:bg-[#8B5CF6] group-hover:text-white': !showFeedback() && selectedOption() !== i && (!showFeedback() || (showFeedback() && i !== question.correctOptionIndex && selectedOption() !== i))
+                                    }" class="w-8 h-8 rounded-lg flex items-center justify-center font-bold border transition-all duration-300 text-sm shrink-0">
+                                        {{ ['A', 'B', 'C', 'D'][i] }}
+                                    </div>
+                                    <span class="font-bold text-sm text-slate-700 dark:text-slate-300"
+                                          [ngClass]="{'dark:text-white': selectedOption() === i}">
+                                        {{ option }}
+                                    </span>
+                                </div>
+
+                                <!-- Feedback Text Inside Option -->
+                                <div *ngIf="showFeedback() && i === question.correctOptionIndex" class="mt-2 text-xs text-green-700 dark:text-green-300 font-medium animate-fadeIn">
+                                    ✓ That's right!
+                                </div>
+                                <div *ngIf="showFeedback() && selectedOption() === i && i !== question.correctOptionIndex" class="mt-2 text-xs text-red-700 dark:text-red-300 font-medium animate-fadeIn">
+                                    ✗ Not quite
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Text Area for Open Questions -->
+                <div *ngIf="!question.options" class="relative z-10">
+                    <textarea [(ngModel)]="currentAnswer" 
+                              [disabled]="showFeedback()"
+                              class="w-full p-4 bg-slate-50 dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none transition-all resize-none min-h-[150px] text-sm"
+                              placeholder="Type your answer here..."></textarea>
+                    
+                     <div class="flex justify-end mt-2" *ngIf="!showFeedback()">
+                        <button (click)="toggleRecording()" class="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#7C3AED] transition-colors">
+                            <span class="material-symbols-outlined text-base" [class.text-red-500]="isRecording()" [class.recording-indicator]="isRecording()">mic</span>
+                            {{ isRecording() ? 'Recording...' : 'Record Answer (Coming Soon)' }}
+                        </button>
+                     </div>
+                </div>
+
+                <!-- AI Feedback Section (Moved to Bottom) -->
+                <div *ngIf="showFeedback()" class="mt-6 p-4 rounded-xl border-2 border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-500/10 feedback-enter relative z-10">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 dark:bg-blue-400 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20">
+                            <span class="material-symbols-outlined text-white">psychology</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-blue-900 dark:text-blue-100 mb-1 flex items-center gap-2">
+                                AI Feedback
+                            </h3>
+                            <p class="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
+                                {{ currentFeedback() }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between gap-4 pt-4">
+                <button *ngIf="selectedMode() === 'practice'" (click)="skipQuestion()" class="px-6 py-3.5 rounded-2xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white font-bold text-sm transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">fast_forward</span>
+                    Skip Question
+                </button>
+                
+                <div *ngIf="selectedMode() !== 'practice'" class="flex-1"></div> <!-- Spacer for non-practice mode -->
+                
+                <button *ngIf="!showFeedback()" (click)="submitAnswer()" class="px-10 py-3.5 rounded-2xl bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold shadow-lg hover:brightness-110 transition-all flex items-center gap-2 border border-white/10">
+                    Submit Answer
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+
+                <button *ngIf="showFeedback()" (click)="nextQuestion()" class="px-10 py-3.5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+                    Next Question
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sidebar Stats -->
+    <aside class="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#0B0F1A]/95 backdrop-blur-xl p-6 flex flex-col gap-6 overflow-y-auto z-10">
+        
+        <!-- Score Card -->
+        <div class="glass-panel cyber-card-bg rounded-3xl p-6 relative group overflow-hidden border border-slate-200 dark:border-white/5 shadow-sm">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-[#06B6D4]/5 dark:bg-[#22D3EE]/5 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-[#06B6D4]/10 dark:group-hover:bg-[#22D3EE]/10 transition-colors"></div>
+            <div class="flex items-center gap-2 mb-4 relative z-10">
+                <div class="p-2 bg-slate-100 dark:bg-blue-500/10 rounded-xl border border-slate-200 dark:border-blue-500/20">
+                    <span class="material-symbols-outlined text-[#06B6D4] dark:text-blue-400 text-xl">leaderboard</span>
+                </div>
+                <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Current Score</p>
+            </div>
+            <div class="flex items-baseline gap-2 mb-2 relative z-10">
+                <h3 class="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">{{ progress().currentScore }}</h3>
+                <span class="text-xs font-bold text-[#06B6D4] dark:text-[#22D3EE] flex items-center gap-0.5">
+                    <span class="material-symbols-outlined text-sm font-bold">trending_up</span>
+                    Top 15%
+                </span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden mt-4 relative z-10">
+                <div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE]" [style.width.%]="progress().currentScore"></div>
+            </div>
+        </div>
+
+        <!-- Progress Card -->
+        <div class="glass-panel cyber-card-bg rounded-3xl p-6 relative group border border-slate-200 dark:border-white/5 shadow-sm">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="p-2 bg-slate-100 dark:bg-blue-500/10 rounded-xl border border-slate-200 dark:border-blue-500/20">
+                    <span class="material-symbols-outlined text-[#06B6D4] dark:text-blue-400 text-xl">task_alt</span>
+                </div>
+                <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Simulation Progress</p>
+            </div>
+            <div class="space-y-5">
+                <div class="flex justify-between items-end">
+                    <span class="text-sm font-bold text-slate-900 dark:text-white">Question {{ (currentSession()?.currentQuestionIndex || 0) + 1 }} of {{ currentSession()?.questions?.length || 0 }}</span>
+                    <span class="text-xs font-bold text-[#06B6D4] dark:text-[#22D3EE]">{{ progress().progressPercentage }}%</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden border border-slate-200 dark:border-white/5">
+                    <div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] transition-all duration-500" [style.width.%]="progress().progressPercentage"></div>
+                </div>
+                
+                <div class="pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-3">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Completed</span>
+                        <span class="text-slate-900 dark:text-white font-bold">{{ progress().questionsCompleted }} questions</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Avg. Time / Question</span>
+                        <span class="text-slate-900 dark:text-white font-bold">{{ formatTime(progress().averageTimePerQuestion) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expert Tip -->
+        <div class="mt-auto p-5 bg-gradient-to-br from-blue-50 to-transparent dark:from-white/5 dark:to-transparent rounded-2xl border border-slate-200 dark:border-white/10 relative overflow-hidden">
+             <div class="flex gap-3 relative z-10">
+                <div class="w-8 h-8 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center shadow-sm text-[#06B6D4] border border-slate-200 dark:border-white/10">
+                    <span class="material-symbols-outlined text-lg">tips_and_updates</span>
+                </div>
+                <div class="flex-1">
+                    <p class="text-[11px] font-extrabold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Expert Tip</p>
+                    <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                        Technical MCQs account for 30% of your total interview score. Take your time to read the snippets thoroughly before answering.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+</div>

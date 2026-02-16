@@ -48,7 +48,7 @@ export class SignInComponent {
       localStorage.setItem('access_token', 'user_token_12345');
       localStorage.setItem('user', JSON.stringify({ email, firstName: 'User', role: 'user' }));
       this.loading.set(false);
-      this.router.navigate(['/dashboard/user']);
+      this.router.navigate(['/user/dashboard']);
       return;
     }
 

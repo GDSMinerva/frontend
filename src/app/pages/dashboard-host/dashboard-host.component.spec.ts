@@ -49,7 +49,7 @@ describe('DashboardHostComponent', () => {
     
     component.ngOnInit();
     
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard/user']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/user/dashboard']);
   });
 
   it('should default to user dashboard if no role found', () => {
@@ -58,6 +58,6 @@ describe('DashboardHostComponent', () => {
     
     component.ngOnInit();
     
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard/user']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/user/dashboard']);
   });
 });
