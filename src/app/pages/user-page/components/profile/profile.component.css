@@ -1,106 +1,160 @@
-/* Profile Specific Styles */
+/*
+* =============================================
+*      PROFILE COMPONENT STYLES
+* =============================================
+*/
 
-/* Ensure smooth transitions */
+/*
+* ---------------------------------------------
+*      BASE & GENERAL STYLES
+* ---------------------------------------------
+*/
+
+/* Main container background */
+:host-context(.dark) .bg-\[#FAFAFA\] {
+  background: #0B0F1A !important;
+}
+
+/* General transition for color-based properties */
 .transition-colors {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 }
 
-/* Glass effect for cards */
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.12); }
+  50% { box-shadow: 0 0 50px rgba(139, 92, 246, 0.18); }
+}
+
+/*
+* ---------------------------------------------
+*      TYPOGRAPHY
+* ---------------------------------------------
+*/
+
+/* Light Mode Typography */
+:host-context(:not(.dark)) h2 {
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+:host-context(:not(.dark)) label {
+  color: #6d28d9 !important;
+}
+
+:host-context(:not(.dark)) .section-subtitle {
+  color: #6d28d9 !important;
+}
+
+/* WITH this: */
+:host-context(:not(.dark)) p,
+:host-context(:not(.dark)) span:not(.material-symbols-outlined) {
+  color: #334155;
+}
+
+/* Dark Mode Typography */
+:host-context(.dark) h2 {
+  color: #d6d8dd !important;
+  font-size: 1.5rem;
+}
+
+:host-context(.dark) .section-subtitle {
+  color: #a78bfa !important;
+}
+
+/*
+* ---------------------------------------------
+*      CARD STYLES
+* ---------------------------------------------
+*/
+
+/* Base card style */
 .glass-card {
   transition: all 0.3s ease;
 }
 
-/* Light mode enhancements */
-.glass-card {
+/* Light Mode Card */
+:host-context(:not(.dark)) .glass-card {
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+  background: white;
+  border-color: #e2e8f0;
 }
 
-/* Dark Mode - Glass Card Background */
+/* Dark Mode Card */
 :host-context(.dark) .glass-card {
-  background: linear-gradient(180deg, rgba(15, 22, 41, 0.9) 0%, rgba(11, 15, 26, 0.9) 100%) !important;
-  border: 1px solid rgba(139, 92, 246, 0.2) !important;
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(15, 22, 41, 0.95) 0%, rgba(11, 15, 26, 0.95) 100%) !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.12), 0 8px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-/* Dark Mode - Inputs & Textareas */
-:host-context(.dark) input:not([type="file"]), 
-:host-context(.dark) textarea, 
+:host-context(.dark) .glass-card:hover {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/*
+* ---------------------------------------------
+*      FORM & INPUT STYLES
+* ---------------------------------------------
+*/
+
+/* Light Mode Inputs */
+:host-context(:not(.dark)) input:not([type="file"]),
+:host-context(:not(.dark)) textarea {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+:host-context(:not(.dark)) input:focus,
+:host-context(:not(.dark)) textarea:focus {
+  border-color: #7c3aed;
+  background: white;
+  outline: none;
+}
+
+/* Dark Mode Inputs */
+:host-context(.dark) input:not([type="file"]),
+:host-context(.dark) textarea,
 :host-context(.dark) select {
-    background-color: #0B1022 !important;
-    border: 1px dashed rgba(139,92,246,0.4) !important;
-    color: #f9fafb !important;
+    background: rgba(11, 15, 34, 0.8) !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    color: #f3f4f6 !important;
     transition: all 0.3s ease;
 }
 
-:host-context(.dark) input:focus, 
-:host-context(.dark) textarea:focus, 
+:host-context(.dark) input:focus,
+:host-context(.dark) textarea:focus,
 :host-context(.dark) select:focus {
+    background: rgba(11, 15, 34, 0.95) !important;
     border-color: #8B5CF6 !important;
-    border-style: solid !important;
-    box-shadow: 0 0 0 1px #8B5CF6 !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15), 0 0 20px rgba(139, 92, 246, 0.25) !important;
     outline: none !important;
 }
 
-/* Dark Mode - Table Styles */
-:host-context(.dark) table {
-  color: #e2e8f0;
+:host-context(.dark) input::placeholder,
+:host-context(.dark) textarea::placeholder {
+  color: rgba(148, 163, 184, 0.4) !important;
 }
 
-:host-context(.dark) thead tr {
-  background-color: rgba(11, 16, 34, 0.8) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
+/*
+* ---------------------------------------------
+*      TABLE STYLES
+* ---------------------------------------------
+*/
 
-:host-context(.dark) tbody tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-:host-context(.dark) tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-/* Scrollbar - Dark Mode */
-:host-context(.dark) ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-:host-context(.dark) ::-webkit-scrollbar-track {
-    background: #0B0F1A;
-}
-
-:host-context(.dark) ::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 3px;
-}
-
-:host-context(.dark) ::-webkit-scrollbar-thumb:hover {
-    background: #8B5CF6;
-}
-
-/* Improve light mode text readability */
-:host-context(:not(.dark)) {
-  /* Card titles */
-  h2 {
-    color: #0f172a !important;
-  }
-  
-  /* Labels */
-  label {
-    color: #6d28d9 !important;
-  }
-  
-  /* Body text */
-  p, span {
-    color: #334155;
-  }
-}
-
-/* Enhanced table styling for light mode */
+/* Light Mode Table */
 :host-context(:not(.dark)) table {
   background: white;
   border: 1px solid #e2e8f0;
@@ -119,7 +173,45 @@
   background: #f8fafc;
 }
 
-/* Skill tags light mode improvements */
+/* Dark Mode Table */
+:host-context(.dark) table {
+  background: rgba(11, 15, 34, 0.5) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  color: #e2e8f0;
+}
+
+:host-context(.dark) thead tr {
+  background: linear-gradient(180deg, rgba(15, 22, 41, 0.9) 0%, rgba(11, 15, 34, 0.9) 100%) !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.25) !important;
+}
+
+:host-context(.dark) tbody tr {
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1) !important;
+  background: rgba(11, 15, 34, 0.3);
+  transition: all 0.2s ease;
+}
+
+:host-context(.dark) tbody tr:hover {
+  background: rgba(139, 92, 246, 0.08) !important;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+:host-context(.dark) th {
+  color: rgba(196, 181, 253, 0.9) !important;
+  font-weight: 700;
+}
+
+:host-context(.dark) td {
+  color: rgba(226, 232, 240, 0.95) !important;
+}
+
+/*
+* ---------------------------------------------
+*      SKILL TAGS & BADGES
+* ---------------------------------------------
+*/
+
+/* Light Mode Skills & Badges */
 :host-context(:not(.dark)) .skill-tag {
   background: #ede9fe;
   border: 1px solid #c4b5fd;
@@ -132,26 +224,88 @@
   color: #1e40af;
 }
 
-/* Form inputs light mode */
-:host-context(:not(.dark)) input:not([type="file"]),
-:host-context(:not(.dark)) textarea {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #0f172a;
+:host-context(:not(.dark)) .bg-emerald-50 {
+  background: #d1fae5 !important;
+  border-color: #6ee7b7 !important;
+  color: #047857 !important;
 }
 
-:host-context(:not(.dark)) input:focus,
-:host-context(:not(.dark)) textarea:focus {
-  border-color: #7c3aed;
-  background: white;
+:host-context(:not(.dark)) .bg-amber-50 {
+  background: #fef3c7 !important;
+  border-color: #fcd34d !important;
+  color: #b45309 !important;
 }
 
-/* Button hover states for light mode */
-:host-context(:not(.dark)) button:not(.bg-gradient-to-r):hover {
-  background: #f1f5f9;
+/* Dark Mode Skills & Badges */
+:host-context(.dark) .skill-tag {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(168, 85, 247, 0.08) 100%) !important;
+  border: 1px solid rgba(139, 92, 246, 0.35) !important;
 }
 
-/* Custom Scrollbar for tables if needed */
+:host-context(.dark) .data-export-description {
+  color: #9ca3af !important; /* Tailwind gray-500 */
+}
+:host-context(.dark) .data-export-title {
+  color: #d1d5db !important; /* A brighter gray, close to white */
+}
+/* CV History - File Name White */
+:host-context(.dark) .cv-file-name {
+  color: #d1d5db ;
+}
+/* Skill percentage color */
+.skill-level {
+  color: #9ca3af !important;
+}
+:host-context(:not(.dark)) .group:hover .cv-file-name {
+  color: #06B6D4 !important;
+}
+:host-context(.dark) .group:hover .cv-file-name {
+  color: #22d3ee !important; /* cyan-400 */
+}
+
+:host-context(.dark) .avatar-section {
+  background: rgba(11, 16, 34, 0.8) !important;
+}
+
+:host-context(.dark) .skill-item {
+  color: #ffffff !important;
+}
+
+:host-context(.dark) .soft-skill-tag {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%) !important;
+  border: 1px solid rgba(34, 211, 238, 0.35) !important;
+}
+
+
+
+/*
+* ---------------------------------------------
+*      MISCELLANEOUS COMPONENTS
+* ---------------------------------------------
+*/
+
+/* Scrollbar */
+:host-context(.dark) ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+:host-context(.dark) ::-webkit-scrollbar-track {
+    background: rgba(11, 15, 26, 0.5);
+    border-radius: 4px;
+}
+
+:host-context(.dark) ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #8B5CF6 0%, #6d28d9 100%);
+    border-radius: 4px;
+    border: 2px solid rgba(11, 15, 26, 0.5);
+}
+
+:host-context(.dark) ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #a78bfa 0%, #8B5CF6 100%);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
 .overflow-x-auto::-webkit-scrollbar {
   height: 6px;
 }
@@ -166,60 +320,81 @@
 }
 
 :host-context(.dark) .overflow-x-auto::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.4);
 }
 
-/* Form inputs focus styles (General fallback) */
-input:focus, textarea:focus {
-  outline: none;
+/* Delete Account Button */
+:host-context(.dark) .border-red-500\/20 {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(185, 28, 28, 0.03) 100%) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
 }
 
-/* Animation for loading */
-@keyframes spin {
-  to { transform: rotate(360deg); }
+:host-context(.dark) .hover\:bg-red-500\/10:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(185, 28, 28, 0.05) 100%) !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+}
+/* =============================================
+   SECTION ICON STYLES (ID-based, no overriding)
+   ============================================= */
+
+/* Shared base for all icons */
+#personal-info-icon,
+#skills-icon,
+#experience-icon,
+#cv-history-icon,
+#privacy-icon {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
+/* Light Mode - div gets background/border, span only gets color */
+#personal-info-icon { background-color: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.25); }
+#personal-info-icon span { color: #7c3aed; }
 
-/* Light mode card backgrounds with better contrast */
-:host-context(:not(.dark)) .glass-card {
-  background: white;
-  border-color: #e2e8f0;
-}
+#skills-icon { background-color: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.25); }
+#skills-icon span { color: #0891b2; }
 
-/* Light mode data export sections */
-:host-context(:not(.dark)) .bg-slate-50 {
-  background: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
+#experience-icon { background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); }
+#experience-icon span { color: #d97706; }
 
-/* Avatar border for light mode */
-:host-context(:not(.dark)) img {
-  border-color: #e2e8f0;
-}
+#cv-history-icon { background-color: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25); }
+#cv-history-icon span { color: #16a34a; }
 
-/* Badge improvements for light mode */
-:host-context(:not(.dark)) .bg-emerald-50 {
-  background: #d1fae5 !important;
-  border-color: #6ee7b7 !important;
-  color: #047857 !important;
-}
+#privacy-icon { background-color: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.25); }
+#privacy-icon span { color: #2563eb; }
 
-:host-context(:not(.dark)) .bg-amber-50 {
-  background: #fef3c7 !important;
-  border-color: #fcd34d !important;
-  color: #b45309 !important;
-}
+/* Dark Mode */
+:host-context(.dark) #personal-info-icon { background-color: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.25); }
+:host-context(.dark) #personal-info-icon span { color: #a78bfa; }
 
-/* Upload button area for light mode */
-:host-context(:not(.dark)) .border-dashed {
-  border-color: #c4b5fd;
-  background: #f5f3ff;
-}
+:host-context(.dark) #skills-icon { background-color: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.25); }
+:host-context(.dark) #skills-icon span { color: #67e8f9; }
 
-/* Table score badges */
-:host-context(:not(.dark)) td span {
-  font-weight: 600;
+:host-context(.dark) #experience-icon { background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); }
+:host-context(.dark) #experience-icon span { color: #fbbf24; }
+
+:host-context(.dark) #cv-history-icon { background-color: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25); }
+:host-context(.dark) #cv-history-icon span { color: #86efac; }
+
+:host-context(.dark) #privacy-icon { background-color: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.25); }
+:host-context(.dark) #privacy-icon span { color: #93c5fd; }
+
+/* export as json ison */
+/* Light Mode */
+#export-json-icon { background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); }
+#export-json-icon span { color: #16a34a; }
+
+/* Dark Mode */
+:host-context(.dark) #export-json-icon { background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); }
+:host-context(.dark) #export-json-icon span { color: #86efac; }
+/* View mode field borders - Dark Mode */
+:host-context(.dark) .view-field {
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background: rgba(11, 15, 34, 0.3);
 }

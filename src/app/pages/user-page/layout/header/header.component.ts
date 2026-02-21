@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output, CUSTOM_ELEMENTS_SCHEMA 
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
 import { ThemeService } from '../../../../services/theme.service';
+import { ProfileService } from '../../../../services/profile.service';
 import { NgxThemeToggleComponent, OmDarkIcon, OmLightIcon } from '@omnedia/ngx-theme-toggle';
 import { Router } from '@angular/router';
 
@@ -19,9 +20,11 @@ export class HeaderComponent {
 
   private authService = inject(AuthService);
   private themeService = inject(ThemeService);
+  private profileService = inject(ProfileService);
   private router = inject(Router);
 
   authState$ = this.authService.authState$;
+  userProfile = this.profileService.userProfile$;
 
   toggleMobile(): void {
     this.toggleMobileSidebar.emit();

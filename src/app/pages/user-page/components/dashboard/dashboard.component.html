@@ -48,34 +48,52 @@
           </button>
         </div>
 
-        <div class="flex-1 min-h-[340px] border-2 border-dashed border-slate-200 dark:border-[#8B5CF6]/60 rounded-2xl bg-slate-50/50 dark:bg-[#0B0F1A]/40 flex flex-col items-center justify-center p-6 text-center group hover:border-[#7C3AED] dark:hover:border-[#22D3EE] transition-all duration-300 dark:hover:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)] relative overflow-hidden">
+        <div 
+          class="flex-1 min-h-[340px] border-2 border-dashed rounded-2xl flex flex-col items-center justify-center p-6 text-center group transition-all duration-300 relative overflow-hidden"
+          [ngClass]="isDragging() 
+            ? 'border-[#7C3AED] dark:border-[#22D3EE] bg-[#7C3AED]/5 dark:bg-[#22D3EE]/5 shadow-[inset_0_0_20px_rgba(124,58,237,0.1)] dark:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)]' 
+            : 'border-slate-200 dark:border-[#8B5CF6]/60 bg-slate-50/50 dark:bg-[#0B0F1A]/40 hover:border-[#7C3AED] dark:hover:border-[#22D3EE] dark:hover:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)]'"
+          (dragover)="onDragOver($event)" 
+          (dragleave)="onDragLeave($event)" 
+          (drop)="onDrop($event)"
+          (paste)="onPaste($event)">
           
-          <div *ngIf="!uploadedCV()">
-            <div class="absolute inset-0 bg-gradient-to-tr from-[#7C3AED]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none dark:hidden"></div>
-            <div class="w-16 h-16 rounded-full bg-white dark:bg-[#0F1629]/60 shadow-sm border border-slate-100 dark:border-[#8B5CF6]/30 flex items-center justify-center mb-3 group-hover:scale-110 dark:group-hover:scale-125 transition-transform duration-300 relative mx-auto">
-              <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#8B5CF6] group-hover:text-[#06B6D4] dark:group-hover:text-[#22D3EE] transition-colors duration-300">cloud_upload</span>
+          <div *ngIf="resumeInputMode() === 'file'" class="w-full h-full flex flex-col items-center justify-center">
+            <div *ngIf="!uploadedCV()">
+              <div class="absolute inset-0 bg-gradient-to-tr from-[#7C3AED]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none dark:hidden"></div>
+              <div class="w-16 h-16 rounded-full bg-white dark:bg-[#0F1629]/60 shadow-sm border border-slate-100 dark:border-[#8B5CF6]/30 flex items-center justify-center mb-3 group-hover:scale-110 dark:group-hover:scale-125 transition-transform duration-300 relative mx-auto">
+                <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#8B5CF6] group-hover:text-[#06B6D4] dark:group-hover:text-[#22D3EE] transition-colors duration-300">cloud_upload</span>
+              </div>
+              <p class="text-xs text-slate-900 dark:text-[#E0E7FF] font-medium mb-1.5">Drag &amp; Drop or Upload</p>
+              <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mb-4 font-medium">Supports PDF, DOCX (Max 5MB)</p>
+              <button (click)="triggerFileUpload()" class="px-4 py-2 rounded-lg lg:rounded-full border border-slate-200 dark:border-[#8B5CF6]/30 bg-white dark:bg-[#0F1629]/60 font-medium text-[10px] text-slate-700 dark:text-[#E0E7FF] flex items-center gap-1.5 hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border-[#8B5CF6]/60 transition-all shadow-sm mx-auto">
+                <span class="material-symbols-outlined text-sm">add</span>
+                Choose File
+              </button>
+              <button (click)="toggleResumeInputMode()" class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mt-4 italic font-medium hover:underline">Or copy and paste resume here</button>
             </div>
-            <p class="text-xs text-slate-900 dark:text-[#E0E7FF] font-medium mb-1.5">Drag &amp; Drop or Upload</p>
-            <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mb-4 font-medium">Supports PDF, DOCX (Max 5MB)</p>
-            <button (click)="triggerFileUpload()" class="px-4 py-2 rounded-lg lg:rounded-full border border-slate-200 dark:border-[#8B5CF6]/30 bg-white dark:bg-[#0F1629]/60 font-medium text-[10px] text-slate-700 dark:text-[#E0E7FF] flex items-center gap-1.5 hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border-[#8B5CF6]/60 transition-all shadow-sm mx-auto">
-              <span class="material-symbols-outlined text-sm">add</span>
-              Choose File
-            </button>
-            <p class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mt-4 italic font-medium">Or copy and paste resume here</p>
+
+            <!-- Show uploaded file if exists -->
+            <div *ngIf="uploadedCV()" class="w-full">
+              <div class="w-16 h-16 rounded-full bg-violet-50 dark:bg-[#8B5CF6]/10 flex items-center justify-center mb-3 mx-auto">
+                <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#22D3EE]">description</span>
+              </div>
+              <p class="text-sm font-bold text-slate-900 dark:text-white mb-1 truncate px-4">{{ uploadedCV()?.fileName }}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">{{ uploadedCV()?.fileSize }}</p>
+              <div class="flex gap-2 justify-center">
+                <button (click)="triggerFileUpload()" class="text-xs text-[#7C3AED] dark:text-[#22D3EE] font-bold hover:underline">Change</button>
+                <span class="text-slate-300 dark:text-slate-600">|</span>
+                <button (click)="removeUploadedCV()" class="text-xs text-red-500 font-bold hover:underline">Remove</button>
+              </div>
+            </div>
           </div>
 
-          <!-- Show uploaded file if exists -->
-          <div *ngIf="uploadedCV()" class="w-full">
-            <div class="w-16 h-16 rounded-full bg-violet-50 dark:bg-[#8B5CF6]/10 flex items-center justify-center mb-3 mx-auto">
-              <span class="material-symbols-outlined text-3xl text-[#7C3AED] dark:text-[#22D3EE]">description</span>
-            </div>
-            <p class="text-sm font-bold text-slate-900 dark:text-white mb-1 truncate px-4">{{ uploadedCV()?.fileName }}</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">{{ uploadedCV()?.fileSize }}</p>
-            <div class="flex gap-2 justify-center">
-              <button (click)="triggerFileUpload()" class="text-xs text-[#7C3AED] dark:text-[#22D3EE] font-bold hover:underline">Change</button>
-              <span class="text-slate-300 dark:text-slate-600">|</span>
-              <button (click)="removeUploadedCV()" class="text-xs text-red-500 font-bold hover:underline">Remove</button>
-            </div>
+          <div *ngIf="resumeInputMode() === 'paste'" class="w-full h-full flex flex-col">
+            <textarea
+              [(ngModel)]="pastedResume"
+              class="w-full flex-1 p-4 text-sm bg-transparent border-none focus:ring-1 focus:ring-[#7C3AED] dark:focus:ring-[#22D3EE] rounded-lg resize-none text-slate-600 dark:text-[#E0E7FF] placeholder:text-slate-400 dark:placeholder:text-[#A1A1AA] outline-none transition-all"
+              placeholder="Paste your resume content here..."></textarea>
+            <button (click)="toggleResumeInputMode()" class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mt-2 italic font-medium hover:underline">Upload resume file instead</button>
           </div>
 
         </div>

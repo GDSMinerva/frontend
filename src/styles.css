@@ -62,8 +62,13 @@
 }
 
 .glass-card {
+  background: white;
+  backdrop-filter:blur(10px);
+  border: 1px solid rgba(226,232,240,0.8)
+}
+
+.dark .glass-card {
   background: linear-gradient(180deg, #0F1629 0%, #0B0F1A 100%);
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 

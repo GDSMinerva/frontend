@@ -1,23 +1,10 @@
-import { Component, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, signal, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ProfileService, UserProfile } from '../../../../services/profile.service';
 
 // --- Interfaces ---
-
-export interface UserProfile {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  location?: string;
-  bio?: string;
-  avatarUrl?: string;
-  linkedIn?: string;
-  github?: string;
-  portfolio?: string;
-}
 
 export interface Skill {
   id: string;
@@ -56,10 +43,10 @@ export interface CV {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProfileComponent {
+  private profileService = inject(ProfileService);
+  userProfile = this.profileService.userProfile$;
+
   // --- State Signals ---
-  
-  // User profile data
-  userProfile = signal<UserProfile | null>(null);
   
   // Skills data
   hardSkills = signal<Skill[]>([]);
@@ -81,16 +68,6 @@ export class ProfileComponent {
 
   // --- Sample Data (Hardcoded for now) ---
   
-  private readonly sampleUserProfile: UserProfile = {
-    id: 'usr-001',
-    firstName: 'Alex',
-    lastName: 'Johnson',
-    email: 'alex.johnson@example.com',
-    location: 'San Francisco, CA',
-    bio: 'Seeking a Senior Frontend Engineer role at a growth-stage startup, focusing on React ecosystem and user experience optimization.',
-    avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC0gKe153agdtaE2QX8dxVTTUZvCNwr9lfHYTo3qfEtVw-g5beM0dyqV9fTCCfKqp4zWLxSzPhnbKXQVZsuOBTkupMtvr5J7IqZ8qJ8bv8suaEY4rr4ZRwnvnlv4OfF7_lWFzdlurNcL00eg3dLK2Yp_9WiDvl1kusdeIywVtaNU-NtKJhnyPj72JQB2HrXvlRDo11OWO2WurLSMkEIVA9kcs5hnsrrbHoFTN2Ek4O-sHt6N5X_oDRWQADS_D3GNbn2m-CBAsqXE-Y'
-  };
-
   private readonly sampleHardSkills: Skill[] = [
     { id: 'hs-001', name: 'React', category: 'hard', level: 90 },
     { id: 'hs-002', name: 'TypeScript', category: 'hard', level: 85 },
@@ -162,7 +139,6 @@ export class ProfileComponent {
   }
 
   private loadSampleData(): void {
-    this.userProfile.set(this.sampleUserProfile);
     this.hardSkills.set(this.sampleHardSkills);
     this.softSkills.set(this.sampleSoftSkills);
     this.experiences.set(this.sampleExperiences);
@@ -207,10 +183,7 @@ export class ProfileComponent {
       // Simulate API call
       setTimeout(() => {
         const formValues = this.profileForm.value;
-        this.userProfile.update(profile => ({
-          ...profile!,
-          ...formValues
-        }));
+        this.profileService.setUserProfile(formValues);
         this.isEditingProfile.set(false);
         this.isLoading.set(false);
         // In real app, call this.updateProfile(formValues);
@@ -322,10 +295,8 @@ export class ProfileComponent {
       // Create a fake local URL for the image
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.userProfile.update(profile => ({
-          ...profile!,
-          avatarUrl: e.target?.result as string
-        }));
+        const newAvatarUrl = e.target?.result as string;
+        this.profileService.updateAvatar(newAvatarUrl);
       };
       reader.readAsDataURL(file);
     }
@@ -333,10 +304,8 @@ export class ProfileComponent {
 
   removeAvatar(): void {
     if (confirm('Are you sure you want to remove your profile picture?')) {
-      this.userProfile.update(profile => ({
-        ...profile!,
-        avatarUrl: 'https://ui-avatars.com/api/?name=' + profile?.firstName + '+' + profile?.lastName
-      }));
+      const defaultAvatar = 'assets/images/default-avatar.png'; // Or generate from name
+      this.profileService.updateAvatar(defaultAvatar);
     }
   }
 

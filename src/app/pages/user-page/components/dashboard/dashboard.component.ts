@@ -59,6 +59,8 @@ export class DashboardComponent {
   uploadedCV = signal<CVFile | null>(null);
   jobDescription = signal<JobDescription>({ text: '', source: 'manual' });
   selectedSampleJobs = signal<string[]>([]);
+  resumeInputMode = signal<'file' | 'paste'>('file');
+  pastedResume = signal<string>('');
   
   // Analysis results
   analysisResults = signal<CVAnalysisResult | null>(null);
@@ -67,6 +69,7 @@ export class DashboardComponent {
   isScanning = signal(false);
   scanProgress = signal(0);
   errorMessage = signal<string | null>(null);
+  isDragging = signal(false);
 
   /** Sample job titles - will be replaced with API data later */
   readonly sampleJobTitles: SampleJob[] = [
@@ -81,38 +84,78 @@ export class DashboardComponent {
   /**
    * Handle file upload from input
    */
+  /**
+   * Handle file upload from input
+   */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      
-      // Validate file type
-      // Using broad type checking or extension checking as MIME types can vary
-      const fileName = file.name.toLowerCase();
-      const validExtensions = ['.pdf', '.docx', '.doc'];
-      const isValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
-
-      if (!isValidExtension) {
-        this.errorMessage.set('Please upload a PDF or DOCX file');
-        return;
-      }
-      
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        this.errorMessage.set('File size must be less than 5MB');
-        return;
-      }
-      
-      this.uploadedCV.set({
-        id: `cv-${Date.now()}`,
-        file,
-        fileName: file.name,
-        fileSize: this.formatFileSize(file.size),
-        uploadDate: new Date().toISOString()
-      });
-      this.errorMessage.set(null);
+      this.handleFile(input.files[0]);
     }
   }
+
+  /**
+   * Process the uploaded/dropped file
+   */
+  handleFile(file: File): void {
+    // Validate file type
+    // Using broad type checking or extension checking as MIME types can vary
+    const fileName = file.name.toLowerCase();
+    const validExtensions = ['.pdf', '.docx', '.doc'];
+    const isValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+
+    if (!isValidExtension) {
+      this.errorMessage.set('Please upload a PDF or DOCX file');
+      return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      this.errorMessage.set('File size must be less than 5MB');
+      return;
+    }
+    
+    this.uploadedCV.set({
+      id: `cv-${Date.now()}`,
+      file,
+      fileName: file.name,
+      fileSize: this.formatFileSize(file.size),
+      uploadDate: new Date().toISOString()
+    });
+    this.errorMessage.set(null);
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging.set(true);
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging.set(false);
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging.set(false);
+    
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      this.handleFile(event.dataTransfer.files[0]);
+    }
+  }
+
+  onPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (event.clipboardData && event.clipboardData.files.length > 0) {
+      this.handleFile(event.clipboardData.files[0]);
+    }
+  }
+  
   
   /**
    * Trigger file input click
@@ -178,12 +221,17 @@ export class DashboardComponent {
   getSampleJobByTitle(title: string): SampleJob | undefined {
     return this.sampleJobTitles.find(job => job.title === title);
   }
+
+  toggleResumeInputMode(): void {
+    this.resumeInputMode.set(this.resumeInputMode() === 'file' ? 'paste' : 'file');
+  }
+  
   
   /**
    * Validate form before scanning
    */
   canStartScan(): boolean {
-    const hasCV = this.uploadedCV() !== null;
+    const hasCV = this.uploadedCV() !== null || this.pastedResume().length > 0;
     const hasJobDesc = this.jobDescription().text.length > 0 || this.selectedSampleJobs().length > 0;
     return hasCV && hasJobDesc;
   }
