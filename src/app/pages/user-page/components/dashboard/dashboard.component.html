@@ -90,7 +90,8 @@
 
           <div *ngIf="resumeInputMode() === 'paste'" class="w-full h-full flex flex-col">
             <textarea
-              [(ngModel)]="pastedResume"
+              [ngModel]="pastedResume()"
+              (ngModelChange)="pastedResume.set($event)"
               class="w-full flex-1 p-4 text-sm bg-transparent border-none focus:ring-1 focus:ring-[#7C3AED] dark:focus:ring-[#22D3EE] rounded-lg resize-none text-slate-600 dark:text-[#E0E7FF] placeholder:text-slate-400 dark:placeholder:text-[#A1A1AA] outline-none transition-all"
               placeholder="Paste your resume content here..."></textarea>
             <button (click)="toggleResumeInputMode()" class="text-[10px] text-slate-400 dark:text-[#A1A1AA] mt-2 italic font-medium hover:underline">Upload resume file instead</button>
@@ -114,7 +115,7 @@
               Paste Job Description
             </label>
             <div class="flex-1 bg-white dark:bg-[#0F1629]/60 rounded-lg border border-slate-200 dark:border-[#8B5CF6]/20 hover:border-[#7C3AED] dark:hover:border-[#8B5CF6]/50 transition-colors">
-              <textarea [(ngModel)]="jobDescription().text"
+              <textarea [ngModel]="jobDescription().text"
                         (ngModelChange)="updateJobDescription($event)"
                         class="w-full h-full p-4 text-sm bg-transparent border-none focus:ring-1 focus:ring-[#7C3AED] dark:focus:ring-[#22D3EE] rounded-lg resize-none text-slate-600 dark:text-[#E0E7FF] placeholder:text-slate-400 dark:placeholder:text-[#A1A1AA] outline-none transition-all" 
                         placeholder="Copy and paste job description here..."></textarea>

@@ -148,10 +148,9 @@ export class DashboardComponent {
   }
 
   onPaste(event: ClipboardEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    
     if (event.clipboardData && event.clipboardData.files.length > 0) {
+      event.preventDefault();
+      event.stopPropagation();
       this.handleFile(event.clipboardData.files[0]);
     }
   }
