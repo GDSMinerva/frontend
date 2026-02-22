@@ -23,7 +23,7 @@ export class ProfileService {
     // Initialize with some default or fetched data
     // For now, I'll use a placeholder.
     this.userProfile.set({
-      avatarUrl: 'assets/images/default-avatar.png', // A default placeholder
+      avatarUrl: 'assets/default-profile-pic.png',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
