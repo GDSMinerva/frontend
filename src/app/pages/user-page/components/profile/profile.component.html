@@ -16,7 +16,6 @@
       <!-- Personal Information Card -->
       <div class="glass-card rounded-2xl p-6 relative overflow-hidden group bg-white border border-slate-200 shadow-sm">
         
-        <!-- Card Header -->
         <div class="flex items-center justify-between mb-6 relative z-10">
           <div class="flex items-center gap-3">
             <div id="personal-info-icon" class="p-2 rounded-lg">
@@ -53,17 +52,15 @@
           </div>
         </div>
 
-        <!-- Profile Form / View -->
+        <!-- Profile Form -->
         <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
             
             <div class="space-y-2">
               <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Full Name</label>
-              <!-- View Mode -->
-              <div *ngIf="!isEditingProfile()" class=" view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
+              <div *ngIf="!isEditingProfile()" class="view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
                 {{ userProfile()?.firstName }} {{ userProfile()?.lastName }}
               </div>
-              <!-- Edit Mode -->
               <div *ngIf="isEditingProfile()" class="flex gap-2">
                 <input formControlName="firstName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="First Name">
                 <input formControlName="lastName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="Last Name">
@@ -72,7 +69,7 @@
 
             <div class="space-y-2">
               <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Email Address</label>
-              <div *ngIf="!isEditingProfile()" class=" view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
+              <div *ngIf="!isEditingProfile()" class="view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
                 {{ userProfile()?.email }}
               </div>
               <input *ngIf="isEditingProfile()" formControlName="email" class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" type="email">
@@ -80,7 +77,7 @@
 
             <div class="space-y-2 md:col-span-2">
               <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Location</label>
-              <div *ngIf="!isEditingProfile()" class=" view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
+              <div *ngIf="!isEditingProfile()" class="view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
                 {{ userProfile()?.location || 'Not set' }}
               </div>
               <input *ngIf="isEditingProfile()" formControlName="location" class="w-full rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text">
@@ -88,7 +85,7 @@
 
             <div class="space-y-2 md:col-span-2">
               <label class="text-[10px] font-bold text-[#7C3AED] dark:text-purple-300 uppercase tracking-widest">Career Goals (Bio)</label>
-              <div *ngIf="!isEditingProfile()" class=" view-field min-h-[80px] text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent min-h-[80px]">
+              <div *ngIf="!isEditingProfile()" class="view-field min-h-[80px] text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
                 {{ userProfile()?.bio || 'No bio provided' }}
               </div>
               <textarea *ngIf="isEditingProfile()" formControlName="bio" class="w-full rounded-lg text-sm px-4 py-3 min-h-[100px] bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" placeholder="Briefly describe your professional objectives..."></textarea>
@@ -114,9 +111,7 @@
             <h2 class="text-lg font-bold tracking-wide font-display">Skills</h2>
           </div>
         </div>
-        
         <div class="space-y-6">
-          <!-- Hard Skills -->
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest mb-3 section-subtitle">Technical Skills</p>
             <div class="flex flex-wrap gap-2">
@@ -128,8 +123,6 @@
               <span *ngIf="hardSkills().length === 0" class="text-xs text-slate-400 italic">No technical skills added yet.</span>
             </div>
           </div>
-          
-          <!-- Soft Skills -->
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest mb-3 section-subtitle">Soft Skills</p>
             <div class="flex flex-wrap gap-2">
@@ -153,7 +146,6 @@
             <h2 class="text-lg font-bold tracking-wide font-display">Experience</h2>
           </div>
         </div>
-        
         <div class="relative pl-4 space-y-8 before:absolute before:inset-0 before:ml-4 before:h-full before:w-0.5 before:bg-slate-200 dark:before:bg-white/10">
           <div *ngFor="let exp of experiences()" class="relative pl-8">
             <span class="absolute left-0 top-1.5 -ml-[5px] h-3 w-3 rounded-full border-2 border-white dark:border-[#0B0F1A]" 
@@ -167,6 +159,231 @@
           </div>
         </div>
       </div>
+
+      <!-- ============================================== -->
+      <!-- SAVED JOBS SECTION                             -->
+      <!-- ============================================== -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden bg-white border border-slate-200 shadow-sm transition-colors">
+
+        <!-- Section Header -->
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div id="saved-jobs-icon" class="p-2 rounded-lg">
+              <span class="material-symbols-outlined">bookmark</span>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold tracking-wide font-display">Saved Jobs</h2>
+              <p class="text-[10px] text-slate-500 dark:text-gray-400 mt-0.5">Jobs you saved from Job Matching. Mark important ones as you review.</p>
+            </div>
+          </div>
+
+          <!-- Right side: sort toggle + counter -->
+          <div class="flex items-center gap-2 flex-shrink-0">
+
+            <!-- Sort Toggle — only shown when list is non-empty -->
+            <button *ngIf="savedJobs().length > 0"
+                    (click)="toggleSavedJobsSort()"
+                    class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[10px] font-bold uppercase tracking-wider transition-all"
+                    [ngClass]="savedJobsSort() === 'important-first'
+                      ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-500/30 text-amber-600 dark:text-amber-400'
+                      : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 hover:border-purple-300 dark:hover:border-purple-500/40 hover:text-purple-600 dark:hover:text-purple-400'"
+                    [title]="savedJobsSort() === 'important-first' ? 'Switch to: Most Recent first' : 'Switch to: Important first'">
+              <span class="material-symbols-outlined text-sm">swap_vert</span>
+              {{ savedJobsSort() === 'important-first' ? 'Important first' : 'Recent first' }}
+            </button>
+
+            <!-- Counter badge -->
+            <span *ngIf="savedJobs().length > 0"
+                  class="px-2.5 py-1 bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-200 dark:border-cyan-500/30 text-[#06B6D4] dark:text-cyan-400 text-xs font-bold rounded-full">
+              {{ savedJobs().length }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="savedJobs().length === 0"
+             class="flex flex-col items-center justify-center py-12 text-center">
+          <div class="w-14 h-14 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-3xl text-slate-300 dark:text-gray-600">bookmark_border</span>
+          </div>
+          <p class="text-sm font-medium text-slate-500 dark:text-gray-400">No saved jobs yet</p>
+          <p class="text-xs text-slate-400 dark:text-gray-600 mt-1">Save jobs from Job Matching to track them here</p>
+        </div>
+
+        <!-- Saved Jobs List (paginated) -->
+        <div *ngIf="savedJobs().length > 0" class="space-y-3">
+
+          <!-- Important group -->
+          <div *ngIf="hasImportantJobs()" class="mb-1">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-amber-500 dark:text-amber-400 mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">label_important</span>
+              Important
+            </p>
+            <div class="space-y-2">
+              <ng-container *ngFor="let job of paginatedSavedJobs()">
+                <div *ngIf="job.isImportant"
+                     class="saved-job-card important-card group relative rounded-xl border transition-all bg-amber-50 border-amber-200 dark:border-amber-500/25 hover:border-amber-400/60">
+                  <div class="p-4">
+                    <div class="flex items-start gap-3">
+                      <!-- Company Logo -->
+                      <img *ngIf="job.logoUrl" [src]="job.logoUrl" alt="Logo" class="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-slate-200 dark:border-white/10">
+                      <div *ngIf="!job.logoUrl" class="w-10 h-10 rounded-lg flex-shrink-0 bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] flex items-center justify-center text-white font-bold text-sm">
+                        {{ job.company.charAt(0) }}
+                      </div>
+                      <!-- Job Info -->
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="min-w-0">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ job.title }}</h4>
+                            <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                              <span class="text-xs font-medium text-[#7C3AED] dark:text-purple-400">{{ job.company }}</span>
+                              <a *ngIf="job.companyWebsite" [href]="job.companyWebsite" target="_blank" rel="noopener noreferrer"
+                                 class="inline-flex items-center gap-0.5 text-[10px] text-[#06B6D4] hover:text-cyan-600 transition-colors font-bold"
+                                 (click)="$event.stopPropagation()">
+                                <span class="material-symbols-outlined text-xs">open_in_new</span>
+                                Site
+                              </a>
+                            </div>
+                          </div>
+                          <span class="match-badge" [ngClass]="getMatchClass(job.matchScore)">{{ job.matchScore }}%</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 mt-2 text-[10px] text-slate-400 dark:text-gray-500">
+                          <span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-xs">location_on</span>{{ job.location }}</span>
+                          <span *ngIf="job.salary" class="flex items-center gap-0.5"><span class="material-symbols-outlined text-xs">payments</span>{{ job.salary }}</span>
+                          <span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-xs">work</span>{{ job.type }}</span>
+                          <span class="flex items-center gap-0.5 ml-auto"><span class="material-symbols-outlined text-xs">calendar_today</span>Saved {{ job.savedDate }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Action Row -->
+                    <div class="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-amber-200/60 dark:border-amber-500/10">
+                      <button (click)="toggleImportant(job.id)"
+                              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-500/40 text-amber-600 dark:text-amber-400 hover:bg-amber-200/70 dark:hover:bg-amber-900/50">
+                        <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1">label_important</span>
+                        Important
+                      </button>
+                      <button (click)="unsaveJob(job.id)"
+                              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-500 dark:hover:text-red-400 transition-all">
+                        <span class="material-symbols-outlined text-xs">bookmark_remove</span>
+                        Unsave
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- Other Saved group -->
+          <div *ngIf="hasOtherJobs()">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-gray-500 mb-2">Other Saved</p>
+            <div class="space-y-2">
+              <ng-container *ngFor="let job of paginatedSavedJobs()">
+                <div *ngIf="!job.isImportant"
+                     class="saved-job-card group relative rounded-xl border transition-all bg-white dark:bg-[#0B1022]/60 border-slate-200 dark:border-white/5 hover:border-[#7C3AED]/30 dark:hover:border-purple-500/30">
+                  <div class="p-4">
+                    <div class="flex items-start gap-3">
+                      <!-- Company Logo -->
+                      <img *ngIf="job.logoUrl" [src]="job.logoUrl" alt="Logo" class="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-slate-200 dark:border-white/10">
+                      <div *ngIf="!job.logoUrl" class="w-10 h-10 rounded-lg flex-shrink-0 bg-gradient-to-br from-[#7C3AED] to-[#06B6D4] flex items-center justify-center text-white font-bold text-sm">
+                        {{ job.company.charAt(0) }}
+                      </div>
+                      <!-- Job Info -->
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                          <div class="min-w-0">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ job.title }}</h4>
+                            <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                              <span class="text-xs font-medium text-[#7C3AED] dark:text-purple-400">{{ job.company }}</span>
+                              <a *ngIf="job.companyWebsite" [href]="job.companyWebsite" target="_blank" rel="noopener noreferrer"
+                                 class="inline-flex items-center gap-0.5 text-[10px] text-[#06B6D4] hover:text-cyan-600 transition-colors font-bold"
+                                 (click)="$event.stopPropagation()">
+                                <span class="material-symbols-outlined text-xs">open_in_new</span>
+                                Site
+                              </a>
+                            </div>
+                          </div>
+                          <span class="match-badge" [ngClass]="getMatchClass(job.matchScore)">{{ job.matchScore }}%</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 mt-2 text-[10px] text-slate-400 dark:text-gray-500">
+                          <span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-xs">location_on</span>{{ job.location }}</span>
+                          <span *ngIf="job.salary" class="flex items-center gap-0.5"><span class="material-symbols-outlined text-xs">payments</span>{{ job.salary }}</span>
+                          <span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-xs">work</span>{{ job.type }}</span>
+                          <span class="flex items-center gap-0.5 ml-auto"><span class="material-symbols-outlined text-xs">calendar_today</span>Saved {{ job.savedDate }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Action Row -->
+                    <div class="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-white/5">
+                      <button (click)="toggleImportant(job.id)"
+                              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 hover:border-amber-300 hover:text-amber-600 dark:hover:border-amber-500/40 dark:hover:text-amber-400">
+                        <span class="material-symbols-outlined text-xs">label_important</span>
+                        Mark Important
+                      </button>
+                      <button (click)="unsaveJob(job.id)"
+                              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-500 dark:hover:text-red-400 transition-all">
+                        <span class="material-symbols-outlined text-xs">bookmark_remove</span>
+                        Unsave
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- ======================================= -->
+          <!-- PAGINATION BAR (shown only when > 4 jobs) -->
+          <!-- ======================================= -->
+          <div *ngIf="totalPages() > 1"
+               class="saved-jobs-pagination flex items-center justify-between pt-4 mt-2 border-t border-slate-100 dark:border-white/5">
+
+            <!-- Left: total label (matches screenshot style) -->
+            <span class="text-[10px] text-slate-500 dark:text-slate-300 font-medium">
+              Total {{ totalPages() }} pages
+            </span>
+
+            <!-- Center: prev + page numbers + next -->
+            <div class="flex items-center gap-1">
+              
+
+              <!-- Prev arrow -->
+              <button (click)="goToPage(savedJobsPage() - 1)"
+                      [disabled]="savedJobsPage() === 1"
+                      class="pagination-btn w-7 h-7 flex items-center justify-center rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      [ngClass]="savedJobsPage() === 1
+                        ? 'text-slate-300 dark:text-gray-600'
+                        : 'text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'">
+                <span class="material-symbols-outlined text-base">chevron_left</span>
+              </button>
+
+              <!-- Page number buttons -->
+              <button *ngFor="let page of pageNumbers()"
+                      (click)="goToPage(page)"
+                      class="pagination-btn w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold transition-all"
+                      [ngClass]="page === savedJobsPage()
+                        ? 'active text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'">
+                {{ page }}
+              </button>
+
+              <!-- Next arrow -->
+              <button (click)="goToPage(savedJobsPage() + 1)"
+                      [disabled]="savedJobsPage() === totalPages()"
+                      class="pagination-btn w-7 h-7 flex items-center justify-center rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      [ngClass]="savedJobsPage() === totalPages()
+                        ? 'text-slate-300 dark:text-gray-600'
+                        : 'text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'">
+                <span class="material-symbols-outlined text-base">chevron_right</span>
+              </button>
+
+            </div>
+          </div>
+          <!-- END PAGINATION -->
+
+        </div>
+      </div>
+      <!-- END SAVED JOBS -->
 
     </div>
 
@@ -275,7 +492,7 @@
                 <span class="material-symbols-outlined">folder_zip</span>
               </div>
               <div>
-                <p class=" data-export-title text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Optimized CVs</p>
+                <p class="data-export-title text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Optimized CVs</p>
                 <p class="data-export-description text-[10px] text-slate-500 dark:text-gray-300">ZIP file of all latest versions</p>
               </div>
             </div>
@@ -290,7 +507,7 @@
                 <span class="material-symbols-outlined">database</span>
               </div>
               <div>
-                <p class="data-export-title  text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Personal Data</p>
+                <p class="data-export-title text-sm font-bold text-slate-900 dark:text-white leading-tight">Export Personal Data</p>
                 <p class="data-export-description text-[10px] text-slate-500 dark:text-gray-300">JSON or CSV of profile info</p>
               </div>
             </div>

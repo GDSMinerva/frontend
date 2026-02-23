@@ -288,9 +288,10 @@ export class DashboardComponent {
   private async simulateScanAPI(): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
+        const cvId = this.uploadedCV()?.id || 'pasted-resume-' + Date.now();
         this.analysisResults.set({
           id: `analysis-${Date.now()}`,
-          cvId: this.uploadedCV()!.id,
+          cvId: cvId,
           matchScore: 82,
           strengths: [
             'Strong technical skills in React and TypeScript',
@@ -336,6 +337,7 @@ export class DashboardComponent {
     this.uploadedCV.set(null);
     this.jobDescription.set({ text: '', source: 'manual' });
     this.selectedSampleJobs.set([]);
+    this.pastedResume.set('');
     this.analysisResults.set(null);
     this.errorMessage.set(null);
     
