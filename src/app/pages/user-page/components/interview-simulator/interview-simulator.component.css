@@ -155,3 +155,77 @@
   :host-context(.dark) ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.15);
   }
+/* Modal Animations */
+.modal-backdrop {
+  animation: fadeInBackdrop 0.3s ease-out forwards;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Customization Panel */
+.custom-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.custom-panel.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+/* Skill Tags */
+.skill-tag {
+  transition: all 0.2s ease;
+}
+
+.skill-tag.selected {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+}
+
+:host-context(.dark) .skill-tag.selected {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+/* Saved Question Card */
+.saved-q-card {
+  transition: all 0.2s ease;
+}
+
+.saved-q-card:hover {
+  transform: translateX(4px);
+  border-color: #7c3aed66;
+}
+
+:host-context(.dark) .saved-q-card:hover {
+  border-color: #8b5cf666;
+}
+
+/* Result Modal Stats */
+.stat-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Match Score Gradients (Shared with Job Matching) */
+.match-high { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.match-medium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.match-low { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); }

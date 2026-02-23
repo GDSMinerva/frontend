@@ -1,8 +1,10 @@
 
-import { Component, OnInit, OnDestroy, signal, computed, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { SavedQuestionsService, SavedQuestion } from '../../../../services/saved-questions.service';
+import { SavedJobsService } from '../../../../services/saved-jobs.service';
 
 enum SimulatorState {
   LOCKED = 'locked',
@@ -88,7 +90,89 @@ interface CVScanStatus {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InterviewSimulatorComponent implements OnInit, OnDestroy {
-  // State management
+  private savedQuestionsService = inject(SavedQuestionsService);
+  private savedJobsService = inject(SavedJobsService);
+  private router = inject(Router);
+
+  // --- Saved Questions Signals ---
+  savedQuestions = this.savedQuestionsService.savedQuestions;
+  savedQuestionsPage = signal(1);
+  savedQuestionsSort = signal<'date' | 'importance'>('date');
+  readonly QUESTIONS_PER_PAGE = 3;
+
+  showSavedModal = signal(false);
+  selectedSavedQuestion = signal<SavedQuestion | null>(null);
+
+  // --- Custom Simulation Signals ---
+  isCustomizing = signal(false);
+  targetRole = signal<string>('');
+  techSkills = signal<string[]>([]);
+  softSkills = signal<string[]>([]);
+  techCount = signal<number>(5);
+  softCount = signal<number>(3);
+
+  // Role Options
+  availableRoles = computed(() => {
+    const roles: { title: string, category: string, categoryClass: string }[] = [];
+    
+    // 1. CV Primary Role
+    if (this.cvScanStatus().targetJobTitle) {
+      roles.push({ 
+        title: this.cvScanStatus().targetJobTitle!, 
+        category: '📄 CV Primary Role',
+        categoryClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400'
+      });
+    }
+    
+    // 2. Saved Jobs
+    this.savedJobsService.savedJobs().forEach((j: any) => {
+      if (!roles.some(r => r.title === j.title)) {
+        roles.push({ 
+          title: j.title, 
+          category: '💼 Saved Job',
+          categoryClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
+        });
+      }
+    });
+    
+    // 3. Static/Suggested Roles
+    const suggested = [
+      { title: 'Full Stack Engineer', category: '🌐 Suggested Role' },
+      { title: 'Frontend Developer', category: '🔥 Matched Job' },
+      { title: 'Backend Developer', category: '🌐 Suggested Role' },
+      { title: 'DevOps Engineer', category: '💼 Saved Job' },
+      { title: 'Data Scientist', category: '🎯 Career Goal' }
+    ];
+
+    suggested.forEach(s => {
+      if (!roles.some(r => r.title === s.title)) {
+        let colorClass = 'bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-400';
+        if (s.category.includes('Career Goal')) colorClass = 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400';
+        if (s.category.includes('Matched Job')) colorClass = 'bg-cyan-100 text-cyan-700 dark:bg-cyan-500/20 dark:text-cyan-400';
+        
+        roles.push({ 
+          title: s.title, 
+          category: s.category,
+          categoryClass: colorClass
+        });
+      }
+    });
+      
+    return roles;
+  });
+
+  // Skill Options
+  readonly hardSkillOptions = ['SQL', 'System Design', 'Angular', 'React', 'Distributed Systems', 'Python', 'Go', 'Docker', 'Kubernetes'];
+  readonly softSkillOptions = ['Communication', 'Leadership', 'Time Management', 'Problem Solving', 'Adaptability', 'Teamwork', 'Critical Thinking'];
+
+  // --- Result Modal ---
+  showResultModal = signal(false);
+  simulationScore = signal(0);
+  correctAnswersCount = signal(0);
+  wrongAnswersCount = signal(0);
+  aiFeedbackSummary = signal('');
+
+  // --- State management ---
   currentState = signal<SimulatorState>(SimulatorState.LOCKED);
   selectedMode = signal<SimulatorMode | null>(null);
 
@@ -158,7 +242,34 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
   currentFeedback = signal<string>('');
   selectedOption = signal<number | null>(null);
   
-  constructor(private router: Router) {}
+  // --- Computed for Saved Questions Section ---
+  sortedSavedQuestions = computed(() => {
+    const qs = [...this.savedQuestions()];
+    if (this.savedQuestionsSort() === 'importance') {
+      return qs.sort((a, b) => {
+        if (a.isImportant === b.isImportant) return (new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
+        return a.isImportant ? -1 : 1;
+      });
+    }
+    return qs.sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
+  });
+
+  totalPages = computed(() => Math.ceil(this.sortedSavedQuestions().length / this.QUESTIONS_PER_PAGE));
+
+  paginatedSavedQuestions = computed(() => {
+    const start = (this.savedQuestionsPage() - 1) * this.QUESTIONS_PER_PAGE;
+    return this.sortedSavedQuestions().slice(start, start + this.QUESTIONS_PER_PAGE);
+  });
+
+  pageNumbers = computed(() => {
+    const total = this.totalPages();
+    const current = this.savedQuestionsPage();
+    const pages: number[] = [];
+    for (let i = 1; i <= total; i++) pages.push(i);
+    return pages;
+  });
+
+  constructor() {}
 
   async ngOnInit(): Promise<void> {
     await this.checkCVScanStatus();
@@ -194,6 +305,10 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
       // Set initial state based on CV scan status
       if (hasCompletedScan) {
         this.currentState.set(SimulatorState.MODE_SELECTION);
+        // Default preselection
+        if (this.availableRoles().length > 0) {
+          this.targetRole.set(this.availableRoles()[0].title);
+        }
       } else {
         this.currentState.set(SimulatorState.LOCKED);
       }
@@ -210,7 +325,27 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
     this.selectedMode.set(mode);
     this.initializeSimulation();
   }
-  
+
+  /**
+   * Toggle the customization panel
+   */
+  toggleCustomization(): void {
+    this.isCustomizing.update(v => !v);
+    if (this.isCustomizing() && !this.targetRole()) {
+      if (this.availableRoles().length > 0) {
+        this.targetRole.set(this.availableRoles()[0].title);
+      }
+    }
+  }
+
+  toggleSkill(skill: string, type: 'hard' | 'soft'): void {
+    if (type === 'hard') {
+      this.techSkills.update(s => s.includes(skill) ? s.filter(x => x !== skill) : [...s, skill]);
+    } else {
+      this.softSkills.update(s => s.includes(skill) ? s.filter(x => x !== skill) : [...s, skill]);
+    }
+  }
+
   /**
    * Initialize interview simulation
    * Only called if user has completed CV scan
@@ -475,14 +610,41 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
    */
   completeSimulation(): void {
     this.stopTimer();
+    const session = this.currentSession();
+    if (!session) return;
+
     this.currentSession.update(s => ({
       ...s!,
       status: 'completed',
       endTime: new Date().toISOString()
     }));
-    // Show completion modal or redirect
-    alert('Simulation Completed! Review your results on the dashboard.');
-    this.navigateToDashboard();
+
+    // Calculate final results
+    const total = session.answers.length;
+    const correct = session.answers.filter(a => (a.score || 0) >= 70).length;
+    const wrong = total - correct;
+    const finalScore = total > 0 ? Math.round(session.answers.reduce((acc, a) => acc + (a.score || 0), 0) / total) : 0;
+
+    this.simulationScore.set(finalScore);
+    this.correctAnswersCount.set(correct);
+    this.wrongAnswersCount.set(wrong);
+    
+    // Generate AI Feedback Summary
+    if (finalScore >= 80) {
+      this.aiFeedbackSummary.set("Excellent technical mastery and communication. You are ready for the real interview.");
+    } else if (finalScore >= 60) {
+      this.aiFeedbackSummary.set("Good technical foundation, but work on structuring your answers and managing your time better.");
+    } else {
+      this.aiFeedbackSummary.set("Keep practicing. Focus on the fundamentals and try to be more precise in your explanations.");
+    }
+
+    this.showResultModal.set(true);
+  }
+
+  restartSimulation(): void {
+    this.showResultModal.set(false);
+    this.currentState.set(SimulatorState.MODE_SELECTION);
+    this.selectedMode.set(null);
   }
   
   /**
@@ -580,4 +742,53 @@ query {
       keyPoints: ['Memoization', 'Code splitting', 'Virtual DOM', 'React.memo', 'useCallback']
     }
   ];
+
+  // --- Saved Question Actions ---
+
+  isQuestionSaved(id: string): boolean {
+    return this.savedQuestionsService.isSaved(id);
+  }
+
+  toggleSave(q?: InterviewQuestion): void {
+    const question = q || this.currentQuestion();
+    if (!question) return;
+
+    this.savedQuestionsService.toggleSave({
+      id: question.id,
+      question: question.question,
+      answer: question.idealAnswer || "No answer available",
+      topic: question.category,
+      savedAt: new Date().toISOString(),
+      isImportant: false
+    });
+  }
+
+  toggleImportant(id: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.savedQuestionsService.toggleImportant(id);
+  }
+
+  unsaveQuestion(id: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.savedQuestionsService.unsaveQuestion(id);
+  }
+
+  viewSavedQuestion(q: SavedQuestion): void {
+    this.selectedSavedQuestion.set(q);
+    this.showSavedModal.set(true);
+  }
+
+  closeSavedModal(): void {
+    this.showSavedModal.set(false);
+    this.selectedSavedQuestion.set(null);
+  }
+
+  toggleSortedSaved(): void {
+    this.savedQuestionsSort.update(s => s === 'date' ? 'importance' : 'date');
+    this.savedQuestionsPage.set(1);
+  }
+
+  setSavedPage(page: number): void {
+    this.savedQuestionsPage.set(page);
+  }
 }

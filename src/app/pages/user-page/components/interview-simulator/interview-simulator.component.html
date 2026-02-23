@@ -126,14 +126,17 @@
     <div class="max-w-6xl w-full mx-auto relative z-10">
       
       <!-- Header -->
-      <div class="text-center mb-12 animate-fadeIn">
+      <div class="text-center mb-8 animate-fadeIn">
         <h1 class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-4 font-display">
           Choose Your Interview Mode
         </h1>
-        <p class="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          Select the practice mode that best fits your preparation style and goals.
+        <p class="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8">
+          Select the mode that best fits your preparation style or customize your experience below.
         </p>
+
       </div>
+
+      
       
       <!-- Mode Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -261,7 +264,7 @@
           <!-- Select Button -->
           <div class="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700/50">
             <span class="text-sm font-medium text-slate-500 dark:text-slate-500">
-              Best for preparation
+              Optimal for practice
             </span>
             <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold group-hover:gap-3 transition-all">
               Start Simulation
@@ -269,7 +272,201 @@
             </div>
           </div>
         </button>
-        
+      </div>
+
+      <!-- Customize Section (Moved Between Mode Cards and Saved Questions) -->
+      <div class="max-w-4xl mx-auto mb-16 animate-fadeIn" style="animation-delay: 0.2s">
+        <div class="flex items-center gap-4 mb-10 opacity-50">
+          <div class="flex-1 h-px bg-slate-300 dark:bg-white/10"></div>
+          <span class="text-[10px] font-black text-slate-400 dark:text-gray-500 tracking-[0.2em] uppercase">OR CUSTOMIZE IT YOURSELF</span>
+          <div class="flex-1 h-px bg-slate-300 dark:bg-white/10"></div>
+        </div>
+
+        <button (click)="toggleCustomization()"
+                class="flex items-center gap-3 px-8 py-3 rounded-xl border-2 border-[#7C3AED]/30 text-[#7C3AED] dark:text-[#8B5CF6] font-bold hover:bg-[#7C3AED]/5 transition-all mx-auto mb-8 group">
+          <span class="material-symbols-outlined transition-transform duration-300" [class.rotate-180]="isCustomizing()">
+            {{ isCustomizing() ? 'expand_less' : 'tune' }}
+          </span>
+          {{ isCustomizing() ? 'Close Settings' : 'Customize Your Simulation' }}
+        </button>
+
+        <!-- Expandable Customization Panel -->
+        <div class="custom-panel w-full glass-panel rounded-3xl p-8 border border-[#7C3AED]/20 shadow-2xl text-left" [class.expanded]="isCustomizing()">
+           <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              <!-- Left: Role & Counts -->
+              <div class="lg:col-span-12 mb-6">
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Target Role</label>
+                <div class="relative group">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED] z-10">work</span>
+                  <select [(ngModel)]="targetRole"
+                          class="w-full pl-12 pr-12 py-4 bg-white dark:bg-[#0B1022] border-2 border-slate-200 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:border-[#7C3AED] outline-none transition-all appearance-none shadow-sm font-bold cursor-pointer">
+                    <option *ngFor="let role of availableRoles()" [value]="role.title">
+                      {{ role.title }}
+                    </option>
+                  </select>
+                  <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none transition-transform duration-300">
+                    
+                  </span>
+                  
+                  <div class="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
+                    <ng-container *ngFor="let role of availableRoles()">
+                      <span *ngIf="role.title === targetRole()" 
+                            [class]="'px-2 py-0.5 rounded text-[10px] font-black uppercase ' + role.categoryClass">
+                        {{ role.category }}
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skills Selection -->
+              <div class="lg:col-span-6">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-500">code</span>
+                    Technical Skills
+                  </h3>
+                  <div class="flex items-center gap-2">
+                     <input type="number" [(ngModel)]="techCount" max="8" min="1" class="w-12 py-1 px-2 text-center rounded-lg border dark:border-white/10 dark:bg-white/5 text-sm font-bold">
+                     <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">(Max 8)</span>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button *ngFor="let s of hardSkillOptions"
+                          (click)="toggleSkill(s, 'hard')"
+                          [class.selected]="techSkills().includes(s)"
+                          class="skill-tag px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-600 dark:text-slate-400 hover:border-[#7C3AED]/50">
+                    {{ s }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="lg:col-span-6">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-purple-500">favorite</span>
+                    Behavioral Skills
+                  </h3>
+                  <div class="flex items-center gap-2">
+                     <input type="number" [(ngModel)]="softCount" max="8" min="1" class="w-12 py-1 px-2 text-center rounded-lg border dark:border-white/10 dark:bg-white/5 text-sm font-bold">
+                     <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">(Max 8)</span>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button *ngFor="let s of softSkillOptions"
+                          (click)="toggleSkill(s, 'soft')"
+                          [class.selected]="softSkills().includes(s)"
+                          class="skill-tag px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-600 dark:text-slate-400 hover:border-[#8B5CF6]/50">
+                    {{ s }}
+                  </button>
+                </div>
+              </div>
+           </div>
+           
+           <div class="mt-8 pt-6 border-t border-slate-100 dark:border-white/5 flex justify-center">
+              <button (click)="initializeSimulation()"
+                      class="px-12 py-4 bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3">
+                <span class="material-symbols-outlined">bolt</span>
+                Launch Customized Simulation
+              </button>
+           </div>
+        </div>
+      </div>
+
+
+      <div class="max-w-4xl mx-auto mb-16 animate-fadeIn" style="animation-delay: 0.3s">
+        <div class="flex items-center justify-between mb-8 border-b border-slate-100 dark:border-white/5 pb-4">
+          <div class="flex items-center gap-4">
+             <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center border border-amber-200/30">
+                <span class="material-symbols-outlined text-amber-600 dark:text-amber-400">bookmark</span>
+             </div>
+             <div>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Saved Questions</h2>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Quick review of your key insights</p>
+             </div>
+          </div>
+
+          <!-- Filter / Sort Toggle -->
+          <div *ngIf="savedQuestions().length > 0" class="flex items-center gap-2">
+             <button (click)="toggleSortedSaved()"
+                     class="flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase tracking-wider transition-all"
+                     [ngClass]="savedQuestionsSort() === 'importance'
+                        ? 'bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400'
+                        : 'border-slate-200 text-slate-500 hover:border-purple-300 dark:border-white/10 dark:text-slate-400'">
+                <span class="material-symbols-outlined text-sm">swap_vert</span>
+                {{ savedQuestionsSort() === 'importance' ? 'Sort by Importance' : 'Sort by Date' }}
+             </button>
+          </div>
+        </div>
+
+        <!-- Empty State - Now Always Visible if length is 0 -->
+        <div *ngIf="savedQuestions().length === 0" class="text-center py-16 bg-slate-50/50 dark:bg-white/5 rounded-3xl border-2 border-dashed border-slate-200 dark:border-white/10 animate-fadeIn">
+           <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-6">
+              <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-gray-600">bookmark_border</span>
+           </div>
+           <h3 class="text-sm font-bold text-slate-600 dark:text-slate-300 mb-1">You haven't saved any questions yet.</h3>
+           <p class="text-xs text-slate-400 dark:text-gray-600 mb-8">Saved questions will appear here for quick review.</p>
+           
+           <button (click)="restartSimulation()" 
+                   class="px-8 py-3 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-[#7C3AED] dark:text-purple-400 hover:bg-[#7C3AED]/5 transition-all">
+             Start a Simulation
+           </button>
+        </div>
+
+        <!-- Saved Questions List -->
+        <div *ngIf="savedQuestions().length > 0" class="space-y-4">
+           <div *ngFor="let sq of paginatedSavedQuestions()"
+                (click)="viewSavedQuestion(sq)"
+                class="saved-q-card group p-5 bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/5 rounded-2xl cursor-pointer shadow-sm relative overflow-hidden">
+             
+             <div *ngIf="sq.isImportant" class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
+
+             <div class="flex items-center justify-between gap-6">
+                <div class="flex-1 min-w-0">
+                   <div class="flex items-center gap-3 mb-2">
+                      <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        {{ sq.topic }}
+                      </span>
+                      <span class="text-[9px] font-medium text-slate-400">{{ sq.savedAt | date:'dd/MM/yyyy' }}</span>
+                   </div>
+                   <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate group-hover:text-[#7C3AED] dark:group-hover:text-purple-400 transition-colors">
+                     {{ sq.question }}
+                   </h4>
+                </div>
+
+                <div class="flex items-center gap-2">
+                   <button (click)="toggleImportant(sq.id, $event)"
+                           class="p-2 rounded-lg transition-all"
+                           [ngClass]="sq.isImportant ? 'bg-amber-50 text-amber-500 dark:bg-amber-500/20' : 'text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5'">
+                      <span class="material-symbols-outlined text-lg" [style.font-variation-settings]="sq.isImportant ? '\'FILL\' 1' : '\'FILL\' 0'">star</span>
+                   </button>
+                   <button (click)="unsaveQuestion(sq.id, $event)"
+                           class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all">
+                      <span class="material-symbols-outlined text-lg">delete</span>
+                   </button>
+                </div>
+             </div>
+           </div>
+
+           <!-- Pagination -->
+           <div *ngIf="totalPages() > 1" class="flex items-center justify-between pt-6">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Page {{ savedQuestionsPage() }} of {{ totalPages() }}</span>
+              <div class="flex items-center gap-2">
+                 <button (click)="setSavedPage(savedQuestionsPage() - 1)"
+                         [disabled]="savedQuestionsPage() === 1"
+                         class="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold text-slate-600 dark:text-slate-300 disabled:opacity-30 uppercase tracking-wider">
+                   <span class="material-symbols-outlined text-base">chevron_left</span>
+                   Previous
+                 </button>
+                 <button (click)="setSavedPage(savedQuestionsPage() + 1)"
+                         [disabled]="savedQuestionsPage() === totalPages()"
+                         class="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold text-slate-600 dark:text-slate-300 disabled:opacity-30 uppercase tracking-wider">
+                   Next
+                   <span class="material-symbols-outlined text-base">chevron_right</span>
+                 </button>
+              </div>
+           </div>
+        </div>
       </div>
       
       <!-- Back to Dashboard Link -->
@@ -285,88 +482,78 @@
 </div>
 
 <!-- STATE 3: Active Simulator -->
-<div *ngIf="!isLoading() && currentState() === 'active_simulator'" class="flex flex-col lg:flex-row h-[calc(100vh-80px)] overflow-hidden">
+<div *ngIf="!isLoading() && currentState() === 'active_simulator'" class="flex flex-col lg:flex-row h-[calc(125vh-180px)] overflow-hidden">
   
     <!-- Main Content Area -->
     <!-- Main Content Area - Compact Padding -->
     <main class="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
         
         <!-- Mode Badge & Back Button -->
-        <div class="max-w-3xl mx-auto mb-6 flex items-center justify-between animate-fadeIn">
+        <div class="max-w-3xl mx-auto mb-4 flex items-center justify-between animate-fadeIn">
             <div class="flex items-center gap-2">
-              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors border"
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors border"
                     [ngClass]="selectedMode() === 'practice' 
                       ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20' 
                       : 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/20'">
-                <span class="material-symbols-outlined text-sm">
+                <span class="material-symbols-outlined text-xs">
                     {{ selectedMode() === 'practice' ? 'school' : 'timer' }}
                 </span>
                 {{ selectedMode() === 'practice' ? 'Practice Mode' : 'Assistant Mode' }}
               </span>
             </div>
             <button (click)="backToModeSelection()" 
-                    class="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-[#7C3AED] dark:hover:text-[#8B5CF6] transition-colors flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">swap_horiz</span> Change Mode
+                    class="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-[#7C3AED] dark:hover:text-[#8B5CF6] transition-colors flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">swap_horiz</span> Change
             </button>
         </div>
 
         <!-- Timer Display (Assistant Mode Only) -->
         <div *ngIf="isTimerEnabled()" 
-            class="max-w-3xl mx-auto mb-6 p-4 rounded-xl border transition-all animate-fadeIn"
+            class="max-w-3xl mx-auto mb-4 p-3 rounded-xl border transition-all animate-fadeIn"
             [ngClass]="getTimeColor() === 'text-rose-500' 
-                ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30 shadow-[0_0_15px_rgba(244,63,94,0.1)]' 
+                ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30' 
                 : 'glass-panel border-slate-200 dark:border-white/10'">
-            <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-2xl" [className]="getTimeColor()">timer</span>
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Time Remaining</span>
-                        <span class="text-sm text-slate-700 dark:text-slate-300" *ngIf="getTimeColor() !== 'text-rose-500'">Good pace, keep going.</span>
-                        <span class="text-sm text-rose-600 dark:text-rose-400 font-bold" *ngIf="getTimeColor() === 'text-rose-500'">Hurry up! Almost out of time.</span>
-                    </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xl" [className]="getTimeColor()">timer</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Time Remaining</span>
                 </div>
-                <div class="text-3xl font-bold font-mono" [className]="getTimeColor()">
+                <div class="text-xl font-bold font-mono" [className]="getTimeColor()">
                     {{ formatTime(timeRemaining()) }}
                 </div>
             </div>
-            <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div class="h-full transition-all duration-1000 ease-linear"
-                    [className]="getTimeColor() === 'text-rose-500' ? 'bg-rose-500' : (getTimeColor() === 'text-amber-500' ? 'bg-amber-500' : 'bg-emerald-500')"
-                    [style.width.%]="(timeRemaining() / questionTimeLimit()) * 100"></div>
-            </div>
         </div>
 
-        <div class="max-w-3xl mx-auto space-y-6" *ngIf="currentQuestion() as question">
+        <div class="max-w-3xl mx-auto space-y-4" *ngIf="currentQuestion() as question">
             
             <!-- Question Card - Compact Padding -->
-            <div class="glass-panel cyber-card-bg rounded-3xl p-4 lg:p-6 relative overflow-hidden group question-card">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-[#7C3AED]/10 dark:bg-[#8B5CF6]/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+            <div class="glass-panel cyber-card-bg rounded-2xl p-4 lg:p-5 relative overflow-hidden group question-card">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-[#7C3AED]/5 dark:bg-[#8B5CF6]/5 rounded-full blur-3xl -mr-24 -mt-24 pointer-events-none"></div>
                 
-                <div class="flex items-center justify-between mb-4 relative z-10">
-                    <span class="inline-flex items-center px-3 py-1 rounded-lg bg-[#7C3AED]/10 dark:bg-[#8B5CF6]/10 border border-[#7C3AED]/20 dark:border-[#8B5CF6]/20 text-[#7C3AED] dark:text-[#8B5CF6] text-xs font-bold uppercase tracking-wider shadow-sm">
-                        {{ question.category }}
-                    </span>
-                    
-                    <!-- Elapsed Timer for Practice Mode -->
-                    <div *ngIf="!isTimerEnabled()" class="flex items-center gap-2 text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/10">
-                        <span class="material-symbols-outlined text-base text-blue-500">schedule</span>
-                        <span class="text-xs font-bold tabular-nums">{{ formatTime(questionTimer()) }}</span>
+                <div class="flex items-center justify-between mb-3 relative z-10">
+                    <div class="flex items-center gap-2">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-[#7C3AED]/10 dark:bg-[#8B5CF6]/10 border border-[#7C3AED]/20 dark:border-[#8B5CF6]/20 text-[#7C3AED] dark:text-[#8B5CF6] text-[9px] font-bold uppercase tracking-wider">
+                          {{ question.category }}
+                      </span>
+                      
+                      <button (click)="toggleSave()"
+                              class="flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest transition-all"
+                              [ngClass]="isQuestionSaved(question.id)
+                                ? 'bg-amber-50 text-amber-600 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30'
+                                : 'bg-slate-100 text-slate-500 border border-slate-200 dark:bg-white/5 dark:border-white/10 dark:text-slate-400'">
+                         <span class="material-symbols-outlined text-xs" [style.font-variation-settings]="isQuestionSaved(question.id) ? '\'FILL\' 1' : '\'FILL\' 0'">bookmark</span>
+                         {{ isQuestionSaved(question.id) ? 'Saved' : 'Save' }}
+                      </button>
                     </div>
                 </div>
 
-                <h2 class="text-base md:text-lg font-bold text-slate-900 dark:text-white leading-snug mb-4 relative z-10">
+                <h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white leading-tight mb-3 relative z-10">
                     {{ question.question }}
                 </h2>
 
-                <!-- Code Snippet if available - Compact -->
-                <div *ngIf="question.codeSnippet" class="bg-[#0B1022] rounded-xl p-3 font-mono text-xs text-slate-300 mb-4 overflow-x-auto border border-white/5 relative shadow-inner max-h-48">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#7C3AED] to-transparent"></div>
-                    <div class="flex gap-1.5 mb-2 opacity-70">
-                        <div class="w-2 h-2 rounded-full bg-[#ff5f56]"></div>
-                        <div class="w-2 h-2 rounded-full bg-[#ffbd2e]"></div>
-                        <div class="w-2 h-2 rounded-full bg-[#27c93f]"></div>
-                    </div>
-                    <pre class="block leading-relaxed relative z-10"><code>{{ question.codeSnippet.code }}</code></pre>
+                <!-- Code Snippet if available - Extreemly Compact -->
+                <div *ngIf="question.codeSnippet" class="bg-[#0B1022] rounded-lg p-2.5 font-mono text-[11px] text-slate-300 mb-3 overflow-x-auto border border-white/5 relative max-h-40">
+                    <pre class="block leading-tight relative z-10"><code>{{ question.codeSnippet.code }}</code></pre>
                 </div>
 
                 <!-- Multiple Choice Options -->
@@ -375,13 +562,13 @@
                             (click)="!showFeedback() && selectOption(i)"
                             [disabled]="showFeedback()"
                             [ngClass]="{
-                                'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-500/10': showFeedback() && i === question.correctOptionIndex,
-                                'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-500/10': showFeedback() && selectedOption() === i && i !== question.correctOptionIndex,
-                                'opacity-50 border-slate-200 dark:border-slate-700': showFeedback() && i !== question.correctOptionIndex && selectedOption() !== i,
+                                'border-green-500 bg-green-50 dark:bg-green-500/10': showFeedback() && i === question.correctOptionIndex,
+                                'border-red-500 bg-red-50 dark:bg-red-500/10': showFeedback() && selectedOption() === i && i !== question.correctOptionIndex,
+                                'opacity-50 border-slate-200': showFeedback() && i !== question.correctOptionIndex && selectedOption() !== i,
                                 'border-[#7C3AED] bg-[#7C3AED]/5': !showFeedback() && selectedOption() === i,
-                                'border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-[#7C3AED]/50 dark:hover:border-[#8B5CF6]/50 hover:bg-[#7C3AED]/5 dark:hover:bg-[#8B5CF6]/5': !showFeedback() && selectedOption() !== i
+                                'border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-[#7C3AED]/50': !showFeedback() && selectedOption() !== i
                             }"
-                            class="group flex flex-col p-3 rounded-xl border transition-all text-left relative overflow-hidden">
+                            class="group flex flex-col p-2.5 rounded-xl border transition-all text-left relative overflow-hidden">
                         
                         <div class="flex items-start gap-3 w-full">
                             <!-- Icon for Feedback State -->
@@ -455,23 +642,23 @@
 
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex items-center justify-between gap-4 pt-4">
-                <button *ngIf="selectedMode() === 'practice'" (click)="skipQuestion()" class="px-6 py-3.5 rounded-2xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white font-bold text-sm transition-all flex items-center gap-2">
-                    <span class="material-symbols-outlined text-lg">fast_forward</span>
-                    Skip Question
+            <!-- Action Buttons - Compact -->
+            <div class="flex items-center justify-between gap-3 pt-3">
+                <button *ngIf="selectedMode() === 'practice'" (click)="skipQuestion()" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 font-bold text-xs transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">fast_forward</span>
+                    Skip
                 </button>
                 
-                <div *ngIf="selectedMode() !== 'practice'" class="flex-1"></div> <!-- Spacer for non-practice mode -->
+                <div *ngIf="selectedMode() !== 'practice'" class="flex-1"></div>
                 
-                <button *ngIf="!showFeedback()" (click)="submitAnswer()" class="px-10 py-3.5 rounded-2xl bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold shadow-lg hover:brightness-110 transition-all flex items-center gap-2 border border-white/10">
+                <button *ngIf="!showFeedback()" (click)="submitAnswer()" class="px-8 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold text-xs shadow-md hover:brightness-110 transition-all flex items-center gap-2 border border-white/10">
                     Submit Answer
-                    <span class="material-symbols-outlined">send</span>
+                    <span class="material-symbols-outlined text-sm">send</span>
                 </button>
 
-                <button *ngIf="showFeedback()" (click)="nextQuestion()" class="px-10 py-3.5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+                <button *ngIf="showFeedback()" (click)="nextQuestion()" class="px-8 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs shadow-md hover:scale-105 transition-all flex items-center gap-2">
                     Next Question
-                    <span class="material-symbols-outlined">arrow_forward</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </button>
             </div>
         </div>
@@ -501,50 +688,165 @@
             </div>
         </div>
 
-        <!-- Progress Card -->
-        <div class="glass-panel cyber-card-bg rounded-3xl p-6 relative group border border-slate-200 dark:border-white/5 shadow-sm">
-            <div class="flex items-center gap-2 mb-6">
-                <div class="p-2 bg-slate-100 dark:bg-blue-500/10 rounded-xl border border-slate-200 dark:border-blue-500/20">
-                    <span class="material-symbols-outlined text-[#06B6D4] dark:text-blue-400 text-xl">task_alt</span>
+        <!-- Progress Card - Compact -->
+        <div class="glass-panel cyber-card-bg rounded-2xl p-4 relative group border border-slate-200 dark:border-white/5 shadow-sm">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="p-1.5 bg-slate-100 dark:bg-blue-500/10 rounded-lg border border-slate-200 dark:border-blue-500/20">
+                    <span class="material-symbols-outlined text-[#06B6D4] dark:text-blue-400 text-lg">task_alt</span>
                 </div>
-                <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Simulation Progress</p>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Progress</p>
             </div>
-            <div class="space-y-5">
+            <div class="space-y-4">
                 <div class="flex justify-between items-end">
-                    <span class="text-sm font-bold text-slate-900 dark:text-white">Question {{ (currentSession()?.currentQuestionIndex || 0) + 1 }} of {{ currentSession()?.questions?.length || 0 }}</span>
-                    <span class="text-xs font-bold text-[#06B6D4] dark:text-[#22D3EE]">{{ progress().progressPercentage }}%</span>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white">Q {{ (currentSession()?.currentQuestionIndex || 0) + 1 }} / {{ currentSession()?.questions?.length || 0 }}</span>
+                    <span class="text-[10px] font-bold text-[#06B6D4] dark:text-[#22D3EE]">{{ progress().progressPercentage }}%</span>
                 </div>
-                <div class="w-full h-2.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden border border-slate-200 dark:border-white/5">
+                <div class="w-full h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden border border-slate-200 dark:border-white/5">
                     <div class="h-full bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] transition-all duration-500" [style.width.%]="progress().progressPercentage"></div>
                 </div>
                 
-                <div class="pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-3">
-                    <div class="flex justify-between items-center text-xs">
+                <div class="pt-3 border-t border-slate-200 dark:border-white/10 flex flex-col gap-2">
+                    <div class="flex justify-between items-center text-[10px]">
                         <span class="text-slate-500 dark:text-slate-400 font-medium">Completed</span>
-                        <span class="text-slate-900 dark:text-white font-bold">{{ progress().questionsCompleted }} questions</span>
+                        <span class="text-slate-900 dark:text-white font-bold">{{ progress().questionsCompleted }}</span>
                     </div>
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-slate-500 dark:text-slate-400 font-medium">Avg. Time / Question</span>
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Avg. Time</span>
                         <span class="text-slate-900 dark:text-white font-bold">{{ formatTime(progress().averageTimePerQuestion) }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Expert Tip -->
-        <div class="mt-auto p-5 bg-gradient-to-br from-blue-50 to-transparent dark:from-white/5 dark:to-transparent rounded-2xl border border-slate-200 dark:border-white/10 relative overflow-hidden">
-             <div class="flex gap-3 relative z-10">
-                <div class="w-8 h-8 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center shadow-sm text-[#06B6D4] border border-slate-200 dark:border-white/10">
-                    <span class="material-symbols-outlined text-lg">tips_and_updates</span>
+        <!-- Expert Tip - Compact -->
+        <div class="mt-auto p-4 bg-gradient-to-br from-blue-50 to-transparent dark:from-white/5 dark:to-transparent rounded-2xl border border-slate-200 dark:border-white/10 relative overflow-hidden">
+             <div class="flex gap-2 relative z-10">
+                <div class="w-7 h-7 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center shadow-sm text-[#06B6D4] border border-slate-200 dark:border-white/10">
+                    <span class="material-symbols-outlined text-base">tips_and_updates</span>
                 </div>
                 <div class="flex-1">
-                    <p class="text-[11px] font-extrabold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Expert Tip</p>
-                    <p class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                        Technical MCQs account for 30% of your total interview score. Take your time to read the snippets thoroughly before answering.
+                    <p class="text-[10px] font-extrabold text-slate-900 dark:text-white mb-0.5 uppercase tracking-wider">Tip</p>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-300 leading-tight font-medium">
+                        MCQs are 30% of your score. Read snippets thoroughly.
                     </p>
                 </div>
             </div>
         </div>
 
     </aside>
+</div>
+
+<!-- ============================================== -->
+<!-- RESULT MODAL                                   -->
+<!-- ============================================== -->
+<div *ngIf="showResultModal()" class="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:pl-[var(--sidebar-width,0px)]">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-[#0B1022]/80 backdrop-blur-md modal-backdrop" (click)="restartSimulation()"></div>
+
+    <!-- Modal Content -->
+    <div class="relative w-full max-w-lg bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden modal-content">
+        <div class="p-8">
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-[#7C3AED] to-[#06B6D4] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-purple-500/20">
+                   <span class="material-symbols-outlined text-4xl text-white">analytics</span>
+                </div>
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Simulation Results</h2>
+                <div class="flex items-center justify-center gap-2">
+                   <span class="text-4xl font-black text-[#7C3AED] dark:text-purple-400">{{ simulationScore() }}%</span>
+                   <div class="h-4 w-px bg-slate-200 dark:bg-white/10 mx-2"></div>
+                   <span class="text-xl font-bold text-slate-500">{{ (simulationScore() / 10).toFixed(1) }}/10</span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-4 mb-10">
+                <div class="p-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-3xl border border-emerald-100 dark:border-emerald-500/20 text-center">
+                    <p class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-1">Correct</p>
+                    <h4 class="text-2xl font-black text-emerald-700 dark:text-emerald-300">{{ correctAnswersCount() }}</h4>
+                </div>
+                <div class="p-6 bg-rose-50 dark:bg-rose-500/10 rounded-3xl border border-rose-100 dark:border-rose-500/20 text-center">
+                    <p class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest mb-1">Incorrect</p>
+                    <h4 class="text-2xl font-black text-rose-700 dark:text-rose-300">{{ wrongAnswersCount() }}</h4>
+                </div>
+            </div>
+
+            <!-- AI Feedback -->
+            <div class="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 mb-10">
+                <div class="flex items-center gap-3 mb-3">
+                   <span class="material-symbols-outlined text-blue-500">psychology</span>
+                   <h3 class="text-sm font-bold text-slate-900 dark:text-white">AI Feedback</h3>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                  "{{ aiFeedbackSummary() }}"
+                </p>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <button (click)="navigateToDashboard()" class="w-full sm:w-1/2 px-6 py-4 rounded-2xl border-2 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:hover:bg-white/5 transition-all flex items-center justify-center gap-2">
+                   <span class="material-symbols-outlined text-lg">dashboard</span>
+                   Dashboard
+                </button>
+                <button (click)="restartSimulation()" class="w-full sm:w-1/2 px-6 py-4 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-xl">
+                   <span class="material-symbols-outlined text-lg">refresh</span>
+                   New Session
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================== -->
+<!-- SAVED QUESTION DETAIL MODAL                    -->
+<!-- ============================================== -->
+<div *ngIf="showSavedModal() && selectedSavedQuestion() as sq" class="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:pl-[var(--sidebar-width,0px)]">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-[#0B1022]/80 backdrop-blur-md modal-backdrop" (click)="closeSavedModal()"></div>
+
+    <!-- Modal Content -->
+    <div class="relative w-full max-w-2xl bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden modal-content">
+        <!-- Close Button -->
+        <button (click)="closeSavedModal()" class="absolute top-6 right-6 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 transition-all z-10">
+           <span class="material-symbols-outlined">close</span>
+        </button>
+
+        <div class="p-10">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="px-3 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-widest">
+                  {{ sq.topic }}
+                </span>
+                <span class="text-xs font-bold text-slate-400">{{ sq.savedAt | date:'dd/MM/yyyy' }}</span>
+                <div *ngIf="sq.isImportant" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500 text-white text-[10px] font-black uppercase">
+                   <span class="material-symbols-outlined text-xs">star</span> Important
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <!-- Question -->
+                <div>
+                  <h3 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Question</h3>
+                  <div class="text-lg font-bold text-slate-900 dark:text-white leading-relaxed">
+                    {{ sq.question }}
+                  </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="h-px bg-slate-100 dark:bg-white/5"></div>
+
+                <!-- Answer -->
+                <div>
+                  <h3 class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Ideal Answer</h3>
+                  <div class="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl text-sm text-slate-700 dark:text-slate-300 leading-relaxed border border-slate-200 dark:border-white/10">
+                    {{ sq.answer }}
+                  </div>
+                </div>
+            </div>
+
+            <div class="mt-10 flex justify-end">
+                <button (click)="closeSavedModal()" class="px-8 py-3.5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:scale-105 transition-all shadow-xl">
+                   Close
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
