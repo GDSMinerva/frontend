@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-white dark:bg-[#0B0F1A] text-slate-800 dark:text-white transition-colors duration-300">
+<div class="min-h-[125vh] bg-white dark:bg-[#0B0F1A] text-slate-800 dark:text-white transition-colors duration-300">
   <app-user-sidebar 
     [isCollapsed]="isSidebarCollapsed()" 
     [isMobileOpen]="isMobileSidebarOpen()"
@@ -6,14 +6,19 @@
     (closeMobile)="closeMobileSidebar()"
   ></app-user-sidebar>
 
-  <main class="transition-all duration-300 min-h-screen relative overflow-y-auto bg-gradient-to-b from-slate-50 dark:from-transparent dark:to-transparent dark:bg-[#0B1120]" 
-    [ngClass]="{'lg:ml-[280px]': !isSidebarCollapsed(), 'lg:ml-[80px]': isSidebarCollapsed()}">
+  <main class="transition-all duration-300 min-h-[125vh] relative overflow-y-auto bg-gradient-to-b from-slate-50 dark:from-transparent dark:to-transparent dark:bg-[#0B0F1A]" 
+    [ngClass]="{'lg:ml-[280px]': !isSidebarCollapsed(), 'lg:ml-[80px]': isSidebarCollapsed()}"
+    [style.--sidebar-width]="isSidebarCollapsed() ? '80px' : '280px'">
     
     <!-- Dotpattern Background -->
     <om-dotpattern class="absolute inset-0 pointer-events-none dark:z-0"></om-dotpattern>
     
     <!-- Decorative gradient overlay (dark mode only) -->
     <div class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-slate-700/5 dark:from-[#8B5CF6]/5 to-transparent pointer-events-none dark:z-0"></div>
+
+    <!-- Global Background Decorative Blobs -->
+    <div class="fixed top-0 left-0 w-[600px] h-[600px] bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[120px] -translate-x-1/4 -translate-y-1/4 pointer-events-none z-0"></div>
+    <div class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[120px] translate-x-1/4 translate-y-1/4 pointer-events-none z-0"></div>
 
     <div class="relative z-10">
       <app-header 

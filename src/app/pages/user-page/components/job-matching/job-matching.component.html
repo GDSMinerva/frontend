@@ -234,7 +234,7 @@
                 </div>
             </div>
             
-            <div class="space-y-4 h-[calc(100vh-350px)] overflow-y-auto p-2 custom-scrollbar">
+            <div class="space-y-4 h-[calc(125vh-350px)] overflow-y-auto p-2 custom-scrollbar">
                 
                 <div *ngFor="let job of filteredJobs()" 
                      (click)="selectJob(job)"
@@ -381,7 +381,7 @@
                             class="px-8 py-4 text-sm font-bold transition-colors tracking-wide hover:text-slate-900 dark:hover:text-white">Match Analysis</button>
                 </div>
 
-                <div class="p-8 h-[calc(100vh-450px)] overflow-y-auto custom-scrollbar bg-white dark:bg-transparent">
+                <div class="p-8 h-[calc(125vh-450px)] overflow-y-auto custom-scrollbar bg-white dark:bg-transparent">
                     
                     <!-- TAB: OVERVIEW -->
                     <div *ngIf="activeTab() === 'overview'">

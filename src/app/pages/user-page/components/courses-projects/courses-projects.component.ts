@@ -16,10 +16,31 @@ interface Course {
   price?: string; // Display price e.g. "$12.99"
   originalPrice?: string; // e.g. "$84.99"
   duration: string;
+  durationHours: number; // Added for precise filtering
+  hasCertificate: boolean; // Added for precise filtering
   level?: string;
   actionText: string;
   url: string;
   category: string; // Added for filtering
+  status: 'not-started' | 'in-progress' | 'completed'; // Added for tracking enrollment
+  progressPercent?: number; // Progress tracked in enrolled courses
+  skillCategory: string; // Added for mapping to skill gaps
+}
+
+interface EnrolledCourse {
+  id: string;
+  courseId: string;
+  courseTitle: string;
+  provider: string;
+  url: string;
+  skillCategory: string;
+  icon: string;
+  iconBgClass: string;
+  iconColorClass: string;
+  status: 'in-progress' | 'completed';
+  progressPercent: number;
+  hasCertificate: boolean;
+  certificateUrl?: string;
 }
 
 interface Project {
@@ -39,9 +60,16 @@ interface CVScanStatus {
   matchPercentage?: number;
 }
 
-interface LearningPlan {
+interface WeeklyPlanItem {
   id: string;
-  title: string;
+  courseId: string;
+  courseTitle: string;
+  provider: string;
+  url: string;
+  skillCategory: string;
+  icon: string;
+  iconBgClass: string;
+  iconColorClass: string;
   completed: boolean;
 }
 
@@ -52,7 +80,6 @@ interface SkillGap {
   current: number;
   target: number;
   barClass: string;
-  actionText: string;
 }
 
 interface ConnectedAccount {
@@ -93,13 +120,33 @@ export class CoursesProjectsComponent implements OnInit {
   autoSyncEnabled = signal(true);
   
   // Progress Statistics (API-ready)
-  progressStats = signal<ProgressStats>({
-    readinessScore: 65,
-    readinessTarget: 90,
-    skillsMastered: 14,
-    timeInvested: '38.5h',
-    projectsDone: 3,
-    cvImpact: '+12%'
+  // Progress Statistics (Reactive to skillGaps)
+  progressStats = computed<ProgressStats>(() => {
+    const gaps = this.skillGaps();
+    if (gaps.length === 0) return {
+      readinessScore: 0,
+       readinessTarget: 90,
+       skillsMastered: 0,
+       timeInvested: '38.5h',
+       projectsDone: 3,
+       cvImpact: '+0%'
+    };
+
+    // Calculate readiness score as weighted average of current/target
+    const totalProgress = gaps.reduce((acc, gap) => acc + (gap.current / gap.target), 0);
+    const avgProgress = (totalProgress / gaps.length) * 100;
+    
+    // Count mastered skills (current >= target)
+    const mastered = gaps.filter(g => g.current >= g.target).length;
+
+    return {
+      readinessScore: Math.min(100, Math.round(avgProgress)),
+      readinessTarget: 90,
+      skillsMastered: 14 + mastered, // Base 14 + newly mastered
+      timeInvested: '38.5h',
+      projectsDone: 3,
+      cvImpact: `+${Math.round(avgProgress / 7)}%`
+    };
   });
 
   // Course statistics
@@ -113,11 +160,78 @@ export class CoursesProjectsComponent implements OnInit {
     activeLearningPath: 'Data Science Specialist'
   });
   
-  learningPlans = signal<LearningPlan[]>([
-    { id: '1', title: 'Module 4: Pandas Advanced', completed: false },
-    { id: '2', title: 'SQL Query Optimization Quiz', completed: true },
-    { id: '3', title: 'Start Churn Prediction Project', completed: false }
+  weeklyPlanItems = signal<WeeklyPlanItem[]>([
+    {
+      id: 'wp1',
+      courseId: '4',
+      courseTitle: 'Machine Learning Specialization',
+      provider: 'Coursera',
+      url: '#',
+      skillCategory: 'Machine Learning',
+      icon: 'psychology',
+      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
+      iconColorClass: 'text-purple-600 dark:text-purple-400',
+      completed: false
+    },
+    {
+      id: 'wp2',
+      courseId: '1',
+      courseTitle: 'Python for Everybody',
+      provider: 'Coursera',
+      url: '#',
+      skillCategory: 'Python (Data Science)',
+      icon: 'code',
+      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
+      iconColorClass: 'text-purple-600 dark:text-purple-400',
+      completed: false
+    },
+    {
+      id: 'wp3',
+      courseId: '5',
+      courseTitle: 'SQL for Data Analysis',
+      provider: 'Udacity',
+      url: '#',
+      skillCategory: 'SQL Optimization',
+      icon: 'storage',
+      iconBgClass: 'bg-cyan-500/10 border-cyan-500/20',
+      iconColorClass: 'text-cyan-600 dark:text-cyan-400',
+      completed: false
+    }
   ]);
+
+  weeklyPlanFilter = signal<string>('All');
+  weeklyPlanDropdownOpen = signal(false);
+  weeklyPlanPage = signal(0);
+  weeklyPlanPageSize = 2;
+  
+  categoryIcons: Record<string, string> = {
+    'All': 'language',
+    'Machine Learning': 'psychology',
+    'Python (Data Science)': 'code',
+    'SQL Optimization': 'storage'
+  };
+
+  weeklyPlanCategories = computed(() => {
+    const categories = ['All', ...new Set(this.weeklyPlanItems().map(i => i.skillCategory))];
+    return categories.map(cat => ({
+      name: cat,
+      icon: this.categoryIcons[cat] || 'category'
+    }));
+  });
+
+  filteredWeeklyPlan = computed(() => {
+    const filter = this.weeklyPlanFilter();
+    const all = this.weeklyPlanItems();
+    return filter === 'All' ? all : all.filter(i => i.skillCategory === filter);
+  });
+
+  paginatedWeeklyPlan = computed(() => {
+    const start = this.weeklyPlanPage() * this.weeklyPlanPageSize;
+    return this.filteredWeeklyPlan().slice(start, start + this.weeklyPlanPageSize);
+  });
+
+  totalWeeklyPlanPages = computed(() => Math.ceil(this.filteredWeeklyPlan().length / this.weeklyPlanPageSize));
+
   
   skillGaps = signal<SkillGap[]>([
     { 
@@ -126,8 +240,7 @@ export class CoursesProjectsComponent implements OnInit {
       priorityClass: 'bg-red-100 dark:bg-red-500/80 text-red-700 dark:text-white shadow-red-500/20',
       current: 30, 
       target: 85, 
-      barClass: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]',
-      actionText: 'Quick Start: Fast.ai'
+      barClass: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
     },
     { 
       name: 'Python (Data Science)', 
@@ -135,8 +248,7 @@ export class CoursesProjectsComponent implements OnInit {
       priorityClass: 'bg-orange-100 dark:bg-orange-500/80 text-orange-700 dark:text-white shadow-orange-500/20',
       current: 45, 
       target: 95, 
-      barClass: 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]',
-      actionText: 'Real Python Article'
+      barClass: 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'
     },
     { 
       name: 'SQL Optimization', 
@@ -144,8 +256,7 @@ export class CoursesProjectsComponent implements OnInit {
       priorityClass: 'bg-purple-100 dark:bg-purple-500/80 text-purple-700 dark:text-white shadow-purple-500/20',
       current: 70, 
       target: 90, 
-      barClass: 'bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]',
-      actionText: 'Kaggle SQL Path'
+      barClass: 'bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]'
     }
   ]);
 
@@ -159,10 +270,15 @@ export class CoursesProjectsComponent implements OnInit {
       iconColorClass: 'text-purple-600 dark:text-purple-400',
       rating: 4.8,
       duration: '10 hrs',
+      durationHours: 10,
+      hasCertificate: true,
       level: 'Beginner',
       actionText: 'Start Learning',
       url: '#',
-      category: 'All'
+      category: 'All',
+      status: 'in-progress',
+      progressPercent: 35,
+      skillCategory: 'Python (Data Science)'
     },
     {
       id: '2',
@@ -173,9 +289,14 @@ export class CoursesProjectsComponent implements OnInit {
       iconColorClass: 'text-cyan-600 dark:text-cyan-400',
       priceTag: 'FREE CERTIFIED',
       duration: '300 hrs',
+      durationHours: 300,
+      hasCertificate: true,
       actionText: 'Start Free Course',
       url: '#',
-      category: 'All' 
+      category: 'All',
+      status: 'not-started',
+      progressPercent: 0,
+      skillCategory: 'General'
     },
     {
       id: '3',
@@ -188,9 +309,14 @@ export class CoursesProjectsComponent implements OnInit {
       price: '$12.99',
       originalPrice: '$84.99',
       duration: '22 hrs',
+      durationHours: 22,
+      hasCertificate: true,
       actionText: 'View on Udemy',
       url: '#',
-      category: 'Paid' // Example
+      category: 'Paid',
+      status: 'completed',
+      progressPercent: 100,
+      skillCategory: 'Python (Data Science)'
     },
     {
       id: '4',
@@ -201,10 +327,15 @@ export class CoursesProjectsComponent implements OnInit {
       iconColorClass: 'text-purple-600 dark:text-purple-400',
       rating: 4.9,
       duration: '36 hrs',
+      durationHours: 36,
+      hasCertificate: true,
       level: 'Advanced',
       actionText: 'Enroll Now',
       url: '#',
-      category: 'All'
+      category: 'All',
+      status: 'not-started',
+      progressPercent: 0,
+      skillCategory: 'Machine Learning'
     },
     {
       id: '5',
@@ -215,9 +346,63 @@ export class CoursesProjectsComponent implements OnInit {
       iconColorClass: 'text-cyan-600 dark:text-cyan-400',
       priceTag: 'FREE',
       duration: '8 hrs',
+      durationHours: 8,
+      hasCertificate: false,
       actionText: 'Start Free',
       url: '#',
-      category: 'Free'
+      category: 'Free',
+      status: 'in-progress',
+      progressPercent: 62,
+      skillCategory: 'SQL Optimization'
+    },
+    {
+      id: '6',
+      title: 'Python for Everybody 2',
+      provider: 'Coursera',
+      icon: 'code',
+      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
+      iconColorClass: 'text-purple-600 dark:text-purple-400',
+      rating: 4.8,
+      duration: '10 hrs',
+      durationHours: 10,
+      hasCertificate: true,
+      level: 'Beginner',
+      actionText: 'Start Learning',
+      url: '#',
+      category: 'All',
+      status: 'in-progress',
+      progressPercent: 35,
+      skillCategory: 'Python (Data Science)'
+    }
+  ]);
+
+  projects = signal<Project[]>([
+    {
+      id: 'p1',
+      title: 'Customer Churn Prediction',
+      difficulty: 'Medium',
+      timeEstimate: '8h',
+      technologies: ['Python', 'Scikit-Learn'],
+      status: 'active',
+      description: 'Build a predictive model to identify customers at risk of leaving.'
+    },
+    {
+      id: 'p2',
+      title: 'Advanced Neural Networks',
+      difficulty: 'High',
+      timeEstimate: '12h',
+      technologies: ['PyTorch', 'Fast.ai'],
+      status: 'locked',
+      description: 'ML Specialist Path'
+    },
+    {
+      id: 'p3',
+      title: 'Data Visualization Dashboard',
+      difficulty: 'Low',
+      timeEstimate: '4h',
+      technologies: ['Tableau', 'SQL'],
+      status: 'completed',
+      description: 'Completed last week'
     }
   ]);
 
@@ -236,13 +421,77 @@ export class CoursesProjectsComponent implements OnInit {
     const filter = this.activeFilter();
     if (filter === 'All') return this.courses();
     
-    // Simple logic for demo purposes matching visual expectations
     if (filter === 'Free') return this.courses().filter(c => c.priceTag?.includes('FREE') || c.category === 'Free');
     if (filter === 'Paid') return this.courses().filter(c => c.price || c.category === 'Paid');
-    if (filter === '< 10 Hours') return this.courses().filter(c => c.duration.includes('10 hrs') || c.duration.includes('8 hrs')); 
+    if (filter === 'Certificates') return this.courses().filter(c => c.hasCertificate);
+    if (filter === '< 10 Hours') return this.courses().filter(c => c.durationHours < 10);
     
     return this.courses(); 
   });
+  enrolledCourses = signal<EnrolledCourse[]>([
+    {
+      id: 'ec1',
+      courseId: '4',
+      courseTitle: 'Machine Learning Specialization',
+      provider: 'Coursera',
+      url: '#',
+      skillCategory: 'Machine Learning',
+      icon: 'psychology',
+      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
+      iconColorClass: 'text-purple-600 dark:text-purple-400',
+      status: 'in-progress',
+      progressPercent: 0,
+      hasCertificate: true
+    },
+    {
+      id: 'ec2',
+      courseId: '1',
+      courseTitle: 'Python for Everybody',
+      provider: 'Coursera',
+      url: '#',
+      skillCategory: 'Python (Data Science)',
+      icon: 'code',
+      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
+      iconColorClass: 'text-purple-600 dark:text-purple-400',
+      status: 'in-progress',
+      progressPercent: 35,
+      hasCertificate: true
+    },
+    {
+      id: 'ec3',
+      courseId: '5',
+      courseTitle: 'SQL for Data Analysis',
+      provider: 'Udacity',
+      url: '#',
+      skillCategory: 'SQL Optimization',
+      icon: 'storage',
+      iconBgClass: 'bg-cyan-500/10 border-cyan-500/20',
+      iconColorClass: 'text-cyan-600 dark:text-cyan-400',
+      status: 'in-progress',
+      progressPercent: 62,
+      hasCertificate: false
+    }
+  ]);
+
+  enrolledBySkill = computed(() => {
+    const map = new Map<string, EnrolledCourse[]>();
+    this.enrolledCourses().forEach(e => {
+      if (!map.has(e.skillCategory)) {
+        map.set(e.skillCategory, []);
+      }
+      map.get(e.skillCategory)!.push(e);
+    });
+    return map;
+  });
+
+  completedLearning = signal<EnrolledCourse[]>([]);
+  finishingCourseIds = signal<string[]>([]);
+  downloadingCertificateIds = signal<string[]>([]);
+  openSkillEnrollmentList = signal<string | null>(null);
+
+  enrolledCountBySkill(skillName: string): number {
+    return this.enrolledBySkill().get(skillName)?.length || 0;
+  }
 
   // UI State
   isLoading = signal(false);
@@ -257,17 +506,7 @@ export class CoursesProjectsComponent implements OnInit {
    */
   async fetchDashboardStats(): Promise<void> {
     // TODO: const stats = await this.apiService.getProgressStats();
-    // this.progressStats.set(stats);
-    
-    // For now, use sample data
-    this.progressStats.set({
-      readinessScore: 65,
-      readinessTarget: 90,
-      skillsMastered: 14,
-      timeInvested: '38.5h',
-      projectsDone: 3,
-      cvImpact: '+12%'
-    });
+    // For now, this is derived from skillGaps computed
   }
 
   /**
@@ -341,10 +580,31 @@ export class CoursesProjectsComponent implements OnInit {
     this.autoSyncEnabled.update(v => !v);
   }
 
-  togglePlanCompletion(planId: string): void {
-    this.learningPlans.update(plans => 
-      plans.map(p => p.id === planId ? { ...p, completed: !p.completed } : p)
+  togglePlanCompletion(itemId: string): void {
+    this.weeklyPlanItems.update(items => 
+      items.map(p => p.id === itemId ? { ...p, completed: !p.completed } : p)
     );
+  }
+
+  deleteWeeklyPlanItem(id: string): void {
+    const item = this.weeklyPlanItems().find(i => i.id === id);
+    if (item) {
+      // Remove from enrolled courses as well
+      this.enrolledCourses.update(courses => courses.filter(c => c.courseId !== item.courseId));
+      // Remove from weekly plan
+      this.weeklyPlanItems.update(items => items.filter(p => p.id !== id));
+    }
+  }
+
+  setWeeklyPlanFilter(cat: string): void {
+    this.weeklyPlanFilter.set(cat);
+    this.weeklyPlanPage.set(0); // Reset page on filter change
+  }
+
+  setWeeklyPlanPage(page: number): void {
+    if (page >= 0 && page < this.totalWeeklyPlanPages()) {
+      this.weeklyPlanPage.set(page);
+    }
   }
 
   setActiveFilter(filter: string): void {
@@ -352,10 +612,142 @@ export class CoursesProjectsComponent implements OnInit {
   }
 
   enrollInCourse(course: Course): void {
-    console.log('Enrolling in:', course.title);
+    this.enrollCourse(course);
+  }
+
+  enrollCourse(course: Course): void {
+    // Check if already enrolled or completed
+    if (this.isEnrolled(course.id) || this.isCompleted(course.id)) return;
+
+    const isFirstInSkill = !this.enrolledCourses().some(e => e.skillCategory === course.skillCategory);
+
+    const newEnrolled: EnrolledCourse = {
+      id: `ec-${Math.random().toString(36).substring(2, 9)}`,
+      courseId: course.id,
+      courseTitle: course.title,
+      provider: course.provider,
+      url: course.url,
+      skillCategory: course.skillCategory,
+      icon: course.icon,
+      iconBgClass: course.iconBgClass,
+      iconColorClass: course.iconColorClass,
+      status: 'in-progress',
+      progressPercent: 0,
+      hasCertificate: course.hasCertificate
+    };
+
+    this.enrolledCourses.update(courses => [...courses, newEnrolled]);
+
+    if (isFirstInSkill) {
+      const newPlanItem: WeeklyPlanItem = {
+        id: `wp-${Math.random().toString(36).substring(2, 9)}`,
+        courseId: course.id,
+        courseTitle: course.title,
+        provider: course.provider,
+        url: course.url,
+        skillCategory: course.skillCategory,
+        icon: course.icon,
+        iconBgClass: course.iconBgClass,
+        iconColorClass: course.iconColorClass,
+        completed: false
+      };
+      this.weeklyPlanItems.update(items => [...items, newPlanItem]);
+    }
+  }
+
+
+  toggleEnrollmentList(skillName: string | null): void {
+    this.openSkillEnrollmentList.update(current => 
+      current === skillName || skillName === null ? null : skillName
+    );
+  }
+
+  deleteEnrolledCourse(enrolledId: string): void {
+    const enrolled = this.enrolledCourses().find(c => c.id === enrolledId);
+    if (enrolled) {
+      // Remove from weekly plan as well
+      this.weeklyPlanItems.update(items => items.filter(i => i.courseId !== enrolled.courseId));
+      // Remove from enrolled
+      this.enrolledCourses.update(courses => courses.filter(c => c.id !== enrolledId));
+    }
+  }
+
+  finishEnrolledCourse(enrolledId: string): void {
+    const course = this.enrolledCourses().find(c => c.id === enrolledId);
+    if (!course || this.finishingCourseIds().includes(course.courseId)) return;
+
+    // Show finishing message by courseId to sync animation across UIs
+    this.finishingCourseIds.update(ids => [...ids, course.courseId]);
+
+    // Delay the actual completion
+    setTimeout(() => {
+      // Remove from finishing state
+      this.finishingCourseIds.update(ids => ids.filter(id => id !== course.courseId));
+
+      // Remove from enrolled
+      this.enrolledCourses.update(courses => courses.filter(c => c.id !== enrolledId));
+
+      // ALSO remove from weekly plan
+      this.weeklyPlanItems.update(items => items.filter(i => i.courseId !== course.courseId));
+
+      // Update skill gap (+5 capped at target)
+      this.skillGaps.update(gaps => gaps.map(gap => {
+        if (gap.name === course.skillCategory) {
+          return { ...gap, current: Math.min(gap.target, gap.current + 5) };
+        }
+        return gap;
+      }));
+
+      // Add to completed
+      const completedCourse: EnrolledCourse = {
+        ...course,
+        status: 'completed',
+        progressPercent: 100,
+        hasCertificate: course.hasCertificate,
+        certificateUrl: 'https://example.com/certificate' // Mock URL
+      };
+      this.completedLearning.update(prev => [...prev, completedCourse]);
+    }, 2000);
+  }
+
+  downloadCertificate(course: EnrolledCourse): void {
+    if (!course.hasCertificate || this.downloadingCertificateIds().includes(course.id)) return;
+
+    this.downloadingCertificateIds.update(ids => [...ids, course.id]);
+
+    setTimeout(() => {
+      this.downloadingCertificateIds.update(ids => ids.filter(id => id !== course.id));
+      if (course.certificateUrl) {
+        window.open(course.certificateUrl, '_blank');
+      }
+    }, 1500);
+  }
+
+  completeWeeklyItem(item: WeeklyPlanItem): void {
+    const enrolled = this.enrolledCourses().find(ec => ec.courseId === item.courseId);
+    if (enrolled) {
+      this.finishEnrolledCourse(enrolled.id);
+    } else {
+      // If not enrolled (unlikely here but for safety), just delete
+      this.deleteWeeklyPlanItem(item.id);
+    }
+  }
+
+  isEnrolled(courseId: string): boolean {
+    return this.enrolledCourses().some(e => e.courseId === courseId);
+  }
+
+  isCompleted(courseId: string): boolean {
+    return this.completedLearning().some(e => e.courseId === courseId);
   }
 
   navigateToDashboard(): void {
     this.router.navigate(['/user/dashboard']);
   }
+
+  openSkillResource(url: string): void {
+    window.open(url, '_blank', 'noopener');
+  }
+
+  // Removed setPlanPage as pagination is no longer used for weeklyPlanItems.
 }

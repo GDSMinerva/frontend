@@ -445,28 +445,8 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
    * Handle when time expires in Assistant Mode
    */
   handleTimeExpired(): void {
-    // Auto-submit current answer or mark as skipped if empty
-    // If it's an MCQ and nothing selected, we skip/fail
-    // If text answer and non-empty, we submit
-    const currentQ = this.currentQuestion();
-    if (!currentQ) return; 
-
-    if (currentQ.options) {
-        if (this.selectedOption() !== null) {
-            this.submitAnswer();
-        } else {
-            // Auto submit as wrong/skipped
-             alert("Time expired! Moving to next question.");
-             this.nextQuestion();
-        }
-    } else {
-         if (this.currentAnswer().trim().length > 0) {
-            this.submitAnswer();
-         } else {
-             alert("Time expired! Moving to next question.");
-             this.nextQuestion();
-         }
-    }
+    // End the entire simulation immediately when the timer reaches 0
+    this.completeSimulation();
   }
 
   selectOption(index: number): void {
@@ -781,6 +761,16 @@ query {
   closeSavedModal(): void {
     this.showSavedModal.set(false);
     this.selectedSavedQuestion.set(null);
+  }
+
+  nextSavedQuestion(): void {
+    const current = this.selectedSavedQuestion();
+    const questions = this.savedQuestions();
+    if (!current || questions.length <= 1) return;
+
+    const currentIndex = questions.findIndex(q => q.id === current.id);
+    const nextIndex = (currentIndex + 1) % questions.length;
+    this.selectedSavedQuestion.set(questions[nextIndex]);
   }
 
   toggleSortedSaved(): void {

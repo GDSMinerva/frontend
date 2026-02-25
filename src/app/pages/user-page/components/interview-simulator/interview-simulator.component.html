@@ -1,4 +1,5 @@
 
+
 <!-- Loading State -->
 <!-- Loading State Removed -->
 
@@ -9,7 +10,7 @@
     <!-- Main locked card -->
     <div class="lg:col-span-8">
       <div class="flex items-center justify-center min-h-[50vh]">
-        <div class="max-w-lg w-full bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B1120]/80 
+        <div class="max-w-lg w-full bg-white dark:bg-[#161B2A] 
                     rounded-2xl border border-slate-200 dark:border-[#8B5CF6]/20 
                     shadow-xl dark:shadow-[0_0_30px_rgba(139,92,246,0.15)] 
                     p-8 text-center locked-card">
@@ -52,7 +53,7 @@
     <div class="lg:col-span-4 space-y-6">
       
       <!-- Current Score Card -->
-      <div class="bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B1120]/80 
+      <div class="bg-white dark:bg-[#161B2A] 
                   rounded-2xl border border-slate-200 dark:border-[#8B5CF6]/20 p-6">
         <div class="flex items-center gap-2 mb-4">
           <span class="material-symbols-outlined text-[#06B6D4]">bar_chart</span>
@@ -69,7 +70,7 @@
       </div>
       
       <!-- Simulation Progress Card -->
-      <div class="bg-white dark:bg-gradient-to-b dark:from-[#0F1629]/60 dark:to-[#0B1120]/80 
+      <div class="bg-white dark:bg-[#161B2A] 
                   rounded-2xl border border-slate-200 dark:border-[#8B5CF6]/20 p-6">
         <div class="flex items-center gap-2 mb-4">
           <span class="material-symbols-outlined text-[#06B6D4]">check_circle</span>
@@ -143,13 +144,17 @@
         
         <!-- Practice Mode Card -->
         <button (click)="selectMode('practice')"
-                class="bg-white dark:bg-[#020617] 
+                class="bg-white dark:bg-[#161B2A] 
                        rounded-2xl border-2 border-slate-200 dark:border-blue-900/30 
                        hover:border-blue-400 dark:hover:border-blue-400 
                        hover:bg-blue-50/50 dark:hover:bg-[#0F172A] 
                        shadow-xl dark:shadow-none
                        hover:shadow-2xl dark:hover:shadow-[0_0_50px_rgba(59,130,246,0.2)]
-                       p-8 text-left transition-all duration-300 hover:scale-[1.02] group">
+                       p-8 text-left transition-all duration-300 hover:scale-[1.02] group relative overflow-hidden">
+          
+          <!-- Decorative Blobs (Blue for Practice) -->
+          <div class="absolute top-0 left-0 w-80 h-80 bg-blue-400/20 dark:bg-blue-500/20 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
+          <div class="absolute bottom-0 right-0 w-80 h-80 bg-blue-400/20 dark:bg-blue-500/20 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none z-0"></div>
           
           <!-- Icon and Title -->
           <div class="flex items-center gap-4 mb-6">
@@ -209,13 +214,17 @@
         
         <!-- Assistant Mode Card -->
         <button (click)="selectMode('assistant')"
-                class="bg-white dark:bg-[#020617] 
+                class="bg-white dark:bg-[#161B2A] 
                        rounded-2xl border-2 border-slate-200 dark:border-purple-900/30 
                        hover:border-purple-400 dark:hover:border-purple-400 
                        hover:bg-purple-50/50 dark:hover:bg-[#0F172A] 
                        shadow-xl dark:shadow-none
                        hover:shadow-2xl dark:hover:shadow-[0_0_50px_rgba(139,92,246,0.2)]
-                       p-8 text-left transition-all duration-300 hover:scale-[1.02] group">
+                       p-8 text-left transition-all duration-300 hover:scale-[1.02] group relative overflow-hidden">
+          
+          <!-- Decorative Blobs (Purple for Assistant) -->
+          <div class="absolute top-0 left-0 w-80 h-80 bg-purple-400/20 dark:bg-purple-500/20 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
+          <div class="absolute bottom-0 right-0 w-80 h-80 bg-purple-400/20 dark:bg-purple-500/20 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none z-0"></div>
           
           <!-- Icon and Title -->
           <div class="flex items-center gap-4 mb-6">
@@ -299,7 +308,7 @@
                 <div class="relative group">
                   <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED] z-10">work</span>
                   <select [(ngModel)]="targetRole"
-                          class="w-full pl-12 pr-12 py-4 bg-white dark:bg-[#0B1022] border-2 border-slate-200 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:border-[#7C3AED] outline-none transition-all appearance-none shadow-sm font-bold cursor-pointer">
+                          class="w-full pl-12 pr-12 py-4 bg-white dark:bg-[#161B2A] border-2 border-slate-200 dark:border-white/5 rounded-2xl text-slate-900 dark:text-white focus:border-[#7C3AED] outline-none transition-all appearance-none shadow-sm font-bold cursor-pointer">
                     <option *ngFor="let role of availableRoles()" [value]="role.title">
                       {{ role.title }}
                     </option>
@@ -417,16 +426,21 @@
         <div *ngIf="savedQuestions().length > 0" class="space-y-4">
            <div *ngFor="let sq of paginatedSavedQuestions()"
                 (click)="viewSavedQuestion(sq)"
-                class="saved-q-card group p-5 bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/5 rounded-2xl cursor-pointer shadow-sm relative overflow-hidden">
+                class="saved-q-card group p-5 bg-white dark:bg-[#161B2A] border border-slate-200 dark:border-white/5 rounded-2xl cursor-pointer shadow-sm relative overflow-hidden">
              
              <div *ngIf="sq.isImportant" class="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
 
              <div class="flex items-center justify-between gap-6">
                 <div class="flex-1 min-w-0">
                    <div class="flex items-center gap-3 mb-2">
-                      <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                        {{ sq.topic }}
-                      </span>
+                       <span class="px-2 py-0.5 rounded-md border text-[9px] font-bold uppercase tracking-wider"
+                             [ngClass]="{
+                               'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-500/10 dark:border-blue-500/30 dark:text-blue-400': sq.topic?.toLowerCase() === 'technical',
+                               'bg-purple-50 border-purple-200 text-purple-600 dark:bg-purple-500/10 dark:border-purple-500/30 dark:text-purple-400': sq.topic?.toLowerCase() === 'soft' || sq.topic?.toLowerCase() === 'behavioral',
+                               'bg-slate-100 border-slate-200 text-slate-500 dark:bg-white/5 dark:border-white/10 dark:text-slate-400': sq.topic?.toLowerCase() !== 'technical' && sq.topic?.toLowerCase() !== 'soft' && sq.topic?.toLowerCase() !== 'behavioral'
+                             }">
+                         {{ sq.topic }}
+                       </span>
                       <span class="text-[9px] font-medium text-slate-400">{{ sq.savedAt | date:'dd/MM/yyyy' }}</span>
                    </div>
                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate group-hover:text-[#7C3AED] dark:group-hover:text-purple-400 transition-colors">
@@ -486,11 +500,12 @@
   
     <!-- Main Content Area -->
     <!-- Main Content Area - Compact Padding -->
-    <main class="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+    <main class="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent bg-white dark:bg-[#161B2A]">
         
         <!-- Mode Badge & Back Button -->
         <div class="max-w-3xl mx-auto mb-4 flex items-center justify-between animate-fadeIn">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
+              <!-- Mode Label -->
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors border"
                     [ngClass]="selectedMode() === 'practice' 
                       ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20' 
@@ -500,29 +515,29 @@
                 </span>
                 {{ selectedMode() === 'practice' ? 'Practice Mode' : 'Assistant Mode' }}
               </span>
+
+              <!-- Compact Timer (Pic 2 Design) -->
+              <div *ngIf="isTimerEnabled()" 
+                   class="px-3 py-1 rounded-xl border flex items-center gap-2 transition-all animate-fadeIn"
+                   [ngClass]="getTimeColor() === 'text-rose-500' 
+                      ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-500/30 shadow-[0_0_15px_rgba(244,63,94,0.1)]' 
+                      : 'bg-[#161B2A] border-white/10 shadow-sm'">
+                <span class="material-symbols-outlined text-base" 
+                      [className]="getTimeColor() === 'text-rose-500' ? 'text-rose-500' : 'text-[#22D3EE]'">
+                  timer
+                </span>
+                <span class="text-xs font-bold font-mono tracking-wider" 
+                      [className]="getTimeColor() === 'text-rose-500' ? 'text-rose-500' : 'text-slate-200'">
+                  {{ formatTime(timeRemaining()) }}
+                </span>
+              </div>
             </div>
             <button (click)="backToModeSelection()" 
                     class="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-[#7C3AED] dark:hover:text-[#8B5CF6] transition-colors flex items-center gap-1">
-              <span class="material-symbols-outlined text-xs">swap_horiz</span> Change
+              <span class="material-symbols-outlined text-xs">logout</span> QUIT
             </button>
         </div>
 
-        <!-- Timer Display (Assistant Mode Only) -->
-        <div *ngIf="isTimerEnabled()" 
-            class="max-w-3xl mx-auto mb-4 p-3 rounded-xl border transition-all animate-fadeIn"
-            [ngClass]="getTimeColor() === 'text-rose-500' 
-                ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30' 
-                : 'glass-panel border-slate-200 dark:border-white/10'">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-xl" [className]="getTimeColor()">timer</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Time Remaining</span>
-                </div>
-                <div class="text-xl font-bold font-mono" [className]="getTimeColor()">
-                    {{ formatTime(timeRemaining()) }}
-                </div>
-            </div>
-        </div>
 
         <div class="max-w-3xl mx-auto space-y-4" *ngIf="currentQuestion() as question">
             
@@ -612,7 +627,7 @@
                 <div *ngIf="!question.options" class="relative z-10">
                     <textarea [(ngModel)]="currentAnswer" 
                               [disabled]="showFeedback()"
-                              class="w-full p-4 bg-slate-50 dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none transition-all resize-none min-h-[150px] text-sm"
+                              class="w-full p-4 bg-slate-50 dark:bg-[#161B2A] border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent outline-none transition-all resize-none min-h-[150px] text-sm"
                               placeholder="Type your answer here..."></textarea>
                     
                      <div class="flex justify-end mt-2" *ngIf="!showFeedback()">
@@ -665,7 +680,7 @@
     </main>
 
     <!-- Sidebar Stats -->
-    <aside class="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#0B0F1A]/95 backdrop-blur-xl p-6 flex flex-col gap-6 overflow-y-auto z-10">
+    <aside class="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#161B2A] backdrop-blur-xl p-6 flex flex-col gap-6 overflow-y-auto z-10">
         
         <!-- Score Card -->
         <div class="glass-panel cyber-card-bg rounded-3xl p-6 relative group overflow-hidden border border-slate-200 dark:border-white/5 shadow-sm">
@@ -739,12 +754,12 @@
 <!-- ============================================== -->
 <!-- RESULT MODAL                                   -->
 <!-- ============================================== -->
-<div *ngIf="showResultModal()" class="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:pl-[var(--sidebar-width,0px)]">
+<div *ngIf="showResultModal()" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <!-- Backdrop -->
     <div class="absolute inset-0 bg-[#0B1022]/80 backdrop-blur-md modal-backdrop" (click)="restartSimulation()"></div>
 
     <!-- Modal Content -->
-    <div class="relative w-full max-w-lg bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden modal-content">
+    <div class="relative w-full max-w-lg bg-white dark:bg-[#161B2A] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden modal-content">
         <div class="p-8">
             <div class="text-center mb-10">
                 <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-[#7C3AED] to-[#06B6D4] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-purple-500/20">
@@ -799,12 +814,12 @@
 <!-- ============================================== -->
 <!-- SAVED QUESTION DETAIL MODAL                    -->
 <!-- ============================================== -->
-<div *ngIf="showSavedModal() && selectedSavedQuestion() as sq" class="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:pl-[var(--sidebar-width,0px)]">
+<div *ngIf="showSavedModal() && selectedSavedQuestion() as sq" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <!-- Backdrop -->
     <div class="absolute inset-0 bg-[#0B1022]/80 backdrop-blur-md modal-backdrop" (click)="closeSavedModal()"></div>
 
     <!-- Modal Content -->
-    <div class="relative w-full max-w-2xl bg-white dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden modal-content">
+    <div class="relative w-full max-w-2xl bg-white dark:bg-[#161B2A] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden modal-content">
         <!-- Close Button -->
         <button (click)="closeSavedModal()" class="absolute top-6 right-6 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 transition-all z-10">
            <span class="material-symbols-outlined">close</span>
@@ -812,7 +827,12 @@
 
         <div class="p-10">
             <div class="flex items-center gap-3 mb-6">
-                <span class="px-3 py-1 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-widest">
+                <span class="px-3 py-1 rounded-lg border text-xs font-bold uppercase tracking-widest"
+                      [ngClass]="{
+                        'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-500/10 dark:border-blue-500/30 dark:text-blue-400': sq.topic?.toLowerCase() === 'technical',
+                        'bg-purple-50 border-purple-200 text-purple-600 dark:bg-purple-500/10 dark:border-purple-500/30 dark:text-purple-400': sq.topic?.toLowerCase() === 'soft' || sq.topic?.toLowerCase() === 'behavioral',
+                        'bg-slate-100 border-slate-200 text-slate-500 dark:bg-white/5 dark:border-white/10 dark:text-slate-400': sq.topic?.toLowerCase() !== 'technical' && sq.topic?.toLowerCase() !== 'soft' && sq.topic?.toLowerCase() !== 'behavioral'
+                      }">
                   {{ sq.topic }}
                 </span>
                 <span class="text-xs font-bold text-slate-400">{{ sq.savedAt | date:'dd/MM/yyyy' }}</span>
@@ -843,7 +863,15 @@
             </div>
 
             <div class="mt-10 flex justify-end">
-                <button (click)="closeSavedModal()" class="px-8 py-3.5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:scale-105 transition-all shadow-xl">
+                <button (click)="nextSavedQuestion()" 
+                        *ngIf="savedQuestions().length > 1"
+                        class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold hover:scale-105 transition-all shadow-xl flex items-center gap-2 border border-white/10">
+                   Next Question
+                   <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+                <button (click)="closeSavedModal()" 
+                        *ngIf="savedQuestions().length <= 1"
+                        class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white font-bold hover:scale-105 transition-all shadow-xl border border-white/10">
                    Close
                 </button>
             </div>
