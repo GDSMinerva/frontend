@@ -33,6 +33,7 @@
     "@omnedia/ngx-electric-border": "^4.0.1",
     "@omnedia/ngx-gridpattern": "^4.0.0",
     "@omnedia/ngx-meteors": "^4.0.1",
+    "@omnedia/ngx-number-ticker": "^4.0.1",
     "@omnedia/ngx-theme-toggle": "^4.0.1",
     "@omnedia/ngx-typewriter": "^4.0.1",
     "postcss-import": "^16.1.1",

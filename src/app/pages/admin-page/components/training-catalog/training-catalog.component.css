@@ -1,0 +1,182 @@
+/* Training Catalog Component Styles */
+
+/* Card Glass Effect */
+:host ::ng-deep .bg-white\/80 {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+:host-context(.dark) ::ng-deep .dark\:bg-gradient-to-br {
+    background: linear-gradient(to bottom right, rgba(15, 23, 38, 0.6), transparent);
+    backdrop-filter: blur(12px);
+}
+
+/* Custom Scrollbar */
+:host ::ng-deep ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+:host-context(.dark) ::ng-deep ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+:host-context(.dark) ::ng-deep ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+:host-context(.dark) ::ng-deep ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Table Row Hover Effect */
+tbody tr {
+    transition: all 0.2s ease;
+}
+
+tbody tr:hover {
+    transform: translateX(2px);
+}
+
+/* Button Hover Effects */
+button {
+    transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Difficulty Bars Animation */
+.w-1\.5 {
+    transition: all 0.3s ease;
+}
+
+tbody tr:hover .w-1\.5 {
+    transform: scaleY(1.1);
+}
+
+/* Card Hover Shadow Effect */
+.group:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+:host-context(.dark) .group:hover {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+}
+
+/* Filter Input Focus Effects */
+input:focus,
+select:focus {
+    outline: none;
+}
+
+/* Pagination Button Styles */
+.flex.gap-2 button {
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Material Icons Styling */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    user-select: none;
+}
+
+/* Gradient Text for Dark Mode */
+:host-context(.dark) .cyber-gradient-text {
+    background: linear-gradient(to right, #a78bfa, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Table Responsive */
+@media (max-width: 768px) {
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 900px;
+    }
+}
+
+/* Stat Card Icon Pulse Animation */
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.group:hover .material-symbols-outlined {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Smooth Transitions */
+* {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Dark Mode Border Glow */
+:host-context(.dark) .border-white\/10 {
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Empty State Styling */
+.text-4xl.opacity-30 {
+    filter: grayscale(100%);
+}
+
+/* Action Buttons Group */
+.flex.items-center.justify-end.gap-2 button {
+    opacity: 0.7;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+tbody tr:hover .flex.items-center.justify-end.gap-2 button {
+    opacity: 1;
+}
+
+/* Disabled State */
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+button:disabled:hover {
+    transform: none;
+}
+
+/* Category Badge Glow Effect */
+:host-context(.dark) .px-2\.5 {
+    box-shadow: 0 0 10px rgba(var(--badge-color), 0.1);
+}
+
+/* Difficulty Bar Glow */
+:host-context(.dark) .bg-purple-500 {
+    box-shadow: 0 0 5px rgba(168, 85, 247, 0.5);
+}
