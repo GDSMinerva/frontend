@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SavedJobsService } from '../../../../services/saved-jobs.service';
+import { CvScanService } from '../../../../services/cv-scan.service';
 
 // --- Interfaces ---
 
@@ -76,8 +77,17 @@ interface DropdownState {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JobMatchingComponent implements OnInit {
-  // CV Status
-  userCVStatus = signal<UserCVStatus>({ hasSubmittedCV: false });
+  private cvScanService = inject(CvScanService);
+
+  // CV Status from global service
+  userCVStatus = computed(() => {
+    const status = this.cvScanService.cvStatus();
+    return {
+      hasSubmittedCV: status.hasCompletedScan,
+      lastScanDate: status.lastScanDate,
+      cvId: status.cvId
+    };
+  });
 
   // Job data (only loaded if CV submitted)
   jobs = signal<Job[]>([]);
@@ -369,32 +379,15 @@ export class JobMatchingComponent implements OnInit {
    */
   async checkCVStatus(): Promise<void> {
     this.isLoading.set(true);
-    // TODO: Replace with actual API call
-    // const status = await this.cvService.checkStatus();
-    // this.userCVStatus.set(status);
-
-    // Simulate API delay
-    setTimeout(async () => {
-      if (Math.random() < 0.1) {
-        this.actionError.set('Failed to fetch CV status.');
-        this.clearErrorAfterDelay();
-        this.isLoading.set(false);
-        return;
-      }
-
-      // For now, use sample data
-      // Set hasSubmittedCV to false to see locked state, true to see job list
-      this.userCVStatus.set({
-        hasSubmittedCV: true, // Change this to test different states
-        lastScanDate: '2024-01-15',
-        cvId: 'cv-001'
-      });
-
-      if (this.userCVStatus().hasSubmittedCV) {
-        await this.fetchJobs();
-      }
-      this.isLoading.set(false);
-    }, 1000);
+    
+    // Use service status
+    const status = this.cvScanService.cvStatus();
+    
+    if (status.hasCompletedScan) {
+      await this.fetchJobs();
+    }
+    
+    this.isLoading.set(false);
   }
 
   /**

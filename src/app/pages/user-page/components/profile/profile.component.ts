@@ -1,9 +1,10 @@
-import { Component, signal, CUSTOM_ELEMENTS_SCHEMA, inject, computed } from '@angular/core';
+import { Component, signal, CUSTOM_ELEMENTS_SCHEMA, inject, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProfileService, UserProfile } from '../../../../services/profile.service';
 import { SavedJobsService } from '../../../../services/saved-jobs.service';
+import { CvScanService } from '../../../../services/cv-scan.service';
 
 // --- Interfaces ---
 
@@ -52,6 +53,8 @@ export class ProfileComponent {
 
   // Raw signal from service
   savedJobs = this.savedJobsService.savedJobs;
+  private cvScanService = inject(CvScanService);
+  cvStatus = this.cvScanService.cvStatus;
 
   // --- Saved Jobs Pagination & Sort ---
 
@@ -142,65 +145,6 @@ export class ProfileComponent {
   // Forms
   profileForm: FormGroup;
 
-  // --- Sample Data (Hardcoded for now) ---
-
-  private readonly sampleHardSkills: Skill[] = [
-    { id: 'hs-001', name: 'React', category: 'hard', level: 90 },
-    { id: 'hs-002', name: 'TypeScript', category: 'hard', level: 85 },
-    { id: 'hs-003', name: 'Tailwind CSS', category: 'hard', level: 95 },
-    { id: 'hs-004', name: 'Node.js', category: 'hard', level: 80 },
-    { id: 'hs-005', name: 'Next.js', category: 'hard', level: 85 },
-  ];
-
-  private readonly sampleSoftSkills: Skill[] = [
-    { id: 'ss-001', name: 'Team Leadership', category: 'soft', level: 85 },
-    { id: 'ss-002', name: 'Public Speaking', category: 'soft', level: 80 },
-    { id: 'ss-003', name: 'Agile Methodology', category: 'soft', level: 90 },
-  ];
-
-  private readonly sampleExperiences: Experience[] = [
-    {
-      id: 'exp-001',
-      company: 'TechCorp Inc.',
-      position: 'Senior Frontend Developer',
-      startDate: '2022-03',
-      isCurrent: true,
-      description: 'Leading the frontend migration to Angular 17. Improved performance by 40%.'
-    },
-    {
-      id: 'exp-002',
-      company: 'WebSolutions',
-      position: 'Frontend Developer',
-      startDate: '2020-01',
-      endDate: '2022-02',
-      isCurrent: false,
-      description: 'Developed responsive web applications for various clients using React and Vue.'
-    }
-  ];
-
-  private readonly sampleCVs: CV[] = [
-    {
-      id: 'cv-001',
-      versionName: 'Software_Engineer_V3',
-      fileName: 'Alex_Johnson_SE_V3.pdf',
-      fileUrl: '/assets/cvs/resume.pdf',
-      uploadDate: 'Oct 24, 2023',
-      fileSize: '245 KB',
-      isActive: true,
-      score: 75
-    },
-    {
-      id: 'cv-002',
-      versionName: 'Frontend_Dev_Google',
-      fileName: 'Alex_Johnson_FE_Google.pdf',
-      fileUrl: '/assets/cvs/resume_fe.pdf',
-      uploadDate: 'Oct 12, 2023',
-      fileSize: '230 KB',
-      isActive: false,
-      score: 62
-    },
-  ];
-
   constructor(private fb: FormBuilder, private router: Router) {
     this.profileForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -210,24 +154,71 @@ export class ProfileComponent {
       bio: ['']
     });
 
-    // Initialize with sample data
-    this.loadSampleData();
+    // Reactive effect to keep CV list in sync with global scan status
+    effect(() => {
+      const status = this.cvScanService.cvStatus();
+      if (status.hasCompletedScan && status.cvId) {
+        // If we have a scan, update cvList (or add to it if it doesn't already exist)
+        this.cvList.update(cvs => {
+          const existing = cvs.find(c => c.id === status.cvId);
+          if (existing) return cvs;
+          
+          const newCV: CV = {
+            id: status.cvId as string,
+            versionName: status.versionName || 'Main_Resume',
+            fileName: status.fileName || 'resume.pdf',
+            fileUrl: '#',
+            uploadDate: status.lastScanDate ? new Date(status.lastScanDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent',
+            fileSize: status.fileSize || 'N/A',
+            isActive: true,
+            score: status.matchPercentage
+          };
+          
+          return [newCV, ...cvs.map(c => ({...c, isActive: false}))];
+        });
+        
+        // Populate mock skills/experiences if they are empty (simulating parsed data)
+        if (this.hardSkills().length === 0) {
+          this.hardSkills.set([
+            { id: 'hs-001', name: 'React', category: 'hard', level: 90 },
+            { id: 'hs-002', name: 'TypeScript', category: 'hard', level: 85 }
+          ]);
+          this.softSkills.set([
+            { id: 'ss-003', name: 'Agile Methodology', category: 'soft', level: 90 }
+          ]);
+          this.experiences.set([
+            {
+              id: 'exp-001',
+              company: 'Target Company (Mapped)',
+              position: status.targetRole || 'Developer',
+              startDate: '2023-01',
+              isCurrent: true,
+              description: 'Roles and responsibilities derived from CV analysis.'
+            }
+          ]);
+        }
+      } else {
+        // No scan = Empty sections
+        this.hardSkills.set([]);
+        this.softSkills.set([]);
+        this.experiences.set([]);
+        this.cvList.set([]);
+      }
+    });
+
+    // Initialize with current profile (especially email)
+    this.initializeProfileData();
   }
 
-  private loadSampleData(): void {
-    this.hardSkills.set(this.sampleHardSkills);
-    this.softSkills.set(this.sampleSoftSkills);
-    this.experiences.set(this.sampleExperiences);
-    this.cvList.set(this.sampleCVs);
-
-    // Initialize form with data
-    if (this.userProfile()) {
+  private initializeProfileData(): void {
+    const profile = this.userProfile();
+    if (profile) {
       this.profileForm.patchValue({
-        firstName: this.userProfile()?.firstName,
-        lastName: this.userProfile()?.lastName,
-        email: this.userProfile()?.email,
-        location: this.userProfile()?.location,
-        bio: this.userProfile()?.bio
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.email,
+        location: profile.location,
+        bio: profile.bio
       });
     }
   }
@@ -336,18 +327,33 @@ export class ProfileComponent {
   // --- CV Management Methods ---
 
   setPrimaryCV(cvId: string): void {
-    this.cvList.update(cvs => cvs.map(cv => ({
-      ...cv,
-      isActive: cv.id === cvId
+    const cv = this.cvList().find(c => c.id === cvId);
+    if (!cv) return;
+
+    this.cvList.update(cvs => cvs.map(c => ({
+      ...c,
+      isActive: c.id === cvId
     })));
-    // TODO: Call API to set active CV
+
+    // Update global service
+    this.cvScanService.setScanStatus({
+      hasCompletedScan: true,
+      cvId: cv.id,
+      targetRole: 'Data Scientist', // Default mock or extract from CV if possible
+      matchPercentage: cv.score || 0,
+      lastScanDate: cv.uploadDate
+    });
   }
 
   deleteCV(cvId: string): void {
     const cv = this.cvList().find(c => c.id === cvId);
     if (cv && confirm(`Permanently delete "${cv.versionName || cv.fileName}"? This action cannot be undone.`)) {
+      const wasActive = cv.isActive;
       this.cvList.update(cvs => cvs.filter(cv => cv.id !== cvId));
-      // TODO: Call API to delete CV
+      
+      if (wasActive) {
+        this.cvScanService.resetStatus();
+      }
     }
   }
 
@@ -381,7 +387,7 @@ export class ProfileComponent {
     }
 
     // Simulate upload
-    setTimeout(() => {
+    setTimeout(async () => {
       const newCV: CV = {
         id: `cv-${Date.now()}`,
         versionName: file.name.split('.')[0],
@@ -389,11 +395,23 @@ export class ProfileComponent {
         fileUrl: '#',
         uploadDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         fileSize: `${(file.size / 1024).toFixed(1)} KB`,
-        isActive: false,
-        score: 0 // Waiting for analysis
+        isActive: true, // Make newly uploaded primary for demo synchronization
+        score: 85 // Simulated score
       };
 
-      this.cvList.update(cvs => [newCV, ...cvs]);
+      this.cvList.update(cvs => [newCV, ...cvs.map(c => ({...c, isActive: false}))]);
+      
+      this.cvScanService.setScanStatus({
+        hasCompletedScan: true,
+        cvId: newCV.id,
+        targetRole: 'Data Scientist', // Default mock
+        matchPercentage: 85,
+        lastScanDate: new Date().toISOString(),
+        fileName: file.name,
+        fileSize: `${(file.size / 1024).toFixed(1)} KB`,
+        versionName: file.name.split('.')[0]
+      });
+
       this.isLoading.set(false);
     }, 1500);
   }

@@ -4,7 +4,7 @@
   [class.w-[280px]]="!isCollapsed"
   [class.w-[80px]]="isCollapsed"
 >
-  <div class="p-4 lg:p-6 overflow-hidden">
+  <div class="overflow-hidden transition-all duration-300" [ngClass]="isCollapsed ? 'p-2' : 'p-4 lg:p-6'">
     <div class="flex items-center gap-3 mb-10 px-2 min-h-[3rem]">
       <img
         *ngIf="!isCollapsed"
@@ -16,42 +16,42 @@
     <nav class="space-y-2">
       <a routerLink="/user/dashboard" routerLinkActive="active-link" class="w-full px-3 py-3 rounded-lg lg:rounded-xl font-medium transition-all text-left block" 
         [ngClass]="{'bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white shadow-lg dark:shadow-neon-soft': rla1.isActive, 'text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10': !rla1.isActive}" #rla1="routerLinkActive">
-        <span class="flex items-center gap-4">
+        <span class="flex items-center" [ngClass]="isCollapsed ? 'justify-center' : 'gap-4'">
           <span class="material-symbols-outlined shrink-0" [class.filled]="rla1.isActive">grid_view</span>
           <span class="whitespace-nowrap text-sm lg:text-base" [class.hidden]="isCollapsed">Dashboard</span>
         </span>
       </a>
       <a routerLink="/user/job-matching" routerLinkActive="active-link" class="w-full px-3 py-3 rounded-lg lg:rounded-xl font-medium transition-all text-left block"
         [ngClass]="{'bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white shadow-lg dark:shadow-neon-soft': rla2.isActive, 'text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10': !rla2.isActive}" #rla2="routerLinkActive">
-        <span class="flex items-center gap-4">
+        <span class="flex items-center" [ngClass]="isCollapsed ? 'justify-center' : 'gap-4'">
           <span class="material-symbols-outlined shrink-0" [class.filled]="rla2.isActive">work</span>
           <span class="whitespace-nowrap text-sm lg:text-base" [class.hidden]="isCollapsed">Job Matching</span>
         </span>
       </a>
       <a routerLink="/user/interview-simulator" routerLinkActive="active-link" class="w-full px-3 py-3 rounded-lg lg:rounded-xl font-medium transition-all text-left block"
         [ngClass]="{'bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white shadow-lg dark:shadow-neon-soft': rla3.isActive, 'text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10': !rla3.isActive}" #rla3="routerLinkActive">
-        <span class="flex items-center gap-4">
+        <span class="flex items-center" [ngClass]="isCollapsed ? 'justify-center' : 'gap-4'">
           <span class="material-symbols-outlined shrink-0" [class.filled]="rla3.isActive">mic</span>
           <span class="whitespace-nowrap text-sm lg:text-base" [class.hidden]="isCollapsed">Interview Simulator</span>
         </span>
       </a>
       <a routerLink="/user/courses-projects" routerLinkActive="active-link" class="w-full px-3 py-3 rounded-lg lg:rounded-xl font-medium transition-all text-left block"
         [ngClass]="{'bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white shadow-lg dark:shadow-neon-soft': rla4.isActive, 'text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10': !rla4.isActive}" #rla4="routerLinkActive">
-        <span class="flex items-center gap-4">
+        <span class="flex items-center" [ngClass]="isCollapsed ? 'justify-center' : 'gap-4'">
           <span class="material-symbols-outlined shrink-0" [class.filled]="rla4.isActive">school</span>
           <span class="whitespace-nowrap text-sm lg:text-base" [class.hidden]="isCollapsed">Courses &amp; Projects</span>
         </span>
       </a>
       <a routerLink="/user/support-feedback" routerLinkActive="active-link" class="w-full px-3 py-3 rounded-lg lg:rounded-xl font-medium transition-all text-left block"
         [ngClass]="{'bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white shadow-lg dark:shadow-neon-soft': rla5.isActive, 'text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10': !rla5.isActive}" #rla5="routerLinkActive">
-        <span class="flex items-center gap-4">
+        <span class="flex items-center" [ngClass]="isCollapsed ? 'justify-center' : 'gap-4'">
           <span class="material-symbols-outlined shrink-0" [class.filled]="rla5.isActive">help</span>
           <span class="whitespace-nowrap text-sm lg:text-base" [class.hidden]="isCollapsed">Support &amp; Feedback</span>
         </span>
       </a>
       <a routerLink="/user/profile" routerLinkActive="active-link" class="w-full px-3 py-3 rounded-lg lg:rounded-xl font-medium transition-all text-left block"
         [ngClass]="{'bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] text-white shadow-lg dark:shadow-neon-soft': rla6.isActive, 'text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10': !rla6.isActive}" #rla6="routerLinkActive">
-        <span class="flex items-center gap-4">
+        <span class="flex items-center" [ngClass]="isCollapsed ? 'justify-center' : 'gap-4'">
           <span class="material-symbols-outlined shrink-0" [class.filled]="rla6.isActive">person</span>
           <span class="whitespace-nowrap text-sm lg:text-base" [class.hidden]="isCollapsed">Profile and Settings</span>
         </span>
@@ -62,7 +62,8 @@
     <button
       type="button"
       (click)="onToggleCollapse()"
-      class="flex items-center justify-center gap-3 px-4 py-3 rounded-lg lg:rounded-xl text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] transition-colors text-xs font-bold uppercase tracking-widest w-full hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border dark:hover:border-[#8B5CF6]/30"
+      class="flex items-center px-4 py-3 rounded-lg lg:rounded-xl text-slate-600 dark:text-[#A1A1AA] hover:text-slate-900 dark:hover:text-[#22D3EE] transition-colors text-xs font-bold uppercase tracking-widest w-full hover:bg-slate-50 dark:hover:bg-[#8B5CF6]/10 dark:hover:border dark:hover:border-[#8B5CF6]/30"
+      [ngClass]="isCollapsed ? 'justify-center' : 'justify-center lg:justify-start gap-3'"
       [attr.aria-label]="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
     >
       <span class="material-symbols-outlined text-lg shrink-0" [class.rotate-180]="isCollapsed">menu_open</span>

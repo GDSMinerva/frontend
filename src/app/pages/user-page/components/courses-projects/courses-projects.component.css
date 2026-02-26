@@ -80,3 +80,33 @@
 .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+/* Project detail overlay entrance */
+.project-detail-enter {
+  animation: projectSlideIn 0.25s ease-out;
+}
+@keyframes projectSlideIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Checklist item — checked state strikethrough */
+.checklist-item-done {
+  text-decoration: line-through;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+}
+
+/* Submission result card entrance */
+.result-card {
+  animation: fadeScaleIn 0.4s ease-out;
+}
+@keyframes fadeScaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Difficulty badge colors */
+.difficulty-simple  { @apply bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20; }
+.difficulty-medium  { @apply bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/20; }
+.difficulty-hard    { @apply bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20; }

@@ -24,11 +24,11 @@ export class ProfileService {
     // For now, I'll use a placeholder.
     this.userProfile.set({
       avatarUrl: 'assets/default-profile-pic.png',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      location: 'City, Country',
-      bio: 'Your bio goes here.'
+      firstName: 'user',
+      lastName: '',
+      email: 'user@example.com', // Placeholder for "email used in sign up process"
+      location: '',
+      bio: ''
     });
   }
 

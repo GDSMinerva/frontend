@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SavedQuestionsService, SavedQuestion } from '../../../../services/saved-questions.service';
 import { SavedJobsService } from '../../../../services/saved-jobs.service';
+import { CvScanService, CVScanStatus } from '../../../../services/cv-scan.service';
 
 enum SimulatorState {
   LOCKED = 'locked',
@@ -74,12 +75,6 @@ interface SimulationProgress {
   progressPercentage: number;
 }
 
-interface CVScanStatus {
-  hasCompletedScan: boolean;
-  cvId?: string;
-  lastScanDate?: string;
-  targetJobTitle?: string;
-}
 
 @Component({
   selector: 'app-interview-simulator',
@@ -93,6 +88,7 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
   private savedQuestionsService = inject(SavedQuestionsService);
   private savedJobsService = inject(SavedJobsService);
   private router = inject(Router);
+  private cvScanService = inject(CvScanService);
 
   // --- Saved Questions Signals ---
   savedQuestions = this.savedQuestionsService.savedQuestions;
@@ -116,9 +112,9 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
     const roles: { title: string, category: string, categoryClass: string }[] = [];
     
     // 1. CV Primary Role
-    if (this.cvScanStatus().targetJobTitle) {
+    if (this.cvScanStatus().targetRole) {
       roles.push({ 
-        title: this.cvScanStatus().targetJobTitle!, 
+        title: this.cvScanStatus().targetRole!, 
         category: '📄 CV Primary Role',
         categoryClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400'
       });
@@ -181,8 +177,8 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
   currentState = signal<SimulatorState>(SimulatorState.LOCKED);
   selectedMode = signal<SimulatorMode | null>(null);
 
-  // CV Scan Status
-  cvScanStatus = signal<CVScanStatus>({ hasCompletedScan: false });
+  // CV Status from global service
+  cvScanStatus = this.cvScanService.cvStatus;
 
   // Mode configurations
   readonly modeOptions: ModeConfig[] = [
@@ -298,35 +294,20 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
   async checkCVScanStatus(): Promise<void> {
     this.isLoading.set(true);
     
-    // TODO: Replace with actual API call
-    // const status = await this.cvService.checkScanStatus();
-    // this.cvScanStatus.set(status);
+    // Use service status
+    const status = this.cvScanService.cvStatus();
     
-    // Simulate API delay
-    setTimeout(async () => {
-      // For testing - set to false to see locked state, true to see simulator mode selection
-      const hasCompletedScan = true; // Change to true to test mode selection
-      
-      this.cvScanStatus.set({
-        hasCompletedScan, 
-        cvId: hasCompletedScan ? 'cv-001' : undefined,
-        lastScanDate: hasCompletedScan ? '2024-01-15' : undefined,
-        targetJobTitle: hasCompletedScan ? 'Senior Frontend Developer' : undefined
-      });
-      
-      // Set initial state based on CV scan status
-      if (hasCompletedScan) {
-        this.currentState.set(SimulatorState.MODE_SELECTION);
-        // Default preselection
-        if (this.availableRoles().length > 0) {
-          this.targetRole.set(this.availableRoles()[0].title);
-        }
-      } else {
-        this.currentState.set(SimulatorState.LOCKED);
+    // Set initial state based on global status
+    if (status.hasCompletedScan) {
+      this.currentState.set(SimulatorState.MODE_SELECTION);
+      if (this.availableRoles().length > 0) {
+        this.targetRole.set(this.availableRoles()[0].title);
       }
-      
-      this.isLoading.set(false);
-    }, 1000);
+    } else {
+      this.currentState.set(SimulatorState.LOCKED);
+    }
+    
+    this.isLoading.set(false);
   }
 
   /**
@@ -379,7 +360,7 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
     // Sample data for testing
     const session: SimulationSession = {
       id: `session-${Date.now()}`,
-      jobTitle: this.cvScanStatus().targetJobTitle || this.targetRole() || 'Software Developer',
+      jobTitle: this.cvScanStatus().targetRole || this.targetRole() || 'Software Developer',
       cvId: this.cvScanStatus().cvId || '',
       mode: this.selectedMode()!,
       questions: this.sampleQuestions,
@@ -650,6 +631,7 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
     this.showResultModal.set(false);
     this.currentState.set(SimulatorState.MODE_SELECTION);
     this.selectedMode.set(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   
   /**

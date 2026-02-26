@@ -1,6 +1,7 @@
-import { Component, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, signal, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CvScanService } from '../../../../services/cv-scan.service';
 
 // --- Interfaces ---
 
@@ -52,6 +53,7 @@ enum DashboardState {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardComponent {
+  private cvScanService = inject(CvScanService);
   // Dashboard state
   currentState = signal<DashboardState>(DashboardState.UPLOAD);
   
@@ -287,6 +289,21 @@ export class DashboardComponent {
       
       // Wait a bit to show 100% before transitioning
       setTimeout(() => {
+        // Sync with global service
+        const results = this.analysisResults();
+        if (results) {
+          this.cvScanService.setScanStatus({
+            hasCompletedScan: true,
+            cvId: results.cvId,
+            targetRole: results.topMatchingRoles[0]?.title || 'Data Scientist',
+            matchPercentage: results.matchScore,
+            lastScanDate: results.scanDate,
+            fileName: this.uploadedCV()?.fileName || 'Pasted_Resume',
+            fileSize: this.uploadedCV()?.fileSize || 'N/A',
+            versionName: this.uploadedCV()?.fileName.split('.')[0] || 'Pasted_Resume'
+          });
+        }
+        
         this.currentState.set(DashboardState.RESULTS);
         this.isScanning.set(false);
         this.scanProgress.set(0);
@@ -349,10 +366,39 @@ export class DashboardComponent {
     });
   }
   
+  ngOnInit(): void {
+    // Check if we already have a scan completed globally
+    const globalStatus = this.cvScanService.cvStatus();
+    if (globalStatus.hasCompletedScan) {
+      // For now, if there's a global status, we can simulate loading the local matching results
+      // In a real app, you'd fetch the full analysis by cvId
+      this.isLoadingExistingScan(globalStatus);
+    }
+  }
+
+  /**
+   * Helper to load existing scan data into the dashboard UI
+   */
+  private async isLoadingExistingScan(status: any): Promise<void> {
+    this.isScanning.set(true);
+    this.scanProgress.set(100);
+    
+    // Simulate loading the full analysis result from the basic status
+    await this.simulateScanAPI(); 
+    
+    this.currentState.set(DashboardState.RESULTS);
+    this.isScanning.set(false);
+    this.scanProgress.set(0);
+  }
+
   /**
    * Start a new scan (reset to upload state)
    */
   startNewScan(): void {
+    // Also reset global status if the user wants to truly start over?
+    // User didn't specify, but usually "Start New Scan" implies clearing old one
+    this.cvScanService.resetStatus();
+    
     this.currentState.set(DashboardState.UPLOAD);
     this.uploadedCV.set(null);
     this.jobDescription.set({ text: '', source: 'manual' });

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
+import { CvScanService } from '../../../../services/cv-scan.service';
 
 interface Course {
   id: string;
@@ -51,6 +52,21 @@ interface Project {
   technologies: string[];
   status: 'active' | 'locked' | 'completed';
   description?: string; // Optional
+}
+
+interface SkillProject {
+  id: string;
+  skillCategory: string; // must match a SkillGap name exactly
+  title: string;
+  description: string;
+  difficulty: 'Simple' | 'Medium' | 'Hard';
+  difficultyPoints: number; // Simple=5, Medium=10, Hard=20 (added to skill current% on completion)
+  timeEstimate: string;
+  technologies: string[];
+  status: 'not-started' | 'in-progress' | 'completed';
+  checklist: { id: string; label: string; checked: boolean }[];
+  githubUrl?: string;
+  submissionResult?: { completionQuality: number; skillCoverage: number; improvementLevel: string };
 }
 
 interface CVScanStatus {
@@ -129,9 +145,10 @@ interface AccountConnection {
 })
 export class CoursesProjectsComponent implements OnInit {
   private router = inject(Router);
+  private cvScanService = inject(CvScanService);
 
-  // CV Status & Header Signals
-  cvScanStatus = signal<CVScanStatus>({ hasCompletedScan: false });
+  // CV Status from global service
+  cvScanStatus = this.cvScanService.cvStatus;
   
   // Role Selection Signals
   isRoleDropdownOpen = signal(false);
@@ -410,8 +427,9 @@ export class CoursesProjectsComponent implements OnInit {
   projects = signal<Project[]>(this.roleProfiles[0].projects);
   weeklyPlanItems = signal<WeeklyPlanItem[]>(this.roleProfiles[0].weeklyPlanItems);
   matchPercentage = signal<number>(this.roleProfiles[0].matchPercentage);
-  // Progress Statistics (Reactive to current profile)
+  // Progress Statistics (Reactive to current profile and project status)
   progressStats = computed<ProgressStats>(() => {
+    this.skillProjects(); // Dependency to update when projects are completed
     const profile = this.currentRoleProfile();
     if (!profile) return {
        readinessScore: 0, readinessTarget: 90, skillsMastered: 0,
@@ -419,10 +437,171 @@ export class CoursesProjectsComponent implements OnInit {
     };
     return profile.progressStats;
   });
+
+  inProgressProjects = computed(() => this.skillProjects().filter(p => p.status === 'in-progress'));
+  completedProjects = computed(() => this.skillProjects().filter(p => p.status === 'completed'));
+
+  projectsBySkill(skillName: string): SkillProject[] {
+    return this.skillProjects().filter(p => p.skillCategory === skillName);
+  }
   // Course statistics
   totalCoursesAvailable = signal<number>(127);
   totalProjectsAvailable = signal<number>(45);
-  
+
+  activeProjectId = signal<string | null>(null);
+  activeProject = computed(() => this.skillProjects().find(p => p.id === this.activeProjectId()) ?? null);
+
+  // TODO: replace with API call
+  skillProjects = signal<SkillProject[]>([
+    {
+      id: 'ml-1',
+      skillCategory: 'Machine Learning',
+      title: 'Iris Classifier',
+      description: 'A classic beginner project to understand classification. You will build a model to classify iris species based on flower measurements.',
+      difficulty: 'Simple',
+      difficultyPoints: 5,
+      timeEstimate: '2-3h',
+      technologies: ['Python', 'Scikit-Learn', 'NumPy'],
+      status: 'not-started',
+      checklist: [
+        { id: 'ml1-1', label: 'Load and inspect dataset', checked: true },
+        { id: 'ml1-2', label: 'Perform EDA with Matplotlib', checked: true },
+        { id: 'ml1-3', label: 'Train a Random Forest classifier', checked: false },
+        { id: 'ml1-4', label: 'Evaluate model accuracy', checked: false }
+      ]
+    },
+    {
+      id: 'ml-2',
+      skillCategory: 'Machine Learning',
+      title: 'Customer Churn Prediction',
+      description: 'Predict which customers are likely to churn using historical behavior data. Focuses on feature engineering and binary classification.',
+      difficulty: 'Medium',
+      difficultyPoints: 10,
+      timeEstimate: '6-8h',
+      technologies: ['Python', 'Pandas', 'XGBoost', 'Seaborn'],
+      status: 'not-started',
+      checklist: [
+        { id: 'ml2-1', label: 'Handle missing data and encoding', checked: false },
+        { id: 'ml2-2', label: 'Engineeer behavioral features', checked: false },
+        { id: 'ml2-3', label: 'Compare Logistic Regression vs XGBoost', checked: false },
+        { id: 'ml2-4', label: 'Calculate F1-score and Recall', checked: false }
+      ]
+    },
+    {
+      id: 'ml-3',
+      skillCategory: 'Machine Learning',
+      title: 'Neural Network from Scratch',
+      description: 'Implement backpropagation, forward passes, and gradient descent using only NumPy. Deeply understand how weights are updated.',
+      difficulty: 'Hard',
+      difficultyPoints: 20,
+      timeEstimate: '15-20h',
+      technologies: ['Python', 'NumPy', 'Mathematics'],
+      status: 'not-started',
+      checklist: [
+        { id: 'ml3-1', label: 'Implement matrix multiplication', checked: false },
+        { id: 'ml3-2', label: 'Code activation functions (Sigmoid/ReLU)', checked: false },
+        { id: 'ml3-3', label: 'Write backpropagation logic', checked: false },
+        { id: 'ml3-4', label: 'Test on MNIST dataset', checked: false }
+      ]
+    },
+    {
+      id: 'py-1',
+      skillCategory: 'Python (Data Science)',
+      title: 'Data Cleaning Script',
+      description: 'Build a reusable script that automates the process of identifying and fixing data quality issues in large CSV files.',
+      difficulty: 'Simple',
+      difficultyPoints: 5,
+      timeEstimate: '1-2h',
+      technologies: ['Python', 'Pandas', 'CSV'],
+      status: 'not-started',
+      checklist: [
+        { id: 'py1-1', label: 'Detect duplicate rows', checked: true },
+        { id: 'py1-2', label: 'Normalize date formats', checked: false },
+        { id: 'py1-3', label: 'Handle outliers with Z-score', checked: false }
+      ]
+    },
+    {
+      id: 'py-2',
+      skillCategory: 'Python (Data Science)',
+      title: 'Web Scraper for Jobs',
+      description: 'Create a scraper that extracts job postings for Data Science roles and stores them in a structured database.',
+      difficulty: 'Medium',
+      difficultyPoints: 10,
+      timeEstimate: '4-5h',
+      technologies: ['Python', 'BeautifulSoup', 'Requests', 'SQLite'],
+      status: 'not-started',
+      checklist: [
+        { id: 'py2-1', label: 'Handle pagination in search results', checked: false },
+        { id: 'py2-2', label: 'Extract title, company, and salary', checked: false },
+        { id: 'py2-3', label: 'Save data to SQLite database', checked: false }
+      ]
+    },
+    {
+      id: 'py-3',
+      skillCategory: 'Python (Data Science)',
+      title: 'Desktop Automation Tool',
+      description: 'Build a sophisticated tool that monitors folders and automatically organizes files based on their content using NLP.',
+      difficulty: 'Hard',
+      difficultyPoints: 20,
+      timeEstimate: '10-12h',
+      technologies: ['Python', 'OS', 'Spacy', 'Watchdog'],
+      status: 'not-started',
+      checklist: [
+        { id: 'py3-1', label: 'Setup filesystem event watcher', checked: false },
+        { id: 'py3-2', label: 'Categorize files using NLP', checked: false },
+        { id: 'py3-3', label: 'Generate weekly activity report', checked: false }
+      ]
+    },
+    {
+      id: 'sql-1',
+      skillCategory: 'SQL Optimization',
+      title: 'Query Performance Audit',
+      description: 'Analyze a set of slow-running queries and identify bottlenecks using execution plans and performance metrics.',
+      difficulty: 'Simple',
+      difficultyPoints: 5,
+      timeEstimate: '2-3h',
+      technologies: ['SQL', 'PostgreSQL', 'EXPLAIN ANALYZE'],
+      status: 'not-started',
+      checklist: [
+        { id: 'sql1-1', label: 'Generate query execution plans', checked: true },
+        { id: 'sql1-2', label: 'Identify sequential scans', checked: false },
+        { id: 'sql1-3', label: 'Suggest basic indexing fixes', checked: false }
+      ]
+    },
+    {
+      id: 'sql-2',
+      skillCategory: 'SQL Optimization',
+      title: 'Index Migration Plan',
+      description: 'Design and simulate a migration plan for a database with 10M+ rows, focusing on zero-downtime indexing.',
+      difficulty: 'Medium',
+      difficultyPoints: 10,
+      timeEstimate: '5-7h',
+      technologies: ['PostgreSQL', 'SQL', 'Benchmark-Tools'],
+      status: 'not-started',
+      checklist: [
+        { id: 'sql2-1', label: 'Create covering indexes', checked: false },
+        { id: 'sql2-2', label: 'Measure I/O reduction', checked: false },
+        { id: 'sql2-3', label: 'Draft the migration script', checked: false }
+      ]
+    },
+    {
+      id: 'sql-3',
+      skillCategory: 'SQL Optimization',
+      title: 'Database Partitioning Strategy',
+      description: 'Architect a table partitioning strategy for a multi-terabyte dataset to improve query performance and maintenance.',
+      difficulty: 'Hard',
+      difficultyPoints: 20,
+      timeEstimate: '12-15h',
+      technologies: ['PostgreSQL', 'SQL Architecture', 'Scalability'],
+      status: 'not-started',
+      checklist: [
+        { id: 'sql3-1', label: 'Implement range partitioning by date', checked: false },
+        { id: 'sql3-2', label: 'Configure partition pruning', checked: false },
+        { id: 'sql3-3', label: 'Setup maintenance automation tasks', checked: false }
+      ]
+    }
+  ]);
+
   // Account connection stats
   connectionStats = signal<AccountConnection>({
     totalCourses: 3,
@@ -552,6 +731,7 @@ export class CoursesProjectsComponent implements OnInit {
   finishingCourseIds = signal<string[]>([]);
   downloadingCertificateIds = signal<string[]>([]);
   openSkillEnrollmentList = signal<string | null>(null);
+  openSkillProjectList = signal<string | null>(null);
   actionError = signal<string | null>(null);
 
   private clearErrorAfterDelay(): void {
@@ -566,8 +746,138 @@ export class CoursesProjectsComponent implements OnInit {
     return this.enrolledBySkill().get(skillName)?.length || 0;
   }
 
+  projectCountBySkill(skillName: string): number {
+    return this.projectsBySkill(skillName).length;
+  }
+
   // UI State
   isLoading = signal(false);
+  projectGithubUrl = '';
+  selectedFile = signal<File | null>(null);
+
+  startProject(projectId: string): void {
+    this.skillProjects.update(projects => 
+      projects.map(p => p.id === projectId ? { ...p, status: 'in-progress' } : p)
+    );
+    this.activeProjectId.set(projectId);
+  }
+
+  continueProject(projectId: string): void {
+    this.activeProjectId.set(projectId);
+  }
+
+  toggleProjectChecklistItem(projectId: string, itemId: string): void {
+    this.skillProjects.update(projects => 
+      projects.map(p => {
+        if (p.id === projectId) {
+          return {
+            ...p,
+            checklist: p.checklist.map(item => 
+              item.id === itemId ? { ...item, checked: !item.checked } : item
+            )
+          };
+        }
+        return p;
+      })
+    );
+  }
+
+  async submitProject(projectId: string, githubUrl: string): Promise<void> {
+    this.isLoading.set(true);
+    // TODO: replace with real API submission
+    await new Promise(resolve => setTimeout(resolve, 1200));
+
+    const project = this.skillProjects().find(p => p.id === projectId);
+    if (!project) {
+      this.isLoading.set(false);
+      return;
+    }
+
+    const quality = Math.floor(Math.random() * 31) + 70; // 70–100
+    const coverage = Math.floor(Math.random() * 41) + 60; // 60–100
+    let level = 'Good';
+    if (quality >= 90) level = 'Excellent';
+    else if (quality >= 80) level = 'Great';
+
+    this.skillProjects.update(projects => 
+      projects.map(p => p.id === projectId ? { 
+        ...p, 
+        status: 'completed',
+        githubUrl: githubUrl,
+        submissionResult: {
+          completionQuality: quality,
+          skillCoverage: coverage,
+          improvementLevel: level
+        }
+      } : p)
+    );
+
+    // Increase skill gap
+    this.skillGaps.update(gaps => gaps.map(gap => {
+      if (gap.name === project.skillCategory) {
+        return {
+          ...gap,
+          current: Math.min(gap.target, gap.current + project.difficultyPoints)
+        };
+      }
+      return gap;
+    }));
+
+    // Increments progressStats().projectsDone by 1
+    const profile = this.roleProfiles.find(r => r.role === this.selectedRole());
+    if (profile) {
+      profile.progressStats.projectsDone += 1;
+    }
+
+    this.projectGithubUrl = '';
+    this.selectedFile.set(null);
+    this.isLoading.set(false);
+  }
+
+  triggerFileSelect(): void {
+    const fileInput = document.getElementById('project-file-input') as HTMLInputElement;
+    if (fileInput) fileInput.click();
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files?.[0];
+    if (file) {
+      this.selectedFile.set(file);
+    }
+  }
+
+  previousProject(currentId: string): void {
+    const current = this.skillProjects().find(p => p.id === currentId);
+    if (!current) return;
+    const siblingProjects = this.projectsBySkill(current.skillCategory);
+    const index = siblingProjects.findIndex(p => p.id === currentId);
+    if (index > 0) {
+      this.activeProjectId.set(siblingProjects[index - 1].id);
+    }
+  }
+
+  nextProject(currentId: string): void {
+    const current = this.skillProjects().find(p => p.id === currentId);
+    if (!current) return;
+    const siblingProjects = this.projectsBySkill(current.skillCategory);
+    const index = siblingProjects.findIndex(p => p.id === currentId);
+    if (index >= 0 && index < siblingProjects.length - 1) {
+      this.activeProjectId.set(siblingProjects[index + 1].id);
+    }
+  }
+
+  closeProjectDetail(): void {
+    this.activeProjectId.set(null);
+  }
+
+  getCheckedCount(project: SkillProject | null): number {
+    if (!project) return 0;
+    return project.checklist.filter(item => item.checked).length;
+  }
+
+  getProjectIndex(projectId: string, skillCategory: string): number {
+    return this.projectsBySkill(skillCategory).findIndex(p => p.id === projectId);
+  }
 
   ngOnInit(): void {
     this.checkCVScanStatus();
@@ -631,30 +941,10 @@ export class CoursesProjectsComponent implements OnInit {
   }
   
   async checkCVScanStatus(): Promise<void> {
-    this.isLoading.set(true);
+    // Use service status
+    const status = this.cvScanService.cvStatus();
     
-    // TODO: Replace with actual API call
-    // const status = await this.cvService.checkScanStatus();
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    if (Math.random() < 0.1) {
-      this.actionError.set('Failed to check scan status. Please try again.');
-      this.clearErrorAfterDelay();
-      this.isLoading.set(false);
-      return;
-    }
-
-    // Set to true to show the Active State
-    this.cvScanStatus.set({
-      hasCompletedScan: true, 
-      cvId: 'cv-001',
-      targetRole: 'Data Scientist',
-      matchPercentage: 92
-    });
-    
-    if (this.cvScanStatus().hasCompletedScan) {
+    if (status.hasCompletedScan) {
       // Load all data from API
       await Promise.all([
         this.fetchDashboardStats(),
@@ -751,6 +1041,12 @@ export class CoursesProjectsComponent implements OnInit {
 
   toggleEnrollmentList(skillName: string | null): void {
     this.openSkillEnrollmentList.update(current => 
+      current === skillName || skillName === null ? null : skillName
+    );
+  }
+
+  toggleProjectList(skillName: string | null): void {
+    this.openSkillProjectList.update(current => 
       current === skillName || skillName === null ? null : skillName
     );
   }
