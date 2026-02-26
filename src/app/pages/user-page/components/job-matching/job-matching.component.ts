@@ -108,6 +108,16 @@ export class JobMatchingComponent implements OnInit {
     remoteOption: false
   });
 
+  actionError = signal<string | null>(null);
+  inputError = signal<string | null>(null);
+
+  private clearErrorAfterDelay(): void {
+    setTimeout(() => {
+      this.actionError.set(null);
+      this.inputError.set(null);
+    }, 2000);
+  }
+
   // --- Saved Jobs: delegated to shared service so Profile component stays in sync ---
   private savedJobsService = inject(SavedJobsService);
 
@@ -365,6 +375,13 @@ export class JobMatchingComponent implements OnInit {
 
     // Simulate API delay
     setTimeout(async () => {
+      if (Math.random() < 0.1) {
+        this.actionError.set('Failed to fetch CV status.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+        return;
+      }
+
       // For now, use sample data
       // Set hasSubmittedCV to false to see locked state, true to see job list
       this.userCVStatus.set({
@@ -479,6 +496,11 @@ export class JobMatchingComponent implements OnInit {
   }
 
   applyToJob(jobId: string): void {
+    if (Math.random() < 0.1) {
+      this.actionError.set('External application service is down. Try again later.');
+      this.clearErrorAfterDelay();
+      return;
+    }
     // Application logic
     console.log(`Applying to job ${jobId}`);
     alert(`Application submitted successfully for job #${jobId}!`);
@@ -489,6 +511,12 @@ export class JobMatchingComponent implements OnInit {
    * This syncs automatically with the Profile component's Saved Jobs list.
    */
   toggleBookmark(job: Job): void {
+    if (this.isJobSaved(job.id)) {
+      if (!confirm(`Remove "${job.title}" from your saved jobs?`)) {
+        return;
+      }
+    }
+
     this.savedJobsService.toggleBookmark({
       id: job.id,
       title: job.title,
@@ -520,6 +548,17 @@ export class JobMatchingComponent implements OnInit {
 
   scanProfile(): void {
     this.isLoading.set(true);
+    this.actionError.set(null);
+
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('AI Analysis engine timeout. Try again.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 1000);
+      return;
+    }
+
     setTimeout(() => {
       this.isLoading.set(false);
       alert('Profile re-scanned against this job description. Match score updated!');

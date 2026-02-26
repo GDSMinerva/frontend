@@ -171,6 +171,11 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
   correctAnswersCount = signal(0);
   wrongAnswersCount = signal(0);
   aiFeedbackSummary = signal('');
+  actionError = signal<string | null>(null);
+
+  private clearErrorAfterDelay(): void {
+    setTimeout(() => this.actionError.set(null), 2000);
+  }
 
   // --- State management ---
   currentState = signal<SimulatorState>(SimulatorState.LOCKED);
@@ -278,6 +283,13 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.stopTimer();
   }
+
+  confirmExitSession(): boolean {
+    if (this.currentSession()?.status === 'in-progress') {
+      return confirm('Are you sure you want to exit the current session? Your progress for this attempt will be lost.');
+    }
+    return true;
+  }
   
   /**
    * Check if user has completed a CV scan
@@ -352,14 +364,22 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
    */
   async initializeSimulation(): Promise<void> {
     this.isLoading.set(true);
+    this.actionError.set(null);
 
-    // TODO: Fetch questions from API based on CV and job description
-    // const questions = await this.interviewService.generateQuestions(cvId, jobTitle);
-    
+    // Simulate failure
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('Neural engine prep failed. Retrying sync...');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 1000);
+      return;
+    }
+
     // Sample data for testing
     const session: SimulationSession = {
       id: `session-${Date.now()}`,
-      jobTitle: this.cvScanStatus().targetJobTitle || 'Software Developer',
+      jobTitle: this.cvScanStatus().targetJobTitle || this.targetRole() || 'Software Developer',
       cvId: this.cvScanStatus().cvId || '',
       mode: this.selectedMode()!,
       questions: this.sampleQuestions,
@@ -468,10 +488,14 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
 
     // Validation
     if (question.options && selectedOpt === null) {
-        return; // Must select an option
+        this.actionError.set('Please select an option to continue.');
+        this.clearErrorAfterDelay();
+        return; 
     }
     if (!question.options && !answerText.trim()) {
-        return; // Must type an answer
+        this.actionError.set('Please type your response before submitting.');
+        this.clearErrorAfterDelay();
+        return; 
     }
     
     this.stopTimer();
@@ -553,6 +577,7 @@ export class InterviewSimulatorComponent implements OnInit, OnDestroy {
    * Go back to mode selection
    */
   backToModeSelection(): void {
+    if (!this.confirmExitSession()) return;
     this.stopTimer();
     this.currentState.set(SimulatorState.MODE_SELECTION);
     this.selectedMode.set(null);
@@ -750,7 +775,14 @@ query {
 
   unsaveQuestion(id: string, event: MouseEvent): void {
     event.stopPropagation();
+    const q = this.savedQuestions().find(x => x.id === id);
+    if (!q || !confirm(`Remove "${q.question}" from your saved questions?`)) {
+      return;
+    }
     this.savedQuestionsService.unsaveQuestion(id);
+    if (this.savedQuestionsPage() > this.totalPages()) {
+        this.savedQuestionsPage.set(Math.max(1, this.totalPages()));
+    }
   }
 
   viewSavedQuestion(q: SavedQuestion): void {

@@ -70,11 +70,17 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="space-y-2 group">
                   <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-focus-within:text-purple-600 dark:group-focus-within:text-purple-400 transition-colors" for="name">Name</label>
-                  <input formControlName="name" class="w-full bg-slate-50 dark:bg-[#0B0F1A]/60 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 focus:ring-0 focus:border-purple-500 outline-none transition-all text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600" id="name" type="text" placeholder="Your Name"/>
+                  <input formControlName="name" 
+                         [ngClass]="{'border-red-500': contactForm.get('name')?.invalid && contactForm.get('name')?.touched}"
+                         class="w-full bg-slate-50 dark:bg-[#0B0F1A]/60 border border-slate-200 dark:border-white/10 rounded-xl py-2.5 px-4 focus:ring-0 focus:border-purple-500 outline-none transition-all text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600" id="name" type="text" placeholder="Your Name"/>
+                  <p *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched" class="text-[10px] text-red-500 mt-1">Name is required</p>
                 </div>
                 <div class="space-y-2 group">
                   <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-focus-within:text-purple-600 dark:group-focus-within:text-purple-400 transition-colors" for="email">Email</label>
-                  <input formControlName="email" class="w-full bg-slate-50 dark:bg-[#0B0F1A]/60 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 focus:ring-0 focus:border-purple-500 outline-none transition-all text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600" id="email" type="email" placeholder="email@example.com"/>
+                  <input formControlName="email" 
+                         [ngClass]="{'border-red-500': contactForm.get('email')?.invalid && contactForm.get('email')?.touched}"
+                         class="w-full bg-slate-50 dark:bg-[#0B0F1A]/60 border border-slate-200 dark:border-white/10 rounded-xl py-2.5 px-4 focus:ring-0 focus:border-purple-500 outline-none transition-all text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600" id="email" type="email" placeholder="email@example.com"/>
+                  <p *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="text-[10px] text-red-500 mt-1">Valid email required</p>
                 </div>
               </div>
 
@@ -115,16 +121,22 @@
 
               <div class="space-y-2 group">
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-focus-within:text-purple-600 dark:group-focus-within:text-purple-400 transition-colors" for="message">Message</label>
-                <textarea formControlName="message" class="w-full bg-slate-50 dark:bg-[#0B0F1A]/60 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 focus:ring-0 focus:border-purple-500 outline-none transition-all text-slate-900 dark:text-slate-200 resize-none placeholder-slate-400 dark:placeholder-slate-600 min-h-[150px]" id="message" placeholder="Describe your issue or feedback in detail..."></textarea>
+                <textarea formControlName="message" 
+                          [ngClass]="{'border-red-500': contactForm.get('message')?.invalid && contactForm.get('message')?.touched}"
+                          class="w-full bg-slate-50 dark:bg-[#0B0F1A]/60 border border-slate-200 dark:border-white/10 rounded-xl py-3 px-4 focus:ring-0 focus:border-purple-500 outline-none transition-all text-slate-900 dark:text-slate-200 resize-none placeholder-slate-400 dark:placeholder-slate-600 min-h-[150px]" id="message" placeholder="Describe your issue or feedback in detail..."></textarea>
+                <p *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched" class="text-[10px] text-red-500 mt-1">Message must be at least 10 characters</p>
               </div>
               
-              <div class="flex items-center justify-end pt-2">
+              <div class="flex flex-col items-end gap-2 pt-2">
                 <button type="submit" [disabled]="contactForm.invalid || isLoading()" 
+                        [title]="contactForm.invalid ? 'Please complete all required fields' : 'Send message'"
                         class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-purple-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                   <span *ngIf="isLoading()" class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
                   <span *ngIf="!isLoading()" class="material-symbols-outlined text-lg">send</span>
                   <span>{{ isLoading() ? 'Sending...' : 'Send Message' }}</span>
                 </button>
+                <p *ngIf="actionError()" class="text-[10px] text-red-500 dark:text-red-400 font-bold uppercase">{{ actionError() }}</p>
+                <p *ngIf="contactForm.invalid && contactForm.touched && !isLoading()" class="text-[10px] text-slate-400 dark:text-gray-500">Form has validation errors.</p>
               </div>
             </form>
           </div>

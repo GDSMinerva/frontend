@@ -70,6 +70,14 @@ export class DashboardComponent {
   scanProgress = signal(0);
   errorMessage = signal<string | null>(null);
   isDragging = signal(false);
+  actionError = signal<string | null>(null);
+
+  private clearErrorAfterDelay(): void {
+    setTimeout(() => {
+      this.actionError.set(null);
+      this.errorMessage.set(null);
+    }, 2000);
+  }
 
   /** Sample job titles - will be replaced with API data later */
   readonly sampleJobTitles: SampleJob[] = [
@@ -170,10 +178,12 @@ export class DashboardComponent {
    * Remove uploaded CV
    */
   removeUploadedCV(): void {
-    this.uploadedCV.set(null);
-    const fileInput = document.getElementById('cv-file-input') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
+    if (confirm('Remove this resume? You will need to re-upload or paste it again.')) {
+      this.uploadedCV.set(null);
+      const fileInput = document.getElementById('cv-file-input') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
     }
   }
   
@@ -240,7 +250,17 @@ export class DashboardComponent {
    */
   async startScan(): Promise<void> {
     if (!this.canStartScan()) {
-      this.errorMessage.set('Please upload a CV and provide a job description (either text or sample jobs)');
+      const hasCV = this.uploadedCV() !== null || this.pastedResume().length > 0;
+      const hasJobDesc = this.jobDescription().text.length > 0 || this.selectedSampleJobs().length > 0;
+      
+      if (!hasCV && !hasJobDesc) {
+        this.errorMessage.set('Please provide both a resume and a job description.');
+      } else if (!hasCV) {
+        this.errorMessage.set('Resume missing. Please upload or paste your resume.');
+      } else {
+        this.errorMessage.set('Job description missing. Please paste one or select a sample.');
+      }
+      this.clearErrorAfterDelay();
       return;
     }
     
@@ -254,12 +274,11 @@ export class DashboardComponent {
     }, 200);
     
     try {
-      // TODO: Replace with actual API call
-      // const formData = new FormData();
-      // formData.append('cv', this.uploadedCV()!.file!);
-      // formData.append('jobDescription', this.jobDescription().text);
-      // const result = await this.cvService.analyzCV(formData);
-      
+      // Simulate failure
+      if (Math.random() < 0.1) {
+        throw new Error('Neural engine processing failed. Service temporarily unavailable.');
+      }
+
       // Simulate API call
       await this.simulateScanAPI();
       
@@ -273,11 +292,12 @@ export class DashboardComponent {
         this.scanProgress.set(0);
       }, 500);
       
-    } catch (error) {
+    } catch (error: any) {
       clearInterval(progressInterval);
       this.isScanning.set(false);
       this.scanProgress.set(0);
-      this.errorMessage.set('Scan failed. Please try again.');
+      this.errorMessage.set(error.message || 'Scan failed. Please try again.');
+      this.clearErrorAfterDelay();
       console.error('Scan error:', error);
     }
   }

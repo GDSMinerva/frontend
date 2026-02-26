@@ -92,6 +92,11 @@ export class SupportFeedbackComponent implements OnInit {
   showFeedbackForm = signal(false);
   showTicketDetails = signal(false);
   isChatOpen = signal(false);
+  actionError = signal<string | null>(null);
+
+  private clearErrorAfterDelay(): void {
+    setTimeout(() => this.actionError.set(null), 2000);
+  }
   
   // Forms
   contactForm: FormGroup;
@@ -335,8 +340,15 @@ export class SupportFeedbackComponent implements OnInit {
     
     const formData: ContactMessage = this.contactForm.value;
     
-    // TODO: Submit to API
-    // await this.supportService.submitContact(formData);
+    // Simulate API call failure
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('Ticket creation failed. Network timeout.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 1000);
+      return;
+    }
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
@@ -380,8 +392,15 @@ export class SupportFeedbackComponent implements OnInit {
     
     const formData = this.feedbackForm.value;
     
-    // TODO: Submit to API
-    // await this.supportService.submitFeedback(formData);
+    // Simulate API call failure
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('Neural feedback service unavailable.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 800);
+      return;
+    }
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -430,8 +449,15 @@ export class SupportFeedbackComponent implements OnInit {
       timestamp: new Date().toISOString()
     };
     
-    // TODO: Submit to API
-    // await this.supportService.replyToTicket(ticket.id, message);
+    // Simulate API call failure
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('Sync failed. Please resend message.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 1200);
+      return;
+    }
     
     // Update ticket
     this.supportTickets.update(tickets =>

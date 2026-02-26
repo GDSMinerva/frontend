@@ -61,9 +61,14 @@
               <div *ngIf="!isEditingProfile()" class="view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
                 {{ userProfile()?.firstName }} {{ userProfile()?.lastName }}
               </div>
-              <div *ngIf="isEditingProfile()" class="flex gap-2">
-                <input formControlName="firstName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="First Name">
-                <input formControlName="lastName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="Last Name">
+              <div *ngIf="isEditingProfile()" class="flex flex-col gap-2">
+                <div class="flex gap-2">
+                  <input formControlName="firstName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="First Name">
+                  <input formControlName="lastName" class="w-1/2 rounded-lg text-sm px-4 py-3 bg-white border border-slate-300 text-slate-900 outline-none transition-all placeholder-slate-400" type="text" placeholder="Last Name">
+                </div>
+                <p *ngIf="(profileForm.get('firstName')?.invalid || profileForm.get('lastName')?.invalid) && (profileForm.get('firstName')?.touched || profileForm.get('lastName')?.touched)" class="text-[10px] text-red-500 dark:text-red-400 mt-1 font-medium">
+                  First and last name are required.
+                </p>
               </div>
             </div>
 
@@ -72,7 +77,11 @@
               <div *ngIf="!isEditingProfile()" class="view-field text-sm font-medium text-slate-800 dark:text-white px-4 py-3 bg-slate-50 dark:bg-transparent rounded-lg border border-transparent">
                 {{ userProfile()?.email }}
               </div>
-              <input *ngIf="isEditingProfile()" formControlName="email" class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" type="email">
+              <div *ngIf="isEditingProfile()">
+                <input formControlName="email" class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" [ngClass]="{'border-red-500': profileForm.get('email')?.invalid && profileForm.get('email')?.touched}" type="email">
+                <p *ngIf="profileForm.get('email')?.errors?.['required'] && profileForm.get('email')?.touched" class="text-[10px] text-red-500 dark:text-red-400 mt-1 font-medium">This field is required</p>
+                <p *ngIf="profileForm.get('email')?.errors?.['email'] && profileForm.get('email')?.touched" class="text-[10px] text-red-500 dark:text-red-400 mt-1 font-medium">Please enter a valid email address</p>
+              </div>
             </div>
 
             <div class="space-y-2 md:col-span-2">
@@ -92,11 +101,13 @@
             </div>
           </div>
           
-          <div *ngIf="isEditingProfile()" class="mt-6 flex justify-end">
-            <button type="submit" [disabled]="isLoading()" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:shadow-lg transition-all disabled:opacity-70 flex items-center gap-2">
+          <div *ngIf="isEditingProfile()" class="mt-6 flex flex-col items-end gap-2">
+            <button type="submit" [disabled]="isLoading() || profileForm.invalid" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:shadow-lg transition-all disabled:opacity-70 flex items-center gap-2">
               <span *ngIf="isLoading()" class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
               {{ isLoading() ? 'Saving...' : 'Save Changes' }}
             </button>
+            <p *ngIf="actionError()" class="text-[10px] text-red-500 dark:text-red-400 font-medium">{{ actionError() }}</p>
+            <p *ngIf="profileForm.invalid && profileForm.touched && !isLoading()" class="text-[10px] text-slate-400 dark:text-gray-500">Please fix the errors above before saving.</p>
           </div>
         </form>
       </div>
@@ -118,7 +129,7 @@
               <span *ngFor="let skill of hardSkills()" class="skill-item px-3 py-1.5 bg-slate-50 dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-lg text-sm font-medium text-slate-700 dark:text-white flex items-center gap-2 hover:border-[#7C3AED]/50 dark:hover:border-purple-500/50 transition-colors group">
                 {{ skill.name }} 
                 <span *ngIf="skill.level" class="skill-level text-[10px] ml-1">{{skill.level}}%</span>
-                <button (click)="deleteSkill(skill.id)" class="material-symbols-outlined text-sm text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">close</button>
+                <button (click)="deleteSkill(skill)" class="material-symbols-outlined text-sm text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">close</button>
               </span>
               <span *ngIf="hardSkills().length === 0" class="text-xs text-slate-400 italic">No technical skills added yet.</span>
             </div>
@@ -128,7 +139,7 @@
             <div class="flex flex-wrap gap-2">
               <span *ngFor="let skill of softSkills()" class="skill-item px-3 py-1.5 bg-slate-50 dark:bg-[#0B1022] border border-slate-200 dark:border-white/10 rounded-lg text-sm font-medium text-slate-700 dark:text-white flex items-center gap-2 hover:border-[#7C3AED]/50 dark:hover:border-purple-500/50 transition-colors group">
                 {{ skill.name }}
-                <button (click)="deleteSkill(skill.id)" class="material-symbols-outlined text-sm text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">close</button>
+                <button (click)="deleteSkill(skill)" class="material-symbols-outlined text-sm text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">close</button>
               </span>
               <span *ngIf="softSkills().length === 0" class="text-xs text-slate-400 italic">No soft skills added yet.</span>
             </div>
@@ -400,10 +411,15 @@
             <h2 class="text-lg font-bold tracking-wide font-display">CV Management</h2>
           </div>
           <input type="file" id="cv-upload" class="hidden" accept=".pdf,.docx,.doc" (change)="onFileSelected($event)">
-          <button (click)="triggerFileUpload()" [disabled]="isLoading()" class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 border border-transparent dark:border-white/10 disabled:opacity-70">
+          <button (click)="triggerFileUpload()" [disabled]="isLoading()" 
+                  [title]="isLoading() ? 'Upload in progress...' : 'Select a document'"
+                  class="bg-gradient-to-r from-[#7C3AED] to-[#06B6D4] dark:from-[#8B5CF6] dark:to-[#22D3EE] text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 border border-transparent dark:border-white/10 disabled:opacity-70">
             <span class="material-symbols-outlined text-lg">{{ isLoading() ? 'hourglass_empty' : 'upload' }}</span>
             {{ isLoading() ? 'Uploading...' : 'Upload New' }}
           </button>
+        </div>
+        <div *ngIf="actionError() && !isEditingProfile()" class="px-6 py-2 bg-red-500/10 text-red-500 text-[10px] font-bold border-b border-red-500/20">
+          {{ actionError() }}
         </div>
         
         <div class="overflow-x-auto">
@@ -518,9 +534,11 @@
         </div>
         
         <div class="mt-6 pt-6 border-t border-slate-200 dark:border-white/10">
+          <p class="text-[10px] text-red-500 dark:text-red-400 font-bold uppercase mb-2">Warning: This will permanently delete all your data including CVs, saved jobs, and progress history.</p>
           <button (click)="deleteAccount()" class="w-full py-3 rounded-xl border border-red-200 dark:border-red-500/20 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 text-xs font-bold tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(239,68,68,0.1)]">
             DELETE ACCOUNT &amp; ALL DATA
           </button>
+          <p *ngIf="actionError()" class="text-center text-[10px] text-red-500 mt-2 font-bold uppercase">{{ actionError() }}</p>
         </div>
       </div>
       

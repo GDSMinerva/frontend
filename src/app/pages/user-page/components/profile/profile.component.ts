@@ -133,6 +133,11 @@ export class ProfileComponent {
   isEditingProfile = signal(false);
   isUploadingCV = signal(false);
   isLoading = signal(false);
+  actionError = signal<string | null>(null);
+
+  private clearErrorAfterDelay(): void {
+    setTimeout(() => this.actionError.set(null), 2000);
+  }
 
   // Forms
   profileForm: FormGroup;
@@ -251,31 +256,48 @@ export class ProfileComponent {
   saveProfile(): void {
     if (this.profileForm.valid) {
       this.isLoading.set(true);
+      this.actionError.set(null);
+
+      // Simulated failure
+      if (Math.random() < 0.1) {
+        setTimeout(() => {
+          this.actionError.set('Connection lost. Profile changes not saved.');
+          this.clearErrorAfterDelay();
+          this.isLoading.set(false);
+        }, 800);
+        return;
+      }
+
       // Simulate API call
       setTimeout(() => {
         const formValues = this.profileForm.value;
         this.profileService.setUserProfile(formValues);
         this.isEditingProfile.set(false);
         this.isLoading.set(false);
-        // In real app, call this.updateProfile(formValues);
       }, 1000);
     }
   }
 
-  deleteSkill(skillId: string): void {
-    this.hardSkills.update(skills => skills.filter(s => s.id !== skillId));
-    this.softSkills.update(skills => skills.filter(s => s.id !== skillId));
+  deleteSkill(skill: Skill): void {
+    if (confirm(`Remove "${skill.name}" from your skills? This may affect your job match scores.`)) {
+      this.hardSkills.update(skills => skills.filter(s => s.id !== skill.id));
+      this.softSkills.update(skills => skills.filter(s => s.id !== skill.id));
+    }
   }
 
   // --- Saved Jobs Methods ---
 
   unsaveJob(jobId: string): void {
+    const job = this.savedJobs().find(j => j.id === jobId);
+    if (!job || !confirm(`Remove "${job.title}" from your saved jobs?`)) {
+      return;
+    }
+
     this.savedJobsService.unsaveJob(jobId);
     // After unsaving, snap back to page 1 if current page is now out of range
     if (this.savedJobsPage() > this.totalPages()) {
       this.savedJobsPage.set(Math.max(1, this.totalPages()));
     }
-    // TODO: Call API to persist unsaved state
   }
 
   toggleImportant(jobId: string): void {
@@ -322,7 +344,8 @@ export class ProfileComponent {
   }
 
   deleteCV(cvId: string): void {
-    if (confirm('Are you sure you want to delete this CV?')) {
+    const cv = this.cvList().find(c => c.id === cvId);
+    if (cv && confirm(`Permanently delete "${cv.versionName || cv.fileName}"? This action cannot be undone.`)) {
       this.cvList.update(cvs => cvs.filter(cv => cv.id !== cvId));
       // TODO: Call API to delete CV
     }
@@ -345,6 +368,18 @@ export class ProfileComponent {
 
   async uploadCV(file: File): Promise<void> {
     this.isLoading.set(true);
+    this.actionError.set(null);
+
+    // Simulated failure
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('Virus scan failed for this file. Please try another.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 1200);
+      return;
+    }
+
     // Simulate upload
     setTimeout(() => {
       const newCV: CV = {
@@ -360,7 +395,6 @@ export class ProfileComponent {
 
       this.cvList.update(cvs => [newCV, ...cvs]);
       this.isLoading.set(false);
-      // TODO: Call API to upload file
     }, 1500);
   }
 
@@ -416,7 +450,7 @@ export class ProfileComponent {
   }
 
   removeAvatar(): void {
-    if (confirm('Are you sure you want to remove your profile picture?')) {
+    if (confirm('Remove your profile picture? This will revert to a default placeholder.')) {
       const defaultAvatar = 'assets/images/default-avatar.png'; // Or generate from name
       this.profileService.updateAvatar(defaultAvatar);
     }
@@ -424,6 +458,17 @@ export class ProfileComponent {
 
   exportData(format: 'pdf' | 'zip' | 'json'): void {
     this.isLoading.set(true);
+    this.actionError.set(null);
+
+    if (Math.random() < 0.1) {
+      setTimeout(() => {
+        this.actionError.set('Export service timeout. Please try again.');
+        this.clearErrorAfterDelay();
+        this.isLoading.set(false);
+      }, 1000);
+      return;
+    }
+
     // Simulate export delay
     setTimeout(() => {
       this.isLoading.set(false);
@@ -434,14 +479,20 @@ export class ProfileComponent {
   deleteAccount(): void {
     if (confirm('WARNING: This action cannot be undone. Are you sure you want to permanently delete your account and all associated data?')) {
       this.isLoading.set(true);
+      this.actionError.set(null);
 
-      // Simulate API call
-      // TODO: Implement API call to delete account
-      // this.apiService.deleteAccount().subscribe(...)
+      // Simulated failure
+      if (Math.random() < 0.1) {
+        setTimeout(() => {
+          this.actionError.set('Deletion failed: User session mismatch. Re-authenticate and try again.');
+          this.clearErrorAfterDelay();
+          this.isLoading.set(false);
+        }, 1500);
+        return;
+      }
 
       setTimeout(() => {
         this.isLoading.set(false);
-        // alert('Account deletion scheduled. Redirecting to home...'); // Optional: removed alert to just do the action
         this.router.navigate(['/sign-up']);
       }, 2000);
     }
