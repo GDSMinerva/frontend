@@ -149,15 +149,15 @@ export class CoursesProjectsComponent implements OnInit {
 
   // CV Status from global service
   cvScanStatus = this.cvScanService.cvStatus;
-  
+
   // Role Selection Signals
   isRoleDropdownOpen = signal(false);
   selectedRole = signal<string>('Data Scientist');
-  
+
   // Computed for current profile
   currentRole = computed(() => this.selectedRole());
   currentRoleProfile = computed(() => this.roleProfiles.find(r => r.role === this.selectedRole()));
-  
+
   availableRoles = computed(() => this.roleProfiles.map(p => ({
     title: p.role,
     matchRate: p.matchPercentage
@@ -178,25 +178,25 @@ export class CoursesProjectsComponent implements OnInit {
         cvImpact: '+12%'
       },
       skillGaps: [
-        { 
-          name: 'Machine Learning', 
-          priority: 'Critical', 
+        {
+          name: 'Machine Learning',
+          priority: 'Critical',
           priorityClass: 'bg-red-100 dark:bg-red-500/80 text-red-700 dark:text-white shadow-red-500/20',
-          current: 30, target: 85, 
+          current: 30, target: 85,
           barClass: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
         },
-        { 
-          name: 'Python (Data Science)', 
-          priority: 'High', 
+        {
+          name: 'Python (Data Science)',
+          priority: 'High',
           priorityClass: 'bg-orange-100 dark:bg-orange-500/80 text-orange-700 dark:text-white shadow-orange-500/20',
-          current: 45, target: 95, 
+          current: 45, target: 95,
           barClass: 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'
         },
-        { 
-          name: 'SQL Optimization', 
-          priority: 'Medium', 
+        {
+          name: 'SQL Optimization',
+          priority: 'Medium',
           priorityClass: 'bg-purple-100 dark:bg-purple-500/80 text-purple-700 dark:text-white shadow-purple-500/20',
-          current: 70, target: 90, 
+          current: 70, target: 90,
           barClass: 'bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]'
         }
       ],
@@ -234,14 +234,7 @@ export class CoursesProjectsComponent implements OnInit {
           technologies: ['Tableau', 'SQL'], status: 'completed', description: 'Completed last week'
         }
       ],
-      weeklyPlanItems: [
-        {
-          id: 'wp1', courseId: '4', courseTitle: 'Machine Learning Specialization', provider: 'Coursera',
-          url: '#', skillCategory: 'Machine Learning', icon: 'psychology',
-          iconBgClass: 'bg-purple-500/10 border-purple-500/20', iconColorClass: 'text-purple-600 dark:text-purple-400',
-          completed: false
-        }
-      ]
+      weeklyPlanItems: []
     },
     {
       // TODO: replace with API call
@@ -256,25 +249,25 @@ export class CoursesProjectsComponent implements OnInit {
         cvImpact: '+8%'
       },
       skillGaps: [
-        { 
-          name: 'Deep Learning', 
-          priority: 'Critical', 
+        {
+          name: 'Deep Learning',
+          priority: 'Critical',
           priorityClass: 'bg-red-100 dark:bg-red-500/80 text-red-700 dark:text-white shadow-red-500/20',
-          current: 20, target: 90, 
+          current: 20, target: 90,
           barClass: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
         },
-        { 
-          name: 'MLOps', 
-          priority: 'High', 
+        {
+          name: 'MLOps',
+          priority: 'High',
           priorityClass: 'bg-orange-100 dark:bg-orange-500/80 text-orange-700 dark:text-white shadow-orange-500/20',
-          current: 15, target: 80, 
+          current: 15, target: 80,
           barClass: 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'
         },
-        { 
-          name: 'Python (Engineering)', 
-          priority: 'Medium', 
+        {
+          name: 'Python (Engineering)',
+          priority: 'Medium',
           priorityClass: 'bg-purple-100 dark:bg-purple-500/80 text-purple-700 dark:text-white shadow-purple-500/20',
-          current: 60, target: 95, 
+          current: 60, target: 95,
           barClass: 'bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]'
         }
       ],
@@ -302,14 +295,7 @@ export class CoursesProjectsComponent implements OnInit {
           technologies: ['AWS', 'Sagemaker'], status: 'locked', description: 'Automated ML deployment.'
         }
       ],
-      weeklyPlanItems: [
-        {
-          id: 'mwp1', courseId: 'm1', courseTitle: 'Deep Learning Specialization', provider: 'Coursera',
-          url: '#', skillCategory: 'Deep Learning', icon: 'psychology',
-          iconBgClass: 'bg-purple-500/10 border-purple-500/20', iconColorClass: 'text-purple-600 dark:text-purple-400',
-          completed: false
-        }
-      ]
+      weeklyPlanItems: []
     },
     {
       // TODO: replace with API call
@@ -324,18 +310,18 @@ export class CoursesProjectsComponent implements OnInit {
         cvImpact: '+15%'
       },
       skillGaps: [
-        { 
-          name: 'SQL', 
-          priority: 'Critical', 
+        {
+          name: 'SQL',
+          priority: 'Critical',
           priorityClass: 'bg-red-100 dark:bg-red-500/80 text-red-700 dark:text-white shadow-red-500/20',
-          current: 65, target: 100, 
+          current: 65, target: 100,
           barClass: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
         },
-        { 
-          name: 'Tableau', 
-          priority: 'High', 
+        {
+          name: 'Tableau',
+          priority: 'High',
           priorityClass: 'bg-orange-100 dark:bg-orange-500/80 text-orange-700 dark:text-white shadow-orange-500/20',
-          current: 40, target: 90, 
+          current: 40, target: 90,
           barClass: 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'
         }
       ],
@@ -359,14 +345,7 @@ export class CoursesProjectsComponent implements OnInit {
           technologies: ['Tableau', 'Excel'], status: 'active', description: 'Interactive sales monitoring.'
         }
       ],
-      weeklyPlanItems: [
-        {
-          id: 'awp1', courseId: 'a1', courseTitle: 'Advanced SQL for Analytics', provider: 'Udemy',
-          url: '#', skillCategory: 'SQL', icon: 'storage',
-          iconBgClass: 'bg-cyan-500/10 border-cyan-500/20', iconColorClass: 'text-cyan-600 dark:text-cyan-400',
-          completed: false
-        }
-      ]
+      weeklyPlanItems: []
     },
     {
       // TODO: replace with API call
@@ -381,18 +360,18 @@ export class CoursesProjectsComponent implements OnInit {
         cvImpact: '+5%'
       },
       skillGaps: [
-        { 
-          name: 'PyTorch Research', 
-          priority: 'Critical', 
+        {
+          name: 'PyTorch Research',
+          priority: 'Critical',
           priorityClass: 'bg-red-100 dark:bg-red-500/80 text-red-700 dark:text-white shadow-red-500/20',
-          current: 10, target: 95, 
+          current: 10, target: 95,
           barClass: 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
         },
-        { 
-          name: 'Math Foundations', 
-          priority: 'High', 
+        {
+          name: 'Math Foundations',
+          priority: 'High',
           priorityClass: 'bg-orange-100 dark:bg-orange-500/80 text-orange-700 dark:text-white shadow-orange-500/20',
-          current: 50, target: 95, 
+          current: 50, target: 95,
           barClass: 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'
         }
       ],
@@ -410,14 +389,7 @@ export class CoursesProjectsComponent implements OnInit {
           technologies: ['PyTorch', 'HuggingFace'], status: 'active', description: 'Training large models.'
         }
       ],
-      weeklyPlanItems: [
-        {
-          id: 'rwp1', courseId: 'r1', courseTitle: 'Research at Scale with PyTorch', provider: 'Meta AI',
-          url: '#', skillCategory: 'PyTorch Research', icon: 'psychology',
-          iconBgClass: 'bg-purple-500/10 border-purple-500/20', iconColorClass: 'text-purple-600 dark:text-purple-400',
-          completed: false
-        }
-      ]
+      weeklyPlanItems: []
     }
   ];
 
@@ -425,15 +397,15 @@ export class CoursesProjectsComponent implements OnInit {
   skillGaps = signal<SkillGap[]>(this.roleProfiles[0].skillGaps);
   courses = signal<Course[]>(this.roleProfiles[0].courses);
   projects = signal<Project[]>(this.roleProfiles[0].projects);
-  weeklyPlanItems = signal<WeeklyPlanItem[]>(this.roleProfiles[0].weeklyPlanItems);
+  weeklyPlanItems = signal<WeeklyPlanItem[]>([]);
   matchPercentage = signal<number>(this.roleProfiles[0].matchPercentage);
   // Progress Statistics (Reactive to current profile and project status)
   progressStats = computed<ProgressStats>(() => {
     this.skillProjects(); // Dependency to update when projects are completed
     const profile = this.currentRoleProfile();
     if (!profile) return {
-       readinessScore: 0, readinessTarget: 90, skillsMastered: 0,
-       timeInvested: '0h', projectsDone: 0, cvImpact: '+0%'
+      readinessScore: 0, readinessTarget: 90, skillsMastered: 0,
+      timeInvested: '0h', projectsDone: 0, cvImpact: '+0%'
     };
     return profile.progressStats;
   });
@@ -614,7 +586,7 @@ export class CoursesProjectsComponent implements OnInit {
   weeklyPlanDropdownOpen = signal(false);
   weeklyPlanPage = signal(0);
   weeklyPlanPageSize = 2;
-  
+
   categoryIcons: Record<string, string> = {
     'All': 'language',
     'Machine Learning': 'psychology',
@@ -658,63 +630,20 @@ export class CoursesProjectsComponent implements OnInit {
   // Filters & Tabs
   courseFilters = ['All', 'Free', 'Certificates', '< 10 Hours', 'Paid'];
   activeFilter = signal('All');
-  
+
   // Derived state
   filteredCourses = computed(() => {
     const filter = this.activeFilter();
     if (filter === 'All') return this.courses();
-    
+
     if (filter === 'Free') return this.courses().filter(c => c.priceTag?.includes('FREE') || c.category === 'Free');
     if (filter === 'Paid') return this.courses().filter(c => c.price || c.category === 'Paid');
     if (filter === 'Certificates') return this.courses().filter(c => c.hasCertificate);
     if (filter === '< 10 Hours') return this.courses().filter(c => c.durationHours < 10);
-    
-    return this.courses(); 
+
+    return this.courses();
   });
-  enrolledCourses = signal<EnrolledCourse[]>([
-    {
-      id: 'ec1',
-      courseId: '4',
-      courseTitle: 'Machine Learning Specialization',
-      provider: 'Coursera',
-      url: '#',
-      skillCategory: 'Machine Learning',
-      icon: 'psychology',
-      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
-      iconColorClass: 'text-purple-600 dark:text-purple-400',
-      status: 'in-progress',
-      progressPercent: 0,
-      hasCertificate: true
-    },
-    {
-      id: 'ec2',
-      courseId: '1',
-      courseTitle: 'Python for Everybody',
-      provider: 'Coursera',
-      url: '#',
-      skillCategory: 'Python (Data Science)',
-      icon: 'code',
-      iconBgClass: 'bg-purple-500/10 border-purple-500/20',
-      iconColorClass: 'text-purple-600 dark:text-purple-400',
-      status: 'in-progress',
-      progressPercent: 35,
-      hasCertificate: true
-    },
-    {
-      id: 'ec3',
-      courseId: '5',
-      courseTitle: 'SQL for Data Analysis',
-      provider: 'Udacity',
-      url: '#',
-      skillCategory: 'SQL Optimization',
-      icon: 'storage',
-      iconBgClass: 'bg-cyan-500/10 border-cyan-500/20',
-      iconColorClass: 'text-cyan-600 dark:text-cyan-400',
-      status: 'in-progress',
-      progressPercent: 62,
-      hasCertificate: false
-    }
-  ]);
+  enrolledCourses = signal<EnrolledCourse[]>([]);
 
   enrolledBySkill = computed(() => {
     const map = new Map<string, EnrolledCourse[]>();
@@ -756,7 +685,7 @@ export class CoursesProjectsComponent implements OnInit {
   selectedFile = signal<File | null>(null);
 
   startProject(projectId: string): void {
-    this.skillProjects.update(projects => 
+    this.skillProjects.update(projects =>
       projects.map(p => p.id === projectId ? { ...p, status: 'in-progress' } : p)
     );
     this.activeProjectId.set(projectId);
@@ -767,12 +696,12 @@ export class CoursesProjectsComponent implements OnInit {
   }
 
   toggleProjectChecklistItem(projectId: string, itemId: string): void {
-    this.skillProjects.update(projects => 
+    this.skillProjects.update(projects =>
       projects.map(p => {
         if (p.id === projectId) {
           return {
             ...p,
-            checklist: p.checklist.map(item => 
+            checklist: p.checklist.map(item =>
               item.id === itemId ? { ...item, checked: !item.checked } : item
             )
           };
@@ -799,9 +728,9 @@ export class CoursesProjectsComponent implements OnInit {
     if (quality >= 90) level = 'Excellent';
     else if (quality >= 80) level = 'Great';
 
-    this.skillProjects.update(projects => 
-      projects.map(p => p.id === projectId ? { 
-        ...p, 
+    this.skillProjects.update(projects =>
+      projects.map(p => p.id === projectId ? {
+        ...p,
         status: 'completed',
         githubUrl: githubUrl,
         submissionResult: {
@@ -881,6 +810,7 @@ export class CoursesProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkCVScanStatus();
+    this.initializeDefaultEnrollments();
     document.addEventListener('click', this.onDocumentClick.bind(this));
   }
 
@@ -894,7 +824,7 @@ export class CoursesProjectsComponent implements OnInit {
       this.isRoleDropdownOpen.set(false);
     }
   }
-  
+
   /**
    * Fetch all dashboard statistics from API
    * TODO: Replace with actual API call
@@ -939,11 +869,11 @@ export class CoursesProjectsComponent implements OnInit {
     // TODO: const accounts = await this.apiService.getConnectedAccounts();
     // this.connectedAccounts.set(accounts);
   }
-  
+
   async checkCVScanStatus(): Promise<void> {
     // Use service status
     const status = this.cvScanService.cvStatus();
-    
+
     if (status.hasCompletedScan) {
       // Load all data from API
       await Promise.all([
@@ -953,15 +883,16 @@ export class CoursesProjectsComponent implements OnInit {
         this.fetchCourses(),
         this.fetchConnectedAccounts()
       ]);
+      this.initializeDefaultEnrollments();
     }
-    
+
     this.isLoading.set(false);
   }
 
 
 
   togglePlanCompletion(itemId: string): void {
-    this.weeklyPlanItems.update(items => 
+    this.weeklyPlanItems.update(items =>
       items.map(p => p.id === itemId ? { ...p, completed: !p.completed } : p)
     );
   }
@@ -1040,13 +971,13 @@ export class CoursesProjectsComponent implements OnInit {
 
 
   toggleEnrollmentList(skillName: string | null): void {
-    this.openSkillEnrollmentList.update(current => 
+    this.openSkillEnrollmentList.update(current =>
       current === skillName || skillName === null ? null : skillName
     );
   }
 
   toggleProjectList(skillName: string | null): void {
-    this.openSkillProjectList.update(current => 
+    this.openSkillProjectList.update(current =>
       current === skillName || skillName === null ? null : skillName
     );
   }
@@ -1163,7 +1094,7 @@ export class CoursesProjectsComponent implements OnInit {
   selectRole(roleName: string): void {
     this.selectedRole.set(roleName);
     const profile = this.roleProfiles.find(r => r.role === roleName);
-    
+
     if (profile) {
       this.skillGaps.set([...profile.skillGaps]);
       this.courses.set([...profile.courses]);
@@ -1179,6 +1110,24 @@ export class CoursesProjectsComponent implements OnInit {
     this.weeklyPlanFilter.set('All');
     this.activeFilter.set('All');
     this.isRoleDropdownOpen.set(false);
+
+    // Initialize default enrollments for the new role
+    this.initializeDefaultEnrollments();
+  }
+
+  private initializeDefaultEnrollments(): void {
+    const gaps = this.skillGaps();
+    const availableCourses = this.courses();
+
+    gaps.forEach(gap => {
+      // Find the first course from recommended courses for each skill in the Skill Gap section
+      const courseMatch = availableCourses.find(c => c.skillCategory === gap.name);
+
+      // If we found a recommended course and aren't already enrolled in any course for this skill gap
+      if (courseMatch && this.enrolledCountBySkill(gap.name) === 0) {
+        this.enrollCourse(courseMatch);
+      }
+    });
   }
 
   toggleRoleDropdown(): void {
@@ -1191,9 +1140,9 @@ export class CoursesProjectsComponent implements OnInit {
         return;
       }
     }
-    
+
     // Logic to toggle connection
-    this.connectedAccounts.update(accounts => 
+    this.connectedAccounts.update(accounts =>
       accounts.map(a => a.name === account.name ? { ...a, connected: !a.connected } : a)
     );
   }
