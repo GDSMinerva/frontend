@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Interview Selection - AI Cyber Theme</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-purple": "#8B5CF6",
+                        "primary-cyan": "#22D3EE",
+                        "cyber-dark": "#0B0F1A",
+                        "cyber-card-top": "#0F1629",
+                        "cyber-card-bot": "#0B0F1A",
+                    },
+                    fontFamily: {
+                        "sans": ["Manrope", "sans-serif"],
+                        "space": ["Space Grotesk", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        "gradient-primary": "linear-gradient(135deg, #8B5CF6 0%, #22D3EE 100%)",
+                        "gradient-card": "linear-gradient(180deg, #0F1629 0%, #0B0F1A 100%)",
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { @apply bg-[#0B0F1A] text-slate-300 font-sans min-h-screen flex selection:bg-purple-500/30; }
+            h1, h2, h3, h4, h5, h6 { @apply font-space text-white; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }.nav-active {
+            @apply relative text-[#8B5CF6];
+        }
+        .nav-active::before {
+            content: '';
+            @apply absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-[#8B5CF6] rounded-r-full shadow-[0_0_12px_#8B5CF6];
+        }
+        .nav-active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+            @apply drop-shadow-[0_0_8px_rgba(139,92,246,0.6)];
+        }
+        .nav-link {
+            @apply flex items-center gap-3 px-6 py-3.5 text-slate-400 hover:text-white hover:bg-white/5 transition-all font-medium text-[15px];
+        }.sidebar-glass {
+            background-color: rgba(11, 15, 26, 0.9);
+            backdrop-filter: blur(12px);
+        }.cyber-card {
+            @apply bg-gradient-card rounded-2xl border border-[rgba(255,255,255,0.08)];
+        }
+        #sidebar.collapsed {
+            @apply w-20;
+        }
+        #sidebar.collapsed .sidebar-text {
+            @apply hidden;
+        }
+        #sidebar.collapsed .p-8 {
+            @apply px-4;
+        }
+        select {
+            background-image: none !important;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex">
+<aside class="w-72 border-r border-white/5 flex flex-col sidebar-glass shrink-0 h-screen sticky top-0 transition-all duration-300 z-50" id="sidebar">
+<div class="p-8 flex items-center gap-3">
+<div class="size-9 bg-gradient-primary rounded-xl flex items-center justify-center text-white shrink-0 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1">rocket_launch</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight text-white sidebar-text font-space">cvScan</h1>
+</div>
+<nav class="flex-1 space-y-1 mt-2">
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="sidebar-text">Dashboard</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">work</span>
+<span class="sidebar-text">Job Matching</span>
+</a>
+<a class="nav-link nav-active" href="#">
+<span class="material-symbols-outlined">smart_display</span>
+<span class="sidebar-text">Interview Simulator</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="sidebar-text">Courses &amp; Projects</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="sidebar-text">Support &amp; Feedback</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/5">
+<button class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-white/5 hover:text-white transition-all font-semibold text-[15px] w-full" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">
+<span class="material-symbols-outlined">side_navigation</span>
+<span class="sidebar-text">Collapse Sidebar</span>
+</button>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-h-screen bg-[#0B0F1A]">
+<header class="h-20 bg-[#0B0F1A]/80 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-10 sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 flex items-center justify-center lg:hidden cursor-pointer text-white">
+<span class="material-symbols-outlined">menu</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-white/10">
+<span class="material-symbols-outlined text-[20px]">light_mode</span>
+</button>
+<div class="h-6 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-4 bg-white/5 border border-white/5 pl-4 pr-1.5 py-1.5 rounded-full backdrop-blur-sm">
+<div class="text-right">
+<p class="text-sm font-bold text-white leading-none font-space">Alex Johnson</p>
+<button class="text-[10px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-wider mt-0.5">LOGOUT</button>
+</div>
+<div class="size-9 rounded-full bg-slate-800 border border-white/10 overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoxqCDl8W_KoMk-7W9fPLdDSi54j8I_mfBhRdMnwepIB14jzx_hHyCdFxS6tD-DgPchW43FAvEx6iUZpchjvu3NjI3sr6Du5AC8WzYJDF8S9cOtYi2s8mDQcgnhLPfii8uNHifkS6npvxgjn6oBJj2zOAr_oXJL3Pid4n97lNgHIYfXBFN8mtl7vtij6h1YbTDimbSGEZ1CoqM8N5iQnMu-sMACgVCzb4lVFb66q7KkaTEcjZazj6Y2Hnz7bNsbtYmqpbXcKEUBOs"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 p-8 lg:p-12">
+<div class="max-w-6xl mx-auto">
+<div class="mb-10">
+<h1 class="text-[32px] font-bold text-white tracking-tight leading-tight font-space">Interview Setup</h1>
+<p class="text-slate-400 font-medium text-lg mt-1">Configure your AI session to match your upcoming interview requirements.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+<div class="group relative cyber-card p-8 hover:border-[#8B5CF6]/50 transition-all cursor-pointer">
+<div class="flex items-center gap-5 mb-6">
+<div class="size-14 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-[#A78BFA]">
+<span class="material-symbols-outlined text-3xl">school</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-white font-space">Practice Mode</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="size-1.5 rounded-full bg-[#A78BFA] shadow-[0_0_8px_#A78BFA]"></span>
+<span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Guidance enabled</span>
+</div>
+</div>
+</div>
+<p class="text-slate-400 text-[15px] leading-relaxed mb-8">Refine your technical answers with real-time feedback and hints. Perfect for skill building and stress-free preparation.</p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-sm font-semibold text-slate-300">
+<span class="material-symbols-outlined text-[#A78BFA] text-xl" style="font-variation-settings: 'opsz' 20">check_circle</span>
+                            Real-time AI hints &amp; guidance
+                        </li>
+<li class="flex items-center gap-3 text-sm font-semibold text-slate-300">
+<span class="material-symbols-outlined text-[#A78BFA] text-xl" style="font-variation-settings: 'opsz' 20">check_circle</span>
+                            Untimed conversational flow
+                        </li>
+</ul>
+<div class="flex items-center gap-2 text-[#A78BFA] font-bold text-sm group-hover:translate-x-1 transition-transform">
+<span>Select this mode</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="relative cyber-card p-8 shadow-[0_0_30px_rgba(34,211,238,0.05)] border-primary-cyan/30">
+<div class="absolute -top-3.5 right-10 px-4 py-1.5 bg-gradient-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                        Recommended
+                    </div>
+<div class="flex items-center gap-5 mb-6">
+<div class="size-14 rounded-2xl bg-gradient-primary flex items-center justify-center text-white shadow-lg shadow-primary-cyan/20">
+<span class="material-symbols-outlined text-3xl">timer</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-white font-space">Assessment Mode</h3>
+<div class="flex items-center gap-2 mt-1.5">
+<span class="size-1.5 rounded-full bg-primary-cyan shadow-[0_0_8px_#22D3EE]"></span>
+<span class="text-[11px] font-bold text-primary-cyan uppercase tracking-widest">Full simulation</span>
+</div>
+</div>
+</div>
+<p class="text-slate-400 text-[15px] leading-relaxed mb-8">A timed, high-stakes environment mimicking real interviews. Receive a detailed performance score and skill map.</p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-sm font-semibold text-slate-300">
+<span class="material-symbols-outlined text-primary-cyan text-xl" style="font-variation-settings: 'opsz' 20">check_circle</span>
+                            Strict 60-minute time limit
+                        </li>
+<li class="flex items-center gap-3 text-sm font-semibold text-slate-300">
+<span class="material-symbols-outlined text-primary-cyan text-xl" style="font-variation-settings: 'opsz' 20">check_circle</span>
+                            Comprehensive skill scorecard
+                        </li>
+</ul>
+<div class="flex items-center gap-2 text-primary-cyan font-bold text-sm drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">
+<span class="material-symbols-outlined text-primary-cyan">check_circle</span>
+<span>Currently Selected</span>
+</div>
+</div>
+</div>
+<div class="cyber-card p-10">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+<div>
+<label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-5">Target Job Role</label>
+<div class="relative">
+<select class="w-full bg-[#0B0F1A] border border-white/10 rounded-2xl px-5 py-4 appearance-none focus:ring-4 focus:ring-primary-purple/20 focus:border-primary-purple transition-all text-white font-bold text-[15px] font-space">
+<option>Senior Full-Stack Engineer</option>
+<option>Product Design Lead</option>
+<option>DevOps Architect</option>
+<option>Data Scientist (L4)</option>
+<option>Backend Specialist</option>
+</select>
+<span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">expand_more</span>
+</div>
+<p class="mt-4 text-[13px] text-slate-500 flex items-center gap-2 font-medium">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                            AI will generate questions based on this role's seniority and tech stack.
+                        </p>
+</div>
+<div>
+<label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-5">Core Skills to Test</label>
+<div class="flex flex-wrap gap-2.5">
+<div class="inline-flex items-center gap-2 px-4 py-2 bg-[rgba(139,92,246,0.15)] border border-transparent rounded-xl text-sm font-bold text-[#A78BFA]">
+                                #concurrency
+                                <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="inline-flex items-center gap-2 px-4 py-2 bg-[rgba(139,92,246,0.15)] border border-transparent rounded-xl text-sm font-bold text-[#A78BFA]">
+                                #system-design
+                                <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="inline-flex items-center gap-2 px-4 py-2 bg-[rgba(139,92,246,0.15)] border border-transparent rounded-xl text-sm font-bold text-[#A78BFA]">
+                                #distributed-systems
+                                <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="inline-flex items-center gap-2 px-4 py-2 bg-[rgba(139,92,246,0.15)] border border-transparent rounded-xl text-sm font-bold text-[#A78BFA]">
+                                #sql
+                                <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 border border-dashed border-slate-700 rounded-xl text-sm font-bold text-slate-500 hover:border-primary-cyan hover:text-primary-cyan transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                Add Skill
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-10 pt-10 border-t border-white/5">
+<div class="flex items-center gap-5">
+<div class="flex -space-x-3.5">
+<img alt="User" class="size-12 rounded-full border-4 border-[#0B0F1A] object-cover shadow-sm ring-1 ring-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAex0NINHBijqcOGV_nmyj54FSdF9kjRDWcnEqZEkTg9LliEzp6ltVoXA0VsCDHIDDqqJfpYsMX8kdPU05BOm7exUF5yZMR-Os-n9rddz_tn_x12ZDZ5CiCLpaCDOGPIlkJRMeEyccBcoV0jHTZWt9Fr9A7BQ7BFb1COvkZJ_uWkUe1CI7Xd6u3FuoT1dNR0ygH1dXSRc_27VF_rDmM8PGrzZFoEf78HUco26qJ2Wq30Gm5WLYvWIgzNmyxDjgIm_X0OM8F2W0J-us"/>
+<img alt="User" class="size-12 rounded-full border-4 border-[#0B0F1A] object-cover shadow-sm ring-1 ring-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6lO5G9OBSBf_8QW144jidvGuFjo29ERtC3OAfu5tTIncO_Sx1dS0hEycmSHPndwcNQxmxI9BSwxHZqSOkLOO1OJ9rk9MhWQkH3OBVmLWO27Nr0c7Hq5MmxJXpUI-Q9eGxR8LMkeUSw3ztl3QVWg5YJJtOIjZJ6O4NendJMfmEH7EutTEtixlrmrsdu_az_gAKty4Lb4WNCnn4tQ2Pc3OjrFHDrlmQg1UCZehZLFhZ6CjEMDGmei3AiQG3qsPjKrylvOmz5wZ3774"/>
+<img alt="User" class="size-12 rounded-full border-4 border-[#0B0F1A] object-cover shadow-sm ring-1 ring-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsdbiRneR7U-c2OdPXw_uqXzWt_emrx7rp2aSHKjDFCdIXD8A3xGqUdmsnlmbKEJ8FaF4rO8d39fNIMd-JS9Hrnu2rEkz-0Jo6sg0mSevazrJFxB45123IpBIyR97ARrNvykg6M9OARpSLB4x9bF4JHL9rbwNbQZF7pafn45_tLKcv9sF9oycL_khDWbJj2uOLne0Yd3af4_n12b_flCvwgzzJI7NkIyzJsGHX-8iaU_fbfj2uvafk6A0EbgEcgb7FM_LLxpEAlKk"/>
+<div class="size-12 rounded-full border-4 border-[#0B0F1A] bg-slate-800 flex items-center justify-center text-[12px] font-extrabold text-slate-400 shadow-sm ring-1 ring-white/10">+85</div>
+</div>
+<div>
+<p class="text-[15px] font-bold text-white leading-none mb-1 font-space">Join the community</p>
+<p class="text-[13px] font-semibold text-slate-500">85+ engineers joined sessions today</p>
+</div>
+</div>
+<button class="group relative flex items-center gap-3 bg-gradient-primary text-white px-12 py-5 rounded-[22px] font-bold text-lg hover:shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all active:scale-95 font-space">
+                    Start Simulation
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,231 @@
+/* Loading spinner */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Locked card animation */
+  .locked-card {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Timer pulse animation */
+  .timer-active {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  /* Recording indicator */
+  .recording-indicator {
+    animation: recordingPulse 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes recordingPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+  }
+  
+  /* Question card transitions */
+  .question-card {
+    transition: all 0.3s ease;
+  }
+  
+  .question-card.answered {
+    opacity: 0.7;
+  }
+  
+  /* Feedback card slide-in */
+  .feedback-enter {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Progress bar animation */
+  .progress-bar {
+    transition: width 0.6s ease-out;
+  }
+  
+  /* Dark mode adjustments */
+  :host-context(.dark) .question-card {
+    background: linear-gradient(to bottom, rgba(15, 22, 41, 0.6), rgba(11, 15, 26, 0.8));
+    border-color: rgba(139, 92, 246, 0.2);
+  }
+  
+  :host-context(.dark) .question-card:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+  }
+  
+  /* Answer textarea styling */
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  /* Score badge colors */
+  .score-excellent {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+  
+  .score-good {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  }
+  
+  .score-fair {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+  
+  .score-poor {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  }
+
+  /* Glass panel styles */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(82, 82, 82, 0.164);
+  }
+
+  :host-context(.dark) .glass-panel {
+      background: #161B2A;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .cyber-card-bg {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 240, 1) 100%);
+  }
+
+  :host-context(.dark) .cyber-card-bg {
+    background: #161B2A;
+  }
+
+  /* Custom scrollbar for dark mode */
+  :host-context(.dark) ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  :host-context(.dark) ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  :host-context(.dark) ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  :host-context(.dark) ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+/* Modal Animations */
+.modal-backdrop {
+  animation: fadeInBackdrop 0.3s ease-out forwards;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Customization Panel */
+.custom-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.custom-panel.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+/* Skill Tags */
+.skill-tag {
+  transition: all 0.2s ease;
+}
+
+.skill-tag.selected {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+}
+
+:host-context(.dark) .skill-tag.selected {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+/* Saved Question Card */
+.saved-q-card {
+  transition: all 0.2s ease;
+}
+
+.saved-q-card:hover {
+  transform: translateX(4px);
+  border-color: #7c3aed66;
+}
+
+:host-context(.dark) .saved-q-card:hover {
+  border-color: #8b5cf666;
+}
+
+/* Result Modal Stats */
+.stat-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Match Score Gradients (Shared with Job Matching) */
+.match-high { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.match-medium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.match-low { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); }

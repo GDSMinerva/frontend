@@ -20,7 +20,7 @@ export class DashboardHostComponent implements OnInit {
     if (userRole === 'admin') {
       this.router.navigate(['/dashboard/admin']);
     } else {
-      this.router.navigate(['/dashboard/user']);
+      this.router.navigate(['/user/dashboard']);
     }
   }
 }

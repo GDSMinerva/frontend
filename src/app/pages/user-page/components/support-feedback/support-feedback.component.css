@@ -1,0 +1,112 @@
+/* Support & Feedback Specific Styles */
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* FAQ accordion animation */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.faq-answer.expanded {
+  max-height: 500px;
+  transition: max-height 0.5s ease-in;
+}
+
+/* Ticket status badges */
+.status-open {
+  @apply bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 
+         border border-blue-300 dark:border-blue-500/30;
+}
+
+.status-in-progress {
+  @apply bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 
+         border border-yellow-300 dark:border-yellow-500/30;
+}
+
+.status-resolved {
+  @apply bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 
+         border border-green-300 dark:border-green-500/30;
+}
+
+.status-closed {
+  @apply bg-slate-100 dark:bg-slate-500/20 text-slate-700 dark:text-slate-400 
+         border border-slate-300 dark:border-slate-500/30;
+}
+
+/* Priority badges */
+.priority-low {
+  @apply bg-slate-100 dark:bg-slate-700/30 text-slate-600 dark:text-slate-400;
+}
+
+.priority-medium {
+  @apply bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400;
+}
+
+.priority-high {
+  @apply bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400;
+}
+
+.priority-urgent {
+  @apply bg-red-600 dark:bg-red-500 text-white;
+}
+
+/* Star rating */
+.star-rating .star {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.star-rating .star:hover {
+  transform: scale(1.2);
+}
+
+.star-rating .star.filled {
+  color: #f59e0b;
+}
+
+.star-rating .star:not(.filled) {
+  color: #cbd5e1;
+}
+
+:host-context(.dark) .star-rating .star:not(.filled) {
+  color: #475569;
+}
+
+/* Chat widget */
+.chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}

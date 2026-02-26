@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile Settings &amp; Data Export | cvScan AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: "#0B0F1A",
+                            card: "#0F1629",
+                            border: "rgba(139, 92, 246, 0.2)",
+                            accent: "#8B5CF6", // Purple
+                            glow: "rgba(139, 92, 246, 0.15)",
+                            input: "#0B1022",
+                            text: "#A78BFA"
+                        },
+                        // Keeping previous variable names mapped to new colors for cleaner transition if needed, 
+                        // but primarily using direct classes for the new theme.
+                        "dark-sidebar": "rgba(15, 22, 41, 0.7)",
+                        "dark-bg": "#0B0F1A",
+                        "dark-card": "#0F1629",
+                        "dark-border": "rgba(139, 92, 246, 0.2)",
+                        "text-title": "#f9fafb",
+                        "text-secondary": "#94a3b8",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Space Grotesk", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'cyber-gradient': 'linear-gradient(180deg, #0F1629 0%, #0B0F1A 100%)',
+                        'btn-gradient': 'linear-gradient(90deg, #8B5CF6 0%, #22D3EE 100%)',
+                        'glow-radial': 'radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(139, 92, 246, 0.15)',
+                        'card-glow': '0 4px 30px rgba(0, 0, 0, 0.5)',
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { 
+                font-family: 'Inter', sans-serif; 
+                background-color: #0B0F1A;
+                background-image: 
+                    radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.05) 0%, transparent 20%),
+                    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 20%);
+                color: #e2e8f0;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Space Grotesk', sans-serif;
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }aside {
+            background: rgba(15, 22, 41, 0.7) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(139, 92, 246, 0.15);
+        }input, textarea, select {
+            background-color: #0B1022 !important;
+            border: 1px dashed rgba(139,92,246,0.4) !important;
+            color: #f9fafb !important;
+            transition: all 0.3s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #8B5CF6 !important;
+            border-style: solid !important;
+            box-shadow: 0 0 0 1px #8B5CF6 !important;
+            outline: none !important;
+        }#sidebar-toggle:checked ~ aside {
+            width: 80px;
+        }
+        #sidebar-toggle:checked ~ aside .nav-text,
+        #sidebar-toggle:checked ~ aside .logo-text {
+            display: none;
+        }
+        #sidebar-toggle:checked ~ main {
+            margin-left: 80px;
+        }::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F1A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B5CF6;
+        }
+        .glass-card {
+            background: linear-gradient(180deg, rgba(15, 22, 41, 0.9) 0%, rgba(11, 15, 26, 0.9) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.05);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="min-h-screen selection:bg-purple-500 selection:text-white">
+<input class="hidden" id="sidebar-toggle" type="checkbox"/>
+<aside class="w-64 flex flex-col fixed h-full transition-all duration-300 z-30">
+<div class="p-6 flex items-center gap-3 overflow-hidden border-b border-white/5">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+<span class="material-symbols-outlined text-white text-xl">smart_toy</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-white logo-text font-display">cvScan</span>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-6">
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyan-400 transition-colors">dashboard</span>
+<span class="nav-text whitespace-nowrap font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyan-400 transition-colors">work</span>
+<span class="nav-text whitespace-nowrap font-medium">Job Matching</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyan-400 transition-colors">record_voice_over</span>
+<span class="nav-text whitespace-nowrap font-medium">Interview Simulator</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyan-400 transition-colors">school</span>
+<span class="nav-text whitespace-nowrap font-medium">Courses &amp; Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 bg-white/5 border border-purple-500/30 text-white rounded-lg font-medium relative overflow-hidden" href="#">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 to-cyan-400"></div>
+<span class="material-symbols-outlined shrink-0 text-purple-400">settings</span>
+<span class="nav-text whitespace-nowrap">Profile &amp; Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:bg-white/5 hover:text-white rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined shrink-0 group-hover:text-cyan-400 transition-colors">contact_support</span>
+<span class="nav-text whitespace-nowrap font-medium">Support &amp; Feedback</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/5">
+<label class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-purple-400 cursor-pointer transition-colors" for="sidebar-toggle">
+<span class="material-symbols-outlined shrink-0">menu_open</span>
+<span class="nav-text text-sm font-medium">Collapse Sidebar</span>
+</label>
+</div>
+</aside>
+<main class="lg:ml-64 transition-all duration-300 min-h-screen relative overflow-hidden">
+<div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="max-w-[1600px] mx-auto p-4 lg:p-8 relative z-10">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-white/5">
+<div>
+<h1 class="text-3xl font-bold text-white mb-1 tracking-tight">Profile Settings &amp; Data Export</h1>
+<p class="text-gray-400 text-sm">Manage your personal information, CV versions, and data privacy exports.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors text-gray-400 hover:text-white">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="h-8 w-px bg-white/10 mx-1"></div>
+<div class="flex items-center gap-3 pl-1">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none text-white font-display">Alex Johnson</p>
+<a class="text-[10px] text-red-400 hover:text-red-300 font-bold flex items-center justify-end gap-0.5 mt-1 uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined text-[12px]">logout</span>
+                                Logout
+                            </a>
+</div>
+<div class="relative">
+<img alt="Profile" class="w-10 h-10 rounded-full border border-purple-500/30 shrink-0 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0gKe153agdtaE2QX8dxVTTUZvCNwr9lfHYTo3qfEtVw-g5beM0dyqV9fTCCfKqp4zWLxSzPhnbKXQVZsuOBTkupMtvr5J7IqZ8qJ8bv8suaEY4rr4ZRwnvnlv4OfF7_lWFzdlurNcL00eg3dLK2Yp_9WiDvl1kusdeIywVtaNU-NtKJhnyPj72JQB2HrXvlRDo11OWO2WurLSMkEIVA9kcs5hnsrrbHoFTN2Ek4O-sHt6N5X_oDRWQADS_D3GNbn2m-CBAsqXE-Y"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#0B0F1A] rounded-full"></div>
+</div>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<div class="xl:col-span-7 space-y-6">
+<div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
+<div class="flex items-center justify-between mb-6 relative z-10">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded-lg bg-purple-500/10 text-purple-400">
+<span class="material-symbols-outlined">person</span>
+</div>
+<h2 class="text-lg font-bold text-white tracking-wide">Personal Information</h2>
+</div>
+<button class="text-xs font-bold text-cyan-400 hover:text-cyan-300 hover:underline uppercase tracking-widest transition-colors">Save Changes</button>
+</div>
+<div class="mb-8 p-6 bg-[#0B1022]/80 rounded-xl border border-dashed border-purple-500/30 flex flex-col sm:flex-row items-center gap-6 relative">
+<div class="relative group/avatar cursor-pointer">
+<div class="absolute -inset-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full opacity-75 blur opacity-20 group-hover/avatar:opacity-50 transition duration-300"></div>
+<img alt="Profile" class="relative w-24 h-24 rounded-full border-2 border-[#0B1022] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0gKe153agdtaE2QX8dxVTTUZvCNwr9lfHYTo3qfEtVw-g5beM0dyqV9fTCCfKqp4zWLxSzPhnbKXQVZsuOBTkupMtvr5J7IqZ8qJ8bv8suaEY4rr4ZRwnvnlv4OfF7_lWFzdlurNcL00eg3dLK2Yp_9WiDvl1kusdeIywVtaNU-NtKJhnyPj72JQB2HrXvlRDo11OWO2WurLSMkEIVA9kcs5hnsrrbHoFTN2Ek4O-sHt6N5X_oDRWQADS_D3GNbn2m-CBAsqXE-Y"/>
+<div class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-all duration-300">
+<span class="material-symbols-outlined text-white">photo_camera</span>
+</div>
+</div>
+<div class="flex-1 text-center sm:text-left">
+<h3 class="text-sm font-bold text-white mb-1 font-display tracking-wide">Profile Photo</h3>
+<p class="text-xs text-gray-400 mb-4 max-w-sm">Upload a high-quality professional headshot. PNG or JPG, max 5MB.</p>
+<div class="flex flex-wrap justify-center sm:justify-start gap-3">
+<button class="bg-btn-gradient text-white px-5 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all duration-300 border border-white/10">
+<span class="material-symbols-outlined text-sm">upload</span> Update Avatar
+                                    </button>
+<button class="bg-[#0B1022] border border-white/10 text-gray-300 px-5 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:bg-white/5 transition-colors">
+                                        Remove
+                                    </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-purple-300 uppercase tracking-widest">Full Name</label>
+<input class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" type="text" value="Alex Johnson"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-purple-300 uppercase tracking-widest">Email Address</label>
+<input class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" type="email" value="alex.johnson@example.com"/>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-[10px] font-bold text-purple-300 uppercase tracking-widest">Location</label>
+<input class="w-full rounded-lg text-sm px-4 py-3 placeholder-gray-600" type="text" value="San Francisco, CA"/>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-[10px] font-bold text-purple-300 uppercase tracking-widest">Career Goals</label>
+<textarea class="w-full rounded-lg text-sm px-4 py-3 min-h-[100px] placeholder-gray-600" placeholder="Briefly describe your professional objectives...">Seeking a Senior Frontend Engineer role at a growth-stage startup, focusing on React ecosystem and user experience optimization.</textarea>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 relative overflow-hidden">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded-lg bg-cyan-500/10 text-cyan-400">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<h2 class="text-lg font-bold text-white tracking-wide">Skills &amp; Experience</h2>
+</div>
+<button class="text-xs font-bold text-cyan-400 flex items-center gap-1 hover:text-cyan-300 hover:shadow-cyan-500/50 transition-all">
+<span class="material-symbols-outlined text-sm">add</span> ADD SKILL
+                            </button>
+</div>
+<div class="space-y-6">
+<div>
+<p class="text-[10px] font-bold text-purple-300 uppercase tracking-widest mb-3">Technical Skills</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        React <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        TypeScript <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        Tailwind CSS <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        Node.js <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+<span class="px-3 py-1.5 bg-purple-500/10 border border-purple-500/40 rounded-lg text-xs font-medium text-purple-300 flex items-center gap-2 shadow-[0_0_10px_rgba(139,92,246,0.1)]">
+                                        Next.js <button class="material-symbols-outlined text-sm text-purple-400/70 hover:text-red-400">close</button>
+</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] font-bold text-purple-300 uppercase tracking-widest mb-3">Soft Skills</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        Team Leadership <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        Public Speaking <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+<span class="px-3 py-1.5 bg-[#0B1022] border border-white/10 rounded-lg text-xs font-medium text-gray-300 flex items-center gap-2 hover:border-purple-500/50 transition-colors">
+                                        Agile Methodology <button class="material-symbols-outlined text-sm text-gray-500 hover:text-red-400">close</button>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="xl:col-span-5 space-y-6">
+<div class="glass-card rounded-2xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+<span class="material-symbols-outlined">history</span>
+</div>
+<h2 class="text-lg font-bold text-white tracking-wide">CV Management</h2>
+</div>
+<button class="bg-btn-gradient text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 shadow-lg border border-white/10">
+<span class="material-symbols-outlined text-lg">upload</span>
+                                Upload New
+                            </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-[#0B1022]/80 border-b border-white/5">
+<th class="px-6 py-4 text-[10px] font-bold text-purple-300 uppercase tracking-widest">Version Name</th>
+<th class="px-6 py-4 text-[10px] font-bold text-purple-300 uppercase tracking-widest">Date</th>
+<th class="px-6 py-4 text-[10px] font-bold text-purple-300 uppercase tracking-widest">Score</th>
+<th class="px-6 py-4 text-[10px] font-bold text-purple-300 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-400">picture_as_pdf</span>
+<div>
+<p class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">Software_Engineer_V3</p>
+<p class="text-[10px] text-gray-500">Current Version</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-gray-400 font-mono">Oct 24, 2023</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded shadow-[0_0_10px_rgba(16,185,129,0.1)]">75%</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-500">picture_as_pdf</span>
+<div>
+<p class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">Frontend_Dev_Google</p>
+<p class="text-[10px] text-gray-500">Tailored Version</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-gray-400 font-mono">Oct 12, 2023</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold rounded shadow-[0_0_10px_rgba(245,158,11,0.1)]">62%</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+<button class="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 shadow-sm">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+<span class="material-symbols-outlined">security</span>
+</div>
+<h2 class="text-lg font-bold text-white tracking-wide">Data &amp; Privacy</h2>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-[#0B1022]/60 border border-white/5 rounded-xl hover:border-purple-500/30 transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400 group-hover:text-purple-300 transition-colors">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white leading-tight">Export Analysis Reports</p>
+<p class="text-[10px] text-gray-400">Consolidated PDF of all CV scans</p>
+</div>
+</div>
+<button class="bg-btn-gradient text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all hover:shadow-[0_0_10px_rgba(139,92,246,0.4)] border border-white/10">
+<span class="material-symbols-outlined text-sm">download</span> PDF
+                                </button>
+</div>
+<div class="flex items-center justify-between p-4 bg-[#0B1022]/60 border border-white/5 rounded-xl hover:border-purple-500/30 transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center text-cyan-400 group-hover:text-cyan-300 transition-colors">
+<span class="material-symbols-outlined">folder_zip</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white leading-tight">Export Optimized CVs</p>
+<p class="text-[10px] text-gray-400">ZIP file of all latest versions</p>
+</div>
+</div>
+<button class="bg-btn-gradient text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all hover:shadow-[0_0_10px_rgba(139,92,246,0.4)] border border-white/10">
+<span class="material-symbols-outlined text-sm">download</span> ZIP
+                                </button>
+</div>
+<div class="flex items-center justify-between p-4 bg-[#0B1022]/60 border border-white/5 rounded-xl hover:border-purple-500/30 transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-400 group-hover:text-emerald-300 transition-colors">
+<span class="material-symbols-outlined">database</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white leading-tight">Export Personal Data</p>
+<p class="text-[10px] text-gray-400">JSON or CSV of profile info</p>
+</div>
+</div>
+<button class="bg-btn-gradient text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all hover:shadow-[0_0_10px_rgba(139,92,246,0.4)] border border-white/10">
+<span class="material-symbols-outlined text-sm">download</span> JSON
+                                </button>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-white/10">
+<button class="w-full py-3 rounded-xl border border-red-500/20 text-red-400 hover:bg-red-500/10 text-xs font-bold tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                                DELETE ACCOUNT &amp; ALL DATA
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

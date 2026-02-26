@@ -22,9 +22,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/dashboard-host/dashboard-host.component').then(m => m.DashboardHostComponent)
   },
   {
-    path: 'dashboard/user',
+    path: 'user',
     canActivate: [authGuard],
-    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+    loadChildren: () => import('./pages/user-page/user.routes').then(m => m.USER_ROUTES)
   },
   {
     path: 'dashboard/admin',
